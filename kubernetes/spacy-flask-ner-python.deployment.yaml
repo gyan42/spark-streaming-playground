@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spacy-flask-ner-python-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spacy-flask-ner-python
+  template:
+    metadata:
+      labels:
+        app: spacy-flask-ner-python
+    spec:
+      containers:
+      - name: spacy-flask-ner-python
+        image: spacy-flask-ner-python:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000

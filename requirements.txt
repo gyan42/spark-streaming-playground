@@ -1,0 +1,13 @@
+delta==0.4.2
+flask==1.1.1
+spacy==2.2.3
+kafka-python==2.0.1
+textblob==0.15.3
+plotly==4.1.1
+psycopg2==2.8.3
+pandas
+numpy
+Flask-Menu==0.7.1
+flask-paginate==0.5.5
+tweepy==3.8.0
+pyspark==2.4.4
