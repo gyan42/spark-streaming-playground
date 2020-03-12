@@ -4,6 +4,8 @@ class StreamingConfigs(object):
     def __init__(self, config_file_path):
 
         self._config = ConfigManager(config_path=config_file_path)
+        self._twitter_config = ConfigManager(config_path="twitter.ini")
+
 
         # [spark]
         self._spark_master = self._config.get_item("spark", "master")
@@ -12,10 +14,10 @@ class StreamingConfigs(object):
         self._warehouse_location = self._config.get_item("spark", "warehouse_location")
 
         # [twitter]
-        self._twitter_consumer_key = self._config.get_item("twitter", "consumer_key")
-        self._twitter_consumer_secret = self._config.get_item("twitter", "consumer_secret")
-        self._twitter_access_token = self._config.get_item("twitter", "access_token")
-        self._twitter_access_secret = self._config.get_item("twitter", "access_secret")
+        self._twitter_config = self._config.get_item("twitter", "consumer_key")
+        self._twitter_config = self._config.get_item("twitter", "consumer_secret")
+        self._twitter_config = self._config.get_item("twitter", "access_token")
+        self._twitter_config = self._config.get_item("twitter", "access_secret")
 
         # [dataset]
         self._checkpoint_dir = self._config.get_item("dataset", "checkpoint_dir")
