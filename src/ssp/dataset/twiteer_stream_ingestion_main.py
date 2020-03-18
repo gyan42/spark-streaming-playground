@@ -1,10 +1,14 @@
 import argparse
 import os
 import shutil
-
+from threading import Thread, Event
 from tweepy.auth import OAuthHandler
-from tweepy import Stream
+from tweepy.streaming import Stream, StreamListener
 from tweepy.streaming import StreamListener
+
+import pandas as pd
+import glob
+
 # import socket
 from kafka import KafkaProducer
 from pyspark.sql import SparkSession
@@ -13,6 +17,19 @@ from pyspark.sql.types import StructType, StringType, IntegerType
 
 from ssp.utils.config_manager import ConfigManager, print_info
 from ssp.utils.configuration import StreamingConfigs
+
+NATURE_KEYWORDS = ["nature", "life", "climate", "animal", "human", "weather", "earth",
+                    "ocean", "sea", "wildlife", "fungus", "virus", "algae", "bacteria",
+                    "World", "oxygen", "river", "water", "land", "north pole", "south pole",
+                   "species", "natural", "mammals", "living", "organism", "fish"]
+
+SPACE_KEYWORDS = ["space", "universe", " nasa", "star", "solar system", "sun", "moon",
+                  "time", "cosmos", "big bang", "gravity", "energy", "dimension", "matter",
+                  "radiation", "electromagnetic", "proton", "electron", "cosmology", "physics"]
+
+ML_KEYWORDS = ["machine learning", "ml", "dl", "deep learning", "learning", "classification",
+               "clustering", "regression", "svm", "neural networks", "tensorflow", "pytorch",
+               "ai", "artificial", "intelligence", "algorithms", "rl"]
 
 
 def check_n_mk_dirs(path, is_remove=False):
@@ -23,6 +40,7 @@ def check_n_mk_dirs(path, is_remove=False):
         os.makedirs(path)
 
 
+# http://docs.tweepy.org/en/latest/streaming_how_to.html
 # we create this class that inherits from the StreamListener in tweepy StreamListener
 class TweetsListener(StreamListener):
     def __init__(self, kafka_addr='localhost:9092', topic='twitter_data'):
@@ -39,6 +57,20 @@ class TweetsListener(StreamListener):
     def if_error(self, status):
         print(status)
         return True
+
+def get_raw_dataset(path):
+    all_files = glob.glob(path + "/*.parquet")
+
+    print(all_files)
+
+    files = []
+
+    for filename in all_files:
+        df = pd.read_parquet(filename, engine='pyarrow')
+        files.append(df)
+
+    df = pd.concat(files, axis=0, ignore_index=True)
+    return df
 
 class TwitterDataset(StreamingConfigs):
     """
@@ -58,9 +90,11 @@ class TwitterDataset(StreamingConfigs):
         auth.set_access_token(self._twitter_access_token, self._twitter_access_secret)
 
         twitter_stream = Stream(auth, TweetsListener(kafka_addr=self._kafka_addr, topic=self._kafka_topic))
-        twitter_stream.filter(track=["india"])  # this is the topic we are interested in
+        # https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
+        # https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+        twitter_stream.filter(track=NATURE_KEYWORDS + SPACE_KEYWORDS + ML_KEYWORDS)
 
-    def structured_streaming(self):
+    def get_spark(self):
         # get spark session
         spark = SparkSession.builder. \
             appName("TwitterRawDataIngestion"). \
@@ -69,6 +103,10 @@ class TwitterDataset(StreamingConfigs):
             config("spark.sql.warehouse.dir", self._warehouse_location). \
             enableHiveSupport(). \
             getOrCreate()
+        return spark
+
+    def get_tweets_df(self):
+        spark = self.get_spark()
 
         # read the tweets from kafka topic
         tweet_stream = spark \
@@ -98,6 +136,13 @@ class TwitterDataset(StreamingConfigs):
             select("temp.*"). \
             withColumn("source", regexp_replace("source", "<[^>]*>", ""))
 
+        return tweet_df
+
+    def structured_streaming(self):
+
+        # extract the data as per our schema
+        tweet_df = self.get_tweets_df()
+
 
         #tweet_df.createGlobalTempView("raw_tweet_df")
 
@@ -110,7 +155,36 @@ class TwitterDataset(StreamingConfigs):
             trigger(processingTime='10 seconds'). \
             start()
 
-        spark.streams.awaitAnyTermination()
+        self.get_spark().streams.awaitAnyTermination()
+
+    def visualize(self):
+
+        tweet_df = self.get_tweets_df()
+
+        def foreach_batch_function(df, epoch_id):
+            # Transform and write batchDF
+            df.show(50, False)
+
+        tweet_df.writeStream.foreachBatch(foreach_batch_function).start().awaitTermination()
+
+    def file_dump(self, path, seconds):
+        spark = self.get_spark()
+
+        tweet_df = self.get_tweets_df()
+
+        # dump the data into bronze lake path
+        storeDF = tweet_df.writeStream. \
+            format(format). \
+            outputMode("append"). \
+            option("path", path). \
+            option("checkpointLocation", self._checkpoint_dir). \
+            trigger(processingTime='10 seconds'). \
+            start()
+
+        self.get_spark().streams.awaitTerminationOrTimeout(seconds)
+
+        df = get_raw_dataset(path.replace("file://", ""))
+        df.to_parquet("data/ssp_dataset.parquet", engine="pyarrow")
 
 if __name__ == "__main__":
     optparse = argparse.ArgumentParser("Twitter Spark Text Processor pipeline:")
@@ -122,7 +196,16 @@ if __name__ == "__main__":
 
     optparse.add_argument("-m", "--mode",
                           required=True,
-                          help="[start_tweet_stream, structured_streaming]")
+                          help="[start_tweet_stream, structured_streaming_dump, visualize, file_dump]")
+
+    optparse.add_argument("-s", "--seconds",
+                          required=False,
+                          help="Wait seconds before shutting down")
+
+    optparse.add_argument("-p", "--path",
+                          required=False,
+                          default="file:///tmp/ssp/raw_data/",
+                          help="Path to store the records")
 
     parsed_args = optparse.parse_args()
 
@@ -130,7 +213,11 @@ if __name__ == "__main__":
 
     if parsed_args.mode == "start_tweet_stream":
         dataset.twitter_socket_stream()
-    elif parsed_args.mode == "structured_streaming":
+    elif parsed_args.mode == "structured_streaming_dump":
         dataset.structured_streaming()
+    elif parsed_args.mode == "visualize":
+        dataset.visualize()
+    elif parsed_args.mode == "file_dump":
+        dataset.file_dump(parsed_args.path, parsed_args.seconds)
     else:
         raise RuntimeError("Invalid choice")

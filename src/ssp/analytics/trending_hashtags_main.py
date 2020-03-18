@@ -8,10 +8,13 @@ from ssp.utils.configuration import StreamingConfigs
 
 
 def extract_hashtag(text):
-    text = text.replace('\n', ' ').replace('\r', '')
-    text = text.split(" ")
-    text = [word for word in text if "#" in word]
-    if len(text) == 0:
+    if text is not None:
+        text = text.replace('\n', ' ').replace('\r', '')
+        text = text.split(" ")
+        text = [word for word in text if "#" in word]
+        if len(text) == 0:
+            text = ["no tags"]
+    else:
         text = ["no tags"]
     return text
 

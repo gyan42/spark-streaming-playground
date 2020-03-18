@@ -4,7 +4,7 @@ https://www.postgresql.org/
 
 Here is a good comparision [PostgreSQL vs MySQL](https://www.postgresqltutorial.com/postgresql-vs-mysql/) 
 
-The choice of PostgresSQL was donesince we are using closest managed service in AWS called [Redshift](https://aws.amazon.com/redshift/)
+The choice of PostgresSQL was done since we are using closest managed service in AWS called [Redshift](https://aws.amazon.com/redshift/)
  
 ## Setup
 
@@ -121,6 +121,11 @@ Fire a python shell and test out the connection
 ```    
 import psycopg2
 conn = psycopg2.connect(host="localhost", port=5432, database="hive", user="hive", password="hive")
+sql_command = "SELECT * FROM \"CDS\";"
+print (sql_command)
+# Load the data
+data = pd.read_sql(sql_command, conn)
+print(data)
 ```
 
 Use Hive provided tool to setup the metastore tables an schema:
@@ -133,7 +138,6 @@ sudo -i -u hive  psql -d hive
     hive=> \dt
 ```
 
-/usr/lib/postgresql/10/bin/postgres -D /var/lib/postgresql/10/main -c config_file=/etc/postgresql/10/main/postgresql.conf
 
 **References**
 - https://www.tecmint.com/install-postgresql-on-ubuntu/

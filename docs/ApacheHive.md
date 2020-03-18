@@ -38,3 +38,4 @@ Below notes form [here](https://data-flair.training/blogs/apache-hive-installati
 - https://stackoverflow.com/questions/52994585/user-is-not-allowed-to-impersonate-anonymous-state-08s01-code-0-org-apache-had
 - https://data-flair.training/blogs/apache-hive-metastore/
 - https://mapr.com/docs/61/Hive/Config-RemotePostgreSQLForHiveMetastore.html
+- https://www.quora.com/What-is-Hive-Metastore

@@ -14,10 +14,10 @@ class StreamingConfigs(object):
         self._warehouse_location = self._config.get_item("spark", "warehouse_location")
 
         # [twitter]
-        self._twitter_config = self._config.get_item("twitter", "consumer_key")
-        self._twitter_config = self._config.get_item("twitter", "consumer_secret")
-        self._twitter_config = self._config.get_item("twitter", "access_token")
-        self._twitter_config = self._config.get_item("twitter", "access_secret")
+        self._twitter_consumer_key = self._twitter_config.get_item("twitter", "consumer_key")
+        self._twitter_consumer_secret = self._twitter_config.get_item("twitter", "consumer_secret")
+        self._twitter_access_token = self._twitter_config.get_item("twitter", "access_token")
+        self._twitter_access_secret = self._twitter_config.get_item("twitter", "access_secret")
 
         # [dataset]
         self._checkpoint_dir = self._config.get_item("dataset", "checkpoint_dir")

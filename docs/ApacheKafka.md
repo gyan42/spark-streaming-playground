@@ -16,22 +16,34 @@ sudo apt-get install net-tools
 # Now you can run the following command to check whether zookeeper is running on port 2181.
 sudo netstat -tulpen | grep 2181
 
+# Zookepr cleanup
+sudo systemctl stop zookeeper
+# vim /etc/zookeeper/conf_example/zoo.cfg
+sudo rm -rf /var/lib/zookeeper/
+
 # kafka
 cd /opt/binaries/
 wget https://downloads.apache.org/kafka/2.4.0/kafka_2.11-2.4.0.tgz
-mkdir /opt/Kafka
-tar xvzf kafka_2.11-2.4.0.tgz -C /opt/Kafka
+tar xvzf kafka_2.11-2.4.0.tgz -C /opt/binaries/kafka --strip-components=1
 ```
 ```
 # add following to ~/.bashrc
-export KAFKA_HOME="/opt/Kafka/kafka_2.11-2.4.0/"
+export KAFKA_HOME="/opt/kafka/"
 export PATH="$PATH:${KAFKA_HOME}/bin"
 
 sudo ln -s $KAFKA_HOME/config/server.properties /etc/kafka.properties
 sudo kafka-server-start.sh /etc/kafka.properties
 
+#to create a topic
 kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter_data
 
+#to delete the topic
+sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+sudo rm -rf /tmp/kafka-logs 
+vim /etc/kafka.properties
+    delete.topic.enable = true
+
+kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data
 ```
 
 **Testing**

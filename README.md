@@ -8,29 +8,6 @@ do interactive visualization from the data lake.
 
 ## Tools and Frameworks setup
 
-- [Anaconda](docs/Anaconda.md)
-- [SSH](docs/ssh.md)
-- [PostgreSQL](docs/Postgres.md)
-- [Apache Hadoop](docs/ApacheHadoop.md)
-- [Apache Hive](docs/ApacheHive.md)
-- [Apache Spark](docs/ApacheSpark.md)
-- [Apache Kafka](docs/ApacheKafka.md)
-- [Python libs](requirements.txt)
-- [Docker](docs/Docker.md)
-- [Kubernets](docs/Kubernetes.md)
-- [Twitter API](https://www.toptal.com/apache/apache-spark-streaming-twitter) Read the link to get ur [API keys](https://developer.twitter.com/)
-    - In the heart we depend on Twitter tweet stream.
-    - Twitter API along with `Tweepy` package is used to pull the tweets from internet
-
-
-These steps will help you to turn your machine into a single node cluster (both master and client services will be running on your machine).
-This is pretty heavy stuff to hold on average single machine, so it would be ideal to have RAM `16GB` and `8Cores` minimum. 
-
-Most of the materials are presented as a reference materials based on our setup environment, based on your machine some steps 
-may vary.
-
-To make the things simpler there is a `Dockerfile` with cluster components pre-installed.
-
 
 ## Localhost Port Number used
 
@@ -52,20 +29,18 @@ Here is the list of services and their port numbers...
 |8888        |Jupyter Lab       |http://localhost:8888/lab|
 |30123       |Kubernetes Load Balancer - NER|http://127.0.0.1:30123
 
-On Dell G7 with 12Cores and 32GB, when services are running :)
+All the services when running could load your machine to the fullest.
+Minimum configuration would be 8+Cores and 32GB, when services are running :)
 
-![](docs/images/machine_load.png)
 
 ## Configuration
 Check this [file](config.ini). We use Python `configparser` to read the configs from *.ini file.
 Choosen for its simpilicity over others.
 
-Read about [Data Lake](https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/) for understanding purpose.
+Make a note of the your machine name with command `hostname`, and update the [config.ini](config.ini) `spark master url` with it,
+`eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
 
-So we have a data lake setup:
-- Bronze Lake : Raw data i.e tweets
-- Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,
-- Gold Lake   : Data Ready for web application / dash board to consume 
+Get the Twitter App credentials and update it here [twitter.ini](twitter.ini).
 
 ## How to run?
 
@@ -73,8 +48,72 @@ Most of these examples involve multiple services running in the background on di
 It is highly recommened to use terminal like [Guake](http://guake-project.org/).
 Guake is a background running terminal application in short, preventing you from closing the terminals.
 
+**Local Machine Setup**
 
-Assuming most of the user would prefer for Docker, the steps provided accordingly.
+- [Anaconda](docs/Anaconda.md)
+- [SSH](docs/ssh.md)
+- [PostgreSQL](docs/Postgres.md)
+- [Apache Hadoop](docs/ApacheHadoop.md)
+- [Apache Hive](docs/ApacheHive.md)
+- [Apache Spark](docs/ApacheSpark.md)
+- [Apache Kafka](docs/ApacheKafka.md)
+- [Python libs](requirements.txt)
+- [Docker](docs/Docker.md)
+- [Kubernets](docs/Kubernetes.md)
+- [Twitter API](https://www.toptal.com/apache/apache-spark-streaming-twitter) Read the link to get ur [API keys](https://developer.twitter.com/)
+    - In the heart we depend on Twitter tweet stream.
+    - Twitter API along with `Tweepy` package is used to pull the tweets from internet
+
+
+These steps will help you to turn your machine into a single node cluster (both master and client services will be running on your machine).
+This is pretty heavy stuff to hold on average single machine, so it would be ideal to have RAM `16GB` and `8Cores` minimum. 
+
+Most of the materials are presented as a reference materials based on local machine setup environment, 
+based on your machine some steps may vary.
+
+```
+sudo rm -rf /tmp/kafka-ogs 
+sudo rm -rf /var/lib/zookeeper/
+
+/opt/binaries/hive/bin/hiveserver2 &
+sudo /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
+sudo /opt/binaries/kafka/bin/kafka-server-start.sh /etc/kafka.properties &
+sudo kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data 
+sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter_data
+
+#or
+
+# use start supervisord, check docker/supervisor.conf for list of back ground services
+sudo /usr/bin/supervisord -c docker/supervisor.conf # restart if you see any error
+```
+
+Start Spark and Hive services...
+
+```
+# start hdfs
+$HADOOP_HOME/sbin/start-dfs.sh
+# start yarn
+$HADOOP_HOME/sbin/start-yarn.sh
+# Start Spark standalone cluster
+$SPARK_HOME/sbin/start-all.sh
+```
+
+**Python Envronment setup**
+
+Follow the steps [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) to install `conda`.
+
+```
+conda create --prefix=/opt/envs/ssp/ python=3.7
+conda activate /opt/envs/ssp
+pip install -r requirements.txt
+source activate ssp
+```
+
+In general switch to a python environment with all needed packages and run any *.sh files present in [bin](bin)
+
+**Docker Setup**
+
+To make the things simpler there is a `Dockerfile` with cluster components pre-installed.
 
 `cd /path/to/spark-streaming-playground/`
 
@@ -87,140 +126,26 @@ Run the docker with:
 ```
 docker run -v $(pwd):/host/ --hostname=$(hostname) -p 5001:5001 -p 5002:5002 -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest /bin/bash
 ```
-We are mounting current directoy as a volume inside the container, so make sure you trigger from repo base directory,
+
+We are mounting current directory as a volume inside the container, so make sure you trigger from repo base directory,
 so that following steps works.
 
-Make a note of the your machine name with command `hostname`, and update the [config.ini](config.ini) `spark master url` with it,
-`eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
 
-Based on the available memory and core on your machine, you must adjust the Spark cores/RAM memory 0values on *.sh file located in [bin](bin)
-
-------------------------------------------------------------------------------------------------------------------------
-
-### Use Case : Dump Tweet data into Data Lake
-
-This is the first step for any subsequent use case examples, as you can see it involves multiple services running in the background.
-
-Typical terminal layout:
-![](docs/images/guake_example.png)
- 
-`Twitter API -> Kafka Producer -> Kafka Server -> Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake`
-
-Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`
-
-```
-#[producer]
-    docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
-    cd /host/
-    bin/start_kafka_producer.sh
-
-#[consumer]
-    docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
-    cd /host/
-    bin/dump_raw_data.sh
-```
+Based on the available memory and core on your machine, you must adjust the Spark cores/RAM memory
+ values on *.sh file located in [bin](bin)
 
 ------------------------------------------------------------------------------------------------------------------------
+### Debugging
 
-### Use Case : Trending Twitter Hash Tags
-
-`Bronze Lake -> Spark Structured Streaming Parquet Source -> Extract Hash Tags with UDF -> Spark Structured Streaming Postgresql Sink`
-
-`Postgresql -> Flask REST API -> Web Application`
-
+In case you see any error with Spark Structured Streaming run:
 ```
-#[hashtag]
-    docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
-    cd /host/
-    bin/trending_tweet_hashtags.sh
-
-#[dashboard]
-    docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
-    cd /host/
-    bin/dashboard.sh
+rm -rf /opt/spark-warehouse/
+hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 ```
- 
-Head to http://0.0.0.0:5001/ for live count on the trending #hashtags
- ![](docs/images/trending_tags.png)
- 
-**Use Case : Scalable REST end point**
 
-- A naive approach for a scalable back end loading the spaCy model (12MB) and serve them over a REST end point with Kubernetes
-- A NLP task called NER is done with spaCy
-
-`Bronze Lake -> Spark Structured Streaming Parquet Source -> Extract NER Tags from text with UDF -> Spark Structured Streaming Console Sink`
-
-`Extract NER Tags from text with UDF : Raw Text -> REST API end point -> Kubernetes -> Docker -> Flask -> spaCy -> NER`
-
-```
-#[docker/kubernetes]
-
-    docker build --network host -f docker/ner/Dockerfile -t spacy-flask-ner-python:latest .
-    docker run -d -p 5000:5000 spacy-flask-ner-python
-    # test it to see everything working
-    curl -i -H "Content-Type: application/json" -X POST -d '{"text":"Ram read a book on Friday 20/11/2019"}' http://127.0.0.1:5000/spacy/api/v0.1/ner
-    # stop all the services/containers
-    docker stop $(docker ps | grep spacy-flask-ner-python | cut -d' ' -f1)
-    # docker rm $(docker ps -a -q)
-    
-    sudo minikube start --vm-driver=none 
-    
-    # note only first time below commands will add the docker file and run its as as service,
-    # there on, our service will be started by default when we start the Kubernetes!
-    kubectl create -f kubernetes/spacy-flask-ner-python.deployment.yaml 
-    kubectl create -f kubernetes/spacy-flask-ner-python.service.yaml
-    # on local machine, test it to see everything working
-    curl -i -H "Content-Type: application/json" -X POST -d '{"text":"Ram read a book on Friday 20/11/2019"}' http://127.0.0.1:30123/spacy/api/v0.1/ner
-    # on docker, test it to see everything working
-    curl -i -H "Content-Type: application/json" -X POST -d '{"text":"Ram read a book on Friday 20/11/2019"}' -sS host.docker.internal:30123/spacy/api/v0.1/ner
-    # kubernetes restart
-    kubectl delete service/spacy-flask-ner-python-service deployment.apps/spacy-flask-ner-python-deployment
-    # and then create the services again
-
-#[ner]
-    docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
-    cd /host/
-    python3 src/ssp/customudf/spacy_ner_udf.py # test it to see everything working
-    bin/ner_extraction_using_spacy.sh
-```  
-
-![](docs/images/ner_out.png)
-
-------------------------------------------------------------------------------------------------------------------------
-
-### Use Case : Streaming ML Classification with Static Spark Model
-
-Use a dataset from web like 
-
-------------------------------------------------------------------------------------------------------------------------
-
-### Use Case : Streaming ML Classification with Active Learning Model
-- In this use case we are gonna build ground up dataset from scratch from live streaming data. 
-- Use programmatic methods to tag dataset, create golden dataset for ML training, 
-in an iterative manner till we are satisfied with model performance.
-- Build model and evaluate it on golden dataset
-- Deploy the model, classify the text
-- Extract the web links from tweets and store the urls
-
-**[Snorkel](https://www.snorkel.org/)**
-A semi automated way of preparing the dataset at scale for later use.
-
-**Tagger**
-
-- Mannual annotation plays a major role in ML pipeline, where humans needs to infuse domain information in ot ML model.
-- There are more advanced tools like [https://prodi.gy/](https://prodi.gy/).
-- But to keep things tiddy and simple, a simple web tool has been put in place to get a hands on experience with respect to text classification.
-
-`bin/tagger.sh`
-
-Main screen...
-![](docs/images/text_tagger1.png)
-
-Upload CSV data...
-![](docs/images/text_tagger_upload_csv.png)
-
-Upload Labels file...
-![](docs/images/text_tagger_labels.png)
-
-Main Tagger Screen...
-![](docs/images/text_tagger_screen.png)
+### Use Cases 
+- [Dump Tweet data into Data Lake](docs/dump_tweets_1.md)
+- [Trending Twitter Hash Tags](docs/trending_tweets_2.md)
+- [Scalable REST end point](docs/scalable_rest_api.md)
+- Streaming ML Classification with Static Spark Model
+- [Streaming ML Classification with Active Learning Model](docs/full_ml_model_cycle.md)
