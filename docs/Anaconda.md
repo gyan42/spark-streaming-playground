@@ -9,8 +9,18 @@ Follow the steps [here](https://docs.conda.io/projects/conda/en/latest/user-guid
 conda create --prefix=/opt/envs/ssp/ python=3.7
 conda activate /opt/envs/ssp
 pip install -r requirements.txt
+pip install notebook
+pip install jupyterlab
 ```
 
 ## Juyter Lab
 `jupyter-lab # http://localhost:8888/lab`
  
+ 
+ ### Issues
+ - https://github.com/explosion/spaCy/issues/2883
+ ```
+pip uninstall thinc
+pip uninstall cymem
+pip install spacy
+```

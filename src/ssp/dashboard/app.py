@@ -51,6 +51,7 @@ def trending_tags():
                            ids=ids,
                            graphJSON=graphJSON)
 
+
 if __name__ == '__main__':
     config = ConfigManager(config_path="config.ini")
     host = config.get_item("dashboard", "host")

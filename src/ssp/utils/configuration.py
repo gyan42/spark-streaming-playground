@@ -1,6 +1,9 @@
 from ssp.utils.config_manager import ConfigManager
 
 class StreamingConfigs(object):
+    """
+    Reads the config.ini using configparser
+    """
     def __init__(self, config_file_path):
 
         self._config = ConfigManager(config_path=config_file_path)
@@ -12,12 +15,14 @@ class StreamingConfigs(object):
         self._kafka_bootstrap_servers = self._config.get_item("spark", "kafka_bootstrap_servers")
         self._kafka_topic = self._config.get_item("spark", "kafka_topic")
         self._warehouse_location = self._config.get_item("spark", "warehouse_location")
+        self._processing_time = self._config.get_item("spark", "processing_time")
 
         # [twitter]
         self._twitter_consumer_key = self._twitter_config.get_item("twitter", "consumer_key")
         self._twitter_consumer_secret = self._twitter_config.get_item("twitter", "consumer_secret")
         self._twitter_access_token = self._twitter_config.get_item("twitter", "access_token")
         self._twitter_access_secret = self._twitter_config.get_item("twitter", "access_secret")
+        self._key_words = self._config.get_item("twitter", "key_words").split(",")
 
         # [dataset]
         self._checkpoint_dir = self._config.get_item("dataset", "checkpoint_dir")

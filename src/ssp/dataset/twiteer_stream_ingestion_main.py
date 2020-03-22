@@ -1,3 +1,18 @@
+#!/usr/bin/env python
+
+"""
+SSP modules that handles all data at ingestion level frm Twitter stream
+"""
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import argparse
 import os
 import shutil
@@ -8,28 +23,20 @@ from tweepy.streaming import StreamListener
 
 import pandas as pd
 import glob
+import numpy as np
 
 # import socket
 from kafka import KafkaProducer
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, regexp_replace
-from pyspark.sql.types import StructType, StringType, IntegerType
-
+from pyspark.sql.types import StructType, StringType, IntegerType, ArrayType
+from pyspark.sql.functions import col, isnull
 from ssp.utils.config_manager import ConfigManager, print_info
 from ssp.utils.configuration import StreamingConfigs
 
-NATURE_KEYWORDS = ["nature", "life", "climate", "animal", "human", "weather", "earth",
-                    "ocean", "sea", "wildlife", "fungus", "virus", "algae", "bacteria",
-                    "World", "oxygen", "river", "water", "land", "north pole", "south pole",
-                   "species", "natural", "mammals", "living", "organism", "fish"]
+# Twitter Filter Tags
 
-SPACE_KEYWORDS = ["space", "universe", " nasa", "star", "solar system", "sun", "moon",
-                  "time", "cosmos", "big bang", "gravity", "energy", "dimension", "matter",
-                  "radiation", "electromagnetic", "proton", "electron", "cosmology", "physics"]
-
-ML_KEYWORDS = ["machine learning", "ml", "dl", "deep learning", "learning", "classification",
-               "clustering", "regression", "svm", "neural networks", "tensorflow", "pytorch",
-               "ai", "artificial", "intelligence", "algorithms", "rl"]
+AI_KEYWORDS = []
 
 
 def check_n_mk_dirs(path, is_remove=False):
@@ -59,16 +66,16 @@ class TweetsListener(StreamListener):
         return True
 
 def get_raw_dataset(path):
+    """
+    Combines all parquet file as one in given path
+    :param path: Folder path
+    :return:
+    """
     all_files = glob.glob(path + "/*.parquet")
-
-    print(all_files)
-
     files = []
-
     for filename in all_files:
-        df = pd.read_parquet(filename, engine='pyarrow')
+        df = pd.read_parquet(filename, engine="fastparquet")
         files.append(df)
-
     df = pd.concat(files, axis=0, ignore_index=True)
     return df
 
@@ -85,17 +92,19 @@ class TwitterDataset(StreamingConfigs):
         check_n_mk_dirs(self._checkpoint_dir, is_remove=self._remove_old_data)
         check_n_mk_dirs(self._bronze_parquet_dir, is_remove=self._remove_old_data)
 
-    def twitter_socket_stream(self):
+    def twitter_kafka_stream(self):
         auth = OAuthHandler(self._twitter_consumer_key, self._twitter_consumer_secret)
         auth.set_access_token(self._twitter_access_token, self._twitter_access_secret)
 
         twitter_stream = Stream(auth, TweetsListener(kafka_addr=self._kafka_addr, topic=self._kafka_topic))
         # https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
         # https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
-        twitter_stream.filter(track=NATURE_KEYWORDS + SPACE_KEYWORDS + ML_KEYWORDS)
+        twitter_stream.filter(track=self._key_words, languages=["en"])
 
     def get_spark(self):
-        # get spark session
+        """
+        :return:Spark Session
+        """
         spark = SparkSession.builder. \
             appName("TwitterRawDataIngestion"). \
             master(self._spark_master). \
@@ -103,6 +112,8 @@ class TwitterDataset(StreamingConfigs):
             config("spark.sql.warehouse.dir", self._warehouse_location). \
             enableHiveSupport(). \
             getOrCreate()
+        spark.sparkContext.setLogLevel("ERROR")
+
         return spark
 
     def get_tweets_df(self):
@@ -120,11 +131,27 @@ class TwitterDataset(StreamingConfigs):
 
         tweet_stream.printSchema()
 
-        # define the schema we wanted
+        # define the schema to extract the data we are interested
+        # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
+        urls = ArrayType(StructType().\
+        add("expanded_url", StringType(), True))
+
+        media = ArrayType(StructType().\
+        add("media_url", StringType(), True). \
+        add("media_url_https", StringType(), True))
+
+        # Tweet -> Entities{} -> Urls[] -> Media[]
+        entities = StructType(). \
+            add("urls", urls, True). \
+            add("media", media)
+
         schema = StructType(). \
             add('created_at', StringType(), False). \
             add('source', StringType(), False). \
             add('text', StringType(), False). \
+            add('extended_tweet', StructType().add("full_text", StringType(), True), True). \
+            add('entities', entities, False). \
+            add('retweeted_status', StructType().add('user', StructType().add('description', StringType())), True). \
             add('geo', StringType(), True). \
             add('retweet_count', IntegerType(), True)
 
@@ -133,16 +160,25 @@ class TwitterDataset(StreamingConfigs):
             selectExpr("cast (value as STRING)"). \
             select(from_json("value", schema).
                    alias("temp")). \
-            select("temp.*"). \
-            withColumn("source", regexp_replace("source", "<[^>]*>", ""))
+            select(["temp.created_at",
+                    "temp.text",
+                    "temp.source",
+                    "temp.extended_tweet.full_text",
+                    "temp.entities.urls.expanded_url",
+                    "temp.entities.media.media_url_https"]). \
+            withColumn("source", regexp_replace("source", "<[^>]*>", "")). \
+            where(~isnull(col("full_text")))
 
         return tweet_df
 
-    def structured_streaming(self):
+    def structured_streaming_dump(self):
+        """
+        Reads the data from Kafka topic and dumps the data into Bronze lake (HDFS path to store RAW data)
+        :return:
+        """
 
         # extract the data as per our schema
         tweet_df = self.get_tweets_df()
-
 
         #tweet_df.createGlobalTempView("raw_tweet_df")
 
@@ -152,39 +188,82 @@ class TwitterDataset(StreamingConfigs):
             outputMode("append"). \
             option("path", self._bronze_parquet_dir). \
             option("checkpointLocation", self._checkpoint_dir). \
-            trigger(processingTime='10 seconds'). \
+            trigger(processingTime=self._processing_time). \
             start()
 
         self.get_spark().streams.awaitAnyTermination()
 
     def visualize(self):
+        """
+        For debugging purporse
+        :return:
+        """
 
         tweet_df = self.get_tweets_df()
 
         def foreach_batch_function(df, epoch_id):
             # Transform and write batchDF
-            df.show(50, False)
+            df.show(50, True)
 
         tweet_df.writeStream.foreachBatch(foreach_batch_function).start().awaitTermination()
 
-    def file_dump(self, path, seconds):
+    def local_dir_dump(self, path, seconds):
+        """
+        Reads the data from Kafka topic and dumps the data into local directory
+        :param path:
+        :param seconds:
+        :return:
+        """
         spark = self.get_spark()
 
         tweet_df = self.get_tweets_df()
 
         # dump the data into bronze lake path
         storeDF = tweet_df.writeStream. \
-            format(format). \
+            format("parquet"). \
             outputMode("append"). \
             option("path", path). \
             option("checkpointLocation", self._checkpoint_dir). \
-            trigger(processingTime='10 seconds'). \
-            start()
+            trigger(processingTime=self._processing_time). \
+            start().awaitTermination(int(seconds))
 
-        self.get_spark().streams.awaitTerminationOrTimeout(seconds)
+    def parquet_part_files_to_ssp_dataset(self, path):
+        """
+        Reads the parquet part files and constructs the dataset fro ML training
+        :param path:
+        :return:
+        """
+
+        if not os.path.exists("data/dataset/ssp/"):
+            os.makedirs("data/dataset/ssp/")
+
+        def store_df_as_parquet(df, path):
+            df["id"] = np.arange(0, len(df), dtype=int)
+            df["label"] = int(0) # Lets consider all text to be OTHER CATEGORY
+            df["text"] = df["full_text"]
+            df = df[["id", "text", "label"]]
+            df.to_parquet(path, engine="fastparquet")
+
 
         df = get_raw_dataset(path.replace("file://", ""))
-        df.to_parquet("data/ssp_dataset.parquet", engine="pyarrow")
+        print_info(df.shape)
+
+        assert df.shape[0] > 27500
+        df = df.sample(frac=1).reset_index(drop=True)
+        df.to_parquet("data/dataset/ssp/ssp_tweet_dataset.parquet", engine="fastparquet")
+
+        unlabeled_test_df = df[0:1000]  # 1K
+        store_df_as_parquet(df=unlabeled_test_df, path="data/dataset/ssp/ssp_test_dataset.parquet")
+
+        unlabeled_val_df = df[1000:1500]  # 500
+        store_df_as_parquet(df=unlabeled_val_df, path="data/dataset/ssp/ssp_val_dataset.parquet")
+
+        unlabeled_LF_df = df[1500:2500]  # 1K
+        store_df_as_parquet(df=unlabeled_LF_df, path="data/dataset/ssp/ssp_LF_dataset.parquet")
+
+        unlabeled_train_df = df[2500:]  # 25+K
+        unlabeled_train_df.to_parquet("data/dataset/ssp/ssp_train_dataset.parquet", engine="fastparquet")
+
 
 if __name__ == "__main__":
     optparse = argparse.ArgumentParser("Twitter Spark Text Processor pipeline:")
@@ -196,10 +275,11 @@ if __name__ == "__main__":
 
     optparse.add_argument("-m", "--mode",
                           required=True,
-                          help="[start_tweet_stream, structured_streaming_dump, visualize, file_dump]")
+                          help="[start_tweet_stream, structured_streaming_dump, visualize, local_dir_dump, ssp_dataset]")
 
     optparse.add_argument("-s", "--seconds",
                           required=False,
+                          type=int,
                           help="Wait seconds before shutting down")
 
     optparse.add_argument("-p", "--path",
@@ -212,12 +292,14 @@ if __name__ == "__main__":
     dataset = TwitterDataset(config_file_path=parsed_args.config_file)
 
     if parsed_args.mode == "start_tweet_stream":
-        dataset.twitter_socket_stream()
+        dataset.twitter_kafka_stream()
     elif parsed_args.mode == "structured_streaming_dump":
-        dataset.structured_streaming()
+        dataset.structured_streaming_dump()
     elif parsed_args.mode == "visualize":
         dataset.visualize()
-    elif parsed_args.mode == "file_dump":
-        dataset.file_dump(parsed_args.path, parsed_args.seconds)
+    elif parsed_args.mode == "local_dir_dump":
+        dataset.local_dir_dump(parsed_args.path, parsed_args.seconds)
+    elif parsed_args.mode == "ssp_dataset":
+        dataset.parquet_part_files_to_ssp_dataset(path=parsed_args.path)
     else:
         raise RuntimeError("Invalid choice")

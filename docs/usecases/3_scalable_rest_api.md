@@ -39,4 +39,4 @@
     bin/ner_extraction_using_spacy.sh
 ```  
 
-![](images/ner_out.png)
+![](../images/ner_out.png)

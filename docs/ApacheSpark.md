@@ -118,3 +118,11 @@ beeline> !connect jdbc:hive2://<host>:<port>/<database>?hive.server2.transport.m
 - https://www.adaltas.com/en/2019/03/25/spark-sql-dataframe-thrift-server/
 - https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-thrift-server.html
 - https://www.adaltas.com/en/2019/03/25/spark-sql-dataframe-thrift-server/
+
+
+**Learning Materials**
+- https://databricks.com/session/monitoring-structured-streaming-applications-using-web-ui
+- https://databricks.com/session/a-deep-dive-into-structured-streaming
+- https://databricks.com/session/deep-dive-into-monitoring-spark-applications-using-web-ui-and-sparklisteners
+- https://databricks.com/blog/2016/07/28/structured-streaming-in-apache-spark.html
+- https://blog.clairvoyantsoft.com/productionalizing-spark-streaming-applications-4d1c8711c7b0

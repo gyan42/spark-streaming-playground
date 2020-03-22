@@ -5,7 +5,16 @@ from ssp.utils.pretty_print import *
 
 
 class ConfigManager(object):
+    """
+    Config manager to read ini file
+    """
     def __init__(self, config_path=None, key_value_pair_dict=None, string=None):
+        """
+        Initializes the configmanager using configparser
+        :param config_path: File path
+        :param key_value_pair_dict: Python dict
+        :param string: Plain string in acceptable format
+        """
         # set the path to the _config file
         self.config = configparser.ConfigParser(interpolation=ExtendedInterpolation())
         self.config_path = config_path
@@ -37,7 +46,7 @@ class ConfigManager(object):
                         option=option,
                         value=value)
 
-    def get_item(self, section, option)-> str:
+    def get_item(self, section, option) -> str:
         try:
             return self.config.get(section=section,
                                    option=option)
@@ -48,15 +57,33 @@ class ConfigManager(object):
     def add_section(self, section):
         self.config.add_section(section)
 
-    def get_item_as_float(self,section, option):
+    def get_item_as_float(self, section, option):
+        """
+        Returns the value as float
+        :param section:
+        :param option:
+        :return:
+        """
         return self.config.getfloat(section=section,
                                     option=option)
 
-    def get_item_as_int(self,section, option):
+    def get_item_as_int(self, section, option):
+        """
+        Returns the value as int
+        :param section:
+        :param option:
+        :return:
+        """
         return self.config.getint(section=section,
                                   option=option)
 
-    def get_item_as_boolean(self,section, option):
+    def get_item_as_boolean(self, section, option):
+        """
+        Returns the value as bool
+        :param section:
+        :param option:
+        :return:
+        """
         return self.config.getboolean(section=section,
                                       option=option)
 

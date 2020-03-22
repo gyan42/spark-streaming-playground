@@ -29,6 +29,7 @@ RUN apt-get install -y libpq-dev
 RUN apt-get install -y iputils-ping
 RUN apt-get install -y iproute2
 RUN apt-get install -y curl
+RUN apt-get install -y libsnappy-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME "/usr/lib/jvm/java-1.8.0-openjdk-amd64/"

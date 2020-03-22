@@ -33,18 +33,18 @@
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-    <script>
-        window.onload = function(){
-            if({{ scroll_id}}){
-                window.location.hash="#tag_text" + {{ scroll_id }};
-            }
-        }
-        </script>
+{#    <script>#}
+{#        window.onload = function(){#}
+{#            if({{ scroll_id}}){#}
+{#                window.location.hash="#tag_text" + {{ scroll_id }};#}
+{#            }#}
+{#        }#}
+{#        </script>#}
 </head>
 
 <body>
     <div class="header">
-        <h3>Text Classification Tagger</h3>
+        <h3>Text Binary Classification Tagger</h3>
     </div>
         <br>
        Uploaded file : {{ file }}
@@ -53,38 +53,58 @@
         <br>
         {{ pagination.links }}
         <br>
+
+       <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+
+{#        <form method="post" action="{{ url_for('tag_text', id='tag_text_form' + i|string) }}">#}
+        <form method="post" action="{{ url_for('tag_text', file_name=file)}}">
+{#Jinja tempalte#}
+        <div style="text-align:center">
+            <input name="sumbit"  style="font-size:30px;" align="middle" type="submit" style='width:auto' />
+        </div>
+        <br><br><br>
+
         {%for i in range(0, len)%}
 
-            <form method="post" action="{{ url_for('tag_text', id='tag_text_form' + i|string) }}">
-
-                <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word;",
-                     class="boxed">
-                  <a name="tag_text{{ id[i]|string }}">"{{ text[i] }}"</a>
+                {% if label[i]  == 0 %}
+                    <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word;
+                background-color:lightpink;",  class="boxed">
+                {% else %}
+                     <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word;
+                background-color:lightgreen;",  class="boxed">
+                 {% endif %}
+                    <a name="tag_text{{ id[i]|string }}">"{{ text[i] }}"</a>
+                    <br>
+                    <select style="font-size:22px;" name="option{{ id[i]|string }}">
+                        <option value="{{ label_string[i] }}" selected>{{ label_string[i] }}</option>
+                        {% for option in options %}
+                            {% if option != label_string[i] %}
+                                <option value="{{option}}">{{option}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                 </div>
-                <input name="id" value={{ id[i] }} type="hidden" size="5"  />
-                <input name="label" value={{ label[i] }} type="hidden" size="5"  />
+                <input name="id{{ id[i]|string }}" value={{ id[i] }} type="hidden" size="5"  />
+                <input name="label{{ id[i]|string }}" value={{ label[i] }} type="hidden" size="5"  />
                 <input name="page" value={{ page }} type="hidden" size="5"  />
                 <input name="per_page" value={{ per_page }} type="hidden" size="5"  />
                 <input name="offset" value={{ offset }} type="hidden" size="5"  />
-                <select style="font-size:22px;" name="option">
-                  <option value="{{ label_string[i] }}" selected>{{ label_string[i] }}</option>
-                  {% for option in options %}
-                    <option value="{{option}}">{{option}}</option>
-                  {% endfor %}
-                </select>
 
-                <input name="sumbit"  type="submit" style='width:auto' />
-            </form>
+
             <br><br><br>
-
         {%endfor%}
 
+        <div style="text-align:center">
+            <input name="sumbit"  style="font-size:30px;" align="middle" type="submit" style='width:auto' />
+        </div>
+        </form>
 
     <br>
     {{ pagination.links }}
     <br>
 
-   <p><a href="{{ url_for('index') }}"><<< Back to Home</a></p>
+   <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
 
 {{ df }}
 </body>

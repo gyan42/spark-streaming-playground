@@ -20,9 +20,9 @@
     </div>
 
     <br>
-        The CSV should have following columns: <br><br>
+        The CSV/Parquet should have following columns: <br><br>
         id : Record number starting from 0 <br>
-        text: Text column thats needs to validated for labels <br>
+        text: Text column that's needs to validated for labels <br>
         label : Text labels of type integer <br><br>
     <form method=post enctype=multipart/form-data>
         <input type=file name=file>
@@ -32,6 +32,8 @@
     <br>
     Uploaded file  <b> {{ file }} </b> with {{ count }} records!
     <br><br><br>
+
+    <p  style="font-size:18px;"><a href="{{ url_for('upload_labels') }}">Upload labels in CSV format with same file name followed bt "_label.csv"</a></p>
    <p><a href="{{ url_for('index') }}"><<< Back to Home</a></p>
 
 </body>

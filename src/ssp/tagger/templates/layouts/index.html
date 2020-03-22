@@ -18,11 +18,13 @@
 
 <body>
     <div class="header">
-        <h3>Welcome to Text Tagger</h3>
+        <h3>Welcome to Text Binary Classification Tagger</h3>
     </div>
 
     <p  style="font-size:22px;"><a href="{{ url_for('upload_data') }}">Upload Data</a></p>
     <p  style="font-size:22px;"><a href="{{ url_for('upload_labels') }}">Upload Labels</a></p>
-    <p  style="font-size:22px;"><a href="{{ url_for('tag_text') }}">Text Tagger</a></p>
+    <p  style="font-size:22px;"><a href="{{ url_for('uploaded_files_list') }}">Files List</a></p>
+    <p  style="font-size:22px;"><a href="{{ url_for('download_files_list') }}">Download Data Files</a></p>
+
 </body>
 </html>

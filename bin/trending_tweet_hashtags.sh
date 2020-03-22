@@ -14,4 +14,4 @@ spark-submit \
 --conf "spark.cores.max=${CORES_MAX}" \
 --py-files=dist/streaming_pipeline.zip \
 --packages io.delta:delta-core_2.11:0.4.0 \
---packages postgresql:postgresql:9.1-901-1.jdbc4 src/ssp/analytics/trending_hashtags_main.py \
+--packages postgresql:postgresql:9.1-901-1.jdbc4 src/ssp/analytics/trending_hashtags_main.py
