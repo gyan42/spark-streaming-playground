@@ -9,18 +9,17 @@
 
 ## Implementation
   
-So we have a data lake setup as follows on our HDFS, basically boils down to HDFS paths:
-- Bronze Lake : Raw data i.e tweets
-- Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,
-- Gold Lake   : Data Ready for web application / dash board to consume 
-
-
 - Get API Credentials from Twitter Developement Site  
 - Setup Tweepy to read Twitter stream filtering tweets taht talks about `Data Science/AI/Machine Learning/Big Data`  
 - Create Kafka topic for twitter stream  
 - Dump the tweets from Tweepy into Kafka topic  
 - Use Spark Structured Streaming to read the Kafka topic and store as parquet in HDFS  
 - Use HDFS command line ot verify the data dump  
+
+We have a data lake setup as follows on our HDFS, basically boils down to HDFS paths:  
+- Bronze Lake : Raw data i.e tweets  
+- Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,  
+- Gold Lake   : Data Ready for web application / dash board to consume    
 
 
 Below is the data flow path:
