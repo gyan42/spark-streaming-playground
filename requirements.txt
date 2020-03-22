@@ -18,3 +18,4 @@ wordcloud==1.4.1
 pillow==7.0.0
 imgeio==2.6.1
 textacy==0.10.0
+tqdm

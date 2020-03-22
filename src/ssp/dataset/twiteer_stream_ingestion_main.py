@@ -24,6 +24,7 @@ from tweepy.streaming import StreamListener
 import pandas as pd
 import glob
 import numpy as np
+from tqdm import tqdm
 
 # import socket
 from kafka import KafkaProducer
@@ -73,7 +74,7 @@ def get_raw_dataset(path):
     """
     all_files = glob.glob(path + "/*.parquet")
     files = []
-    for filename in all_files:
+    for filename in tqdm(all_files):
         df = pd.read_parquet(filename, engine="fastparquet")
         files.append(df)
     df = pd.concat(files, axis=0, ignore_index=True)
@@ -234,35 +235,48 @@ class TwitterDataset(StreamingConfigs):
         :return:
         """
 
-        if not os.path.exists("data/dataset/ssp/"):
-            os.makedirs("data/dataset/ssp/")
+        if not os.path.exists("data/dataset/ssp/original/"):
+            os.makedirs("data/dataset/ssp/original/")
+
+        def labelme(text, keyboards=self._key_words):
+            res = 0
+            for keyword in keyboards:
+                if keyword.lower() in text:
+                    res = 1
+            return res
 
         def store_df_as_parquet(df, path):
             df["id"] = np.arange(0, len(df), dtype=int)
-            df["label"] = int(0) # Lets consider all text to be OTHER CATEGORY
-            df["text"] = df["full_text"]
+            df["label"] = df["text"].apply(labelme)
             df = df[["id", "text", "label"]]
             df.to_parquet(path, engine="fastparquet")
 
 
         df = get_raw_dataset(path.replace("file://", ""))
+
+        df.drop_duplicates(["full_text"], inplace=True)
+        df["expanded_url"] = df["expanded_url"].astype(str)
+        df["media_url_https"] = df["media_url_https"].astype(str)
+        df["text"] = df["full_text"]
+        df = df.drop(["full_text"], axis=1)
+
         print_info(df.shape)
 
         assert df.shape[0] > 27500
         df = df.sample(frac=1).reset_index(drop=True)
-        df.to_parquet("data/dataset/ssp/ssp_tweet_dataset.parquet", engine="fastparquet")
+        df.to_parquet("data/dataset/ssp/original/ssp_tweet_dataset.parquet", engine="fastparquet")
 
         unlabeled_test_df = df[0:1000]  # 1K
-        store_df_as_parquet(df=unlabeled_test_df, path="data/dataset/ssp/ssp_test_dataset.parquet")
+        store_df_as_parquet(df=unlabeled_test_df, path="data/dataset/ssp/original/ssp_test_dataset.parquet")
 
         unlabeled_val_df = df[1000:1500]  # 500
-        store_df_as_parquet(df=unlabeled_val_df, path="data/dataset/ssp/ssp_val_dataset.parquet")
+        store_df_as_parquet(df=unlabeled_val_df, path="data/dataset/ssp/original/ssp_val_dataset.parquet")
 
         unlabeled_LF_df = df[1500:2500]  # 1K
-        store_df_as_parquet(df=unlabeled_LF_df, path="data/dataset/ssp/ssp_LF_dataset.parquet")
+        store_df_as_parquet(df=unlabeled_LF_df, path="data/dataset/ssp/original/ssp_LF_dataset.parquet")
 
         unlabeled_train_df = df[2500:]  # 25+K
-        unlabeled_train_df.to_parquet("data/dataset/ssp/ssp_train_dataset.parquet", engine="fastparquet")
+        unlabeled_train_df.to_parquet("data/dataset/ssp/original/ssp_train_dataset.parquet", engine="fastparquet")
 
 
 if __name__ == "__main__":

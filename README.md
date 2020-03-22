@@ -14,17 +14,17 @@ Guake is a background running terminal application in short, preventing you from
 
 - **Local Machine Setup**
 
-    - [Linux Machine](docs/Linux.md)
-    - [Anaconda](docs/Anaconda.md)
-    - [SSH](docs/ssh.md)
-    - [PostgreSQL](docs/Postgres.md)
-    - [Apache Hadoop](docs/ApacheHadoop.md)
-    - [Apache Hive](docs/ApacheHive.md)
-    - [Apache Spark](docs/ApacheSpark.md)
-    - [Apache Kafka](docs/ApacheKafka.md)
+    - [Linux Machine](docs/setup/Linux.md)
+    - [Anaconda](docs/setup/Anaconda.md)
+    - [SSH](docs/setup/ssh.md)
+    - [PostgreSQL](docs/setup/Postgres.md)
+    - [Apache Hadoop](docs/setup/ApacheHadoop.md)
+    - [Apache Hive](docs/setup/ApacheHive.md)
+    - [Apache Spark](docs/setup/ApacheSpark.md)
+    - [Apache Kafka](docs/setup/ApacheKafka.md)
     - [Python libs](requirements.txt)
-    - [Docker](docs/Docker.md)
-    - [Kubernets](docs/Kubernetes.md)
+    - [Docker](docs/setup/Docker.md)
+    - [Kubernets](docs/setup/Kubernetes.md)
     - [Twitter API](https://www.toptal.com/apache/apache-spark-streaming-twitter) Read the link to get ur [API keys](https://developer.twitter.com/)
         - In the heart we depend on Twitter tweet stream.
         - Twitter API along with `Tweepy` package is used to pull the tweets from internet
@@ -186,8 +186,8 @@ the same example applications can scale to hundreads of nodes and GigaBytes of d
 with each framework involved.
 
 **Pipeline Examples and Use Cases**   
-- [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
-- [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
-- [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
-- Streaming ML Classification with Static Spark Model  
-- [Streaming ML Classification with Active Learning Model](docs/usecases/full_ml_model_cycle.md)  
+- [1. Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
+- [2. Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
+- [3. Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
+- 4. Streaming ML Classification with Static Spark Model  
+- [5. Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  
