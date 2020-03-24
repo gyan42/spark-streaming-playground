@@ -1,9 +1,37 @@
 import re
 import swifter
 from sklearn.base import BaseEstimator, TransformerMixin
+import spacy
 
 from ssp.utils.eda import get_stop_words
 STOPWORDS = get_stop_words()
+
+nlp = spacy.load('en_core_web_sm')
+
+
+def remove_stop_words(text):
+    res = []
+    for token in nlp(text):
+        # Remove mentions and numeric words, added after checking vectorizer terms/vocabs
+        if token.text not in STOPWORDS and not token.text.startswith("\u2066@") and\
+                not token.text.startswith("@") and\
+                re.search('[a-zA-Z]', token.text): #filter only words with alphabets
+            res.append(token.lemma_.strip())
+    res = " ".join(res)
+    return res
+
+
+def preprocess(text):
+    # Remove https links, added after visualizing in wordcloud plot
+    text = re.sub("http[s]?:\/\/\S+", "", text.strip())
+    # General strategy for ML algos
+    text = remove_stop_words(text=text)
+    # Remove punctuation
+    text = re.sub('[^a-zA-Z0-9\s]', '', text)
+    text = text.lower()
+    text = text.replace("\n", " ")
+    return text.strip()
+
 
 
 class TextPreProcessor(BaseEstimator, TransformerMixin):
@@ -15,26 +43,9 @@ class TextPreProcessor(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
 
-    def remove_stop_words(self, text):
-        res = []
-        for word in text.split(" "):
-            if word not in STOPWORDS and not word.startswith("\u2066@"):
-                    res.append(word)
-        res = " ".join(res)
-        return res
-
     def transform(self, X, y=None):
-        # Remove https links
-        X[self._output_col] = X[self._input_col].swifter.apply(lambda x: re.sub("http[s]?:\/\/\S+", "", x))
-        X[self._output_col] = X[self._output_col].swifter.apply(lambda x: self.remove_stop_words(x))
-        # # Remove punctuation
-        X[self._output_col] = X[self._output_col].swifter.apply(lambda x: re.sub('[^a-zA-Z0-9\s]', '', x))
-        # # To smaller
-        X[self._output_col] = X[self._output_col].swifter.apply(lambda x: x.lower())
-        X[self._output_col] = X[self._output_col].swifter.apply(lambda x: x.replace("\n", " "))
-        # Remove stop words ? for ML models
+        X[self._output_col] = X[self._input_col].swifter.apply(preprocess)
         # Lematization ? for ML models
-        # Remove mentions
         # Tweets with more than 5 mentions/hashtag then consider it to be spam/useless, check with length
         return X
 

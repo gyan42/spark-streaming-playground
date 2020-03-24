@@ -5,10 +5,28 @@ where pipelines can be build and tested based on Twitter stream. Which involves 
 store the data in data lake, play around with the Spark Structured SQLs for processing, create dataset from live 
 stream for Machine Learning and do interactive visualization from the data lake.
 
+## Pipeline Examples and Use Cases  
+
+Run pytest to check everything works fine...
+```
+pytest -rP
+``` 
+
+- [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
+- [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
+- [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
+- WIP : Streaming ML Classification with Static Spark Model  
+- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  
+
+
 
 ## Tools and Frameworks setup
 
+------------------------------------------------------------------------------------------------------------------------
+
 ![](docs/drawio/big_data_zoo.png)
+
+------------------------------------------------------------------------------------------------------------------------
 
 
 Most of these examples involve multiple services running in the background on different terminals tabs for the pipeline to work.
@@ -63,6 +81,14 @@ Guake is a background running terminal application in short, preventing you from
     $HADOOP_HOME/sbin/start-yarn.sh
     # Start Spark standalone cluster
     $SPARK_HOME/sbin/start-all.sh
+    ```
+  
+    If you wanna stop playing...
+    ```
+    sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+    $HADOOP_HOME/sbin/stop-dfs.sh
+    $HADOOP_HOME/sbin/stop-yarn.sh
+    $SPARK_HOME/sbin/stop-all.sh
     ```
 
 - **Python Envronment setup**
@@ -123,8 +149,9 @@ Guake is a background running terminal application in short, preventing you from
     All the services when running could load your machine to the fullest.
     Minimum configuration would be 8+Cores and 32GB, when services are running :)
 
+------------------------------------------------------------------------------------------------------------------------
 
-## Configuration
+### Configuration
 Check this [file](config.ini). We use Python `configparser` to read the configs from *.ini file.
 Choosen for its simpilicity over others.
 
@@ -147,7 +174,7 @@ hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 
 ------------------------------------------------------------------------------------------------------------------------
 
-### Contents
+### Learning Materials
 
 Below are some Big Data frameworks and cool materials to begin with, 
 if you are an intermediate or experienced developer you can ignore it.
@@ -189,9 +216,3 @@ the same example applications can scale to hundreads of nodes and GigaBytes of d
 with each framework involved.
 
 
-**Pipeline Examples and Use Cases**   
-- [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
-- [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
-- [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
-- Streaming ML Classification with Static Spark Model  
-- [5. Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  

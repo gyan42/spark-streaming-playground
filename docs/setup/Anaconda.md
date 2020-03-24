@@ -9,6 +9,7 @@ Follow the steps [here](https://docs.conda.io/projects/conda/en/latest/user-guid
 conda create --prefix=/opt/envs/ssp/ python=3.7
 conda activate /opt/envs/ssp
 pip install -r requirements.txt
+python -m spacy download en_core_web_sm
 pip install notebook
 pip install jupyterlab
 ```
