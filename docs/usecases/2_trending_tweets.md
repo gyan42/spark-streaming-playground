@@ -21,6 +21,8 @@ Below is the data flow path:
 
 `Postgresql -> Flask REST API -> Web Application`
 
+![](../drawio/2_trending_tweets.png)
+
 ## How to run?
 
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
