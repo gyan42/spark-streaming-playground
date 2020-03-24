@@ -185,6 +185,8 @@ Our setup is configured to run on single machine, however with little bit of lea
 the same example applications can scale to hundreads of nodes and GigaBytes of data with right set of confgiurations
 with each framework involved.
 
+![](docs/drawio/big_data_zoo.png)
+
 **Pipeline Examples and Use Cases**   
 - [1. Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
 - [2. Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
