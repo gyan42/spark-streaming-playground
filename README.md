@@ -8,6 +8,9 @@ stream for Machine Learning and do interactive visualization from the data lake.
 
 ## Tools and Frameworks setup
 
+![](docs/drawio/big_data_zoo.png)
+
+
 Most of these examples involve multiple services running in the background on different terminals tabs for the pipeline to work.
 It is highly recommened to use terminal like [Guake](http://guake-project.org/).
 Guake is a background running terminal application in short, preventing you from closing the terminals.
@@ -185,11 +188,10 @@ Our setup is configured to run on single machine, however with little bit of lea
 the same example applications can scale to hundreads of nodes and GigaBytes of data with right set of confgiurations
 with each framework involved.
 
-![](docs/drawio/big_data_zoo.png)
 
 **Pipeline Examples and Use Cases**   
-- [1. Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
-- [2. Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
-- [3. Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
-- 4. Streaming ML Classification with Static Spark Model  
+- [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
+- [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
+- [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
+- Streaming ML Classification with Static Spark Model  
 - [5. Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  
