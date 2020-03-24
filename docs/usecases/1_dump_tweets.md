@@ -27,6 +27,8 @@ Below is the data flow path:
  
 `Twitter API -> Kafka Producer -> Kafka Server -> Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake`
 
+![](../drawio/1_dump_raw_tweets.png)
+
 ------------------------------------------------------------------------------------------------------------------------
 
 ## How to run?

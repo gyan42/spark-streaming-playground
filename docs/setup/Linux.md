@@ -18,3 +18,15 @@ sudo apt-get install -y iproute2
 sudo apt-get install -y curl
 sudo apt-get install -y libsnappy-dev
 ```
+
+Run the following 3 lines, and you should be able to see the progress bars:
+
+```
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
+pip install ipywidgets
+jupyter nbextension enable --py widgetsnbextension
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+```
+
+Download [Draw.io](https://github.com/jgraph/drawio-desktop/releases) desktop version for diagrams!

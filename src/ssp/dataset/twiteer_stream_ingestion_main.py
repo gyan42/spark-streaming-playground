@@ -238,18 +238,11 @@ class TwitterDataset(StreamingConfigs):
         if not os.path.exists("data/dataset/ssp/original/"):
             os.makedirs("data/dataset/ssp/original/")
 
-        def labelme(text, keyboards=self._key_words):
-            res = 0
-            for keyword in keyboards:
-                if keyword.lower() in text:
-                    res = 1
-            return res
-
         def store_df_as_parquet(df, path):
             df["id"] = np.arange(0, len(df), dtype=int)
-            df["label"] = df["text"].apply(labelme)
-            df = df[["id", "text", "label"]]
-            df.to_parquet(path, engine="fastparquet")
+            # df["label"] = df["text"].apply(labelme)
+            df = df[["id", "text"]]
+            df.to_parquet(path, engine="fastparquet", index=False)
 
 
         df = get_raw_dataset(path.replace("file://", ""))
@@ -264,7 +257,7 @@ class TwitterDataset(StreamingConfigs):
 
         assert df.shape[0] > 27500
         df = df.sample(frac=1).reset_index(drop=True)
-        df.to_parquet("data/dataset/ssp/original/ssp_tweet_dataset.parquet", engine="fastparquet")
+        df.to_parquet("data/dataset/ssp/original/ssp_tweet_dataset.parquet", engine="fastparquet", index=False)
 
         unlabeled_test_df = df[0:1000]  # 1K
         store_df_as_parquet(df=unlabeled_test_df, path="data/dataset/ssp/original/ssp_test_dataset.parquet")
@@ -276,7 +269,7 @@ class TwitterDataset(StreamingConfigs):
         store_df_as_parquet(df=unlabeled_LF_df, path="data/dataset/ssp/original/ssp_LF_dataset.parquet")
 
         unlabeled_train_df = df[2500:]  # 25+K
-        unlabeled_train_df.to_parquet("data/dataset/ssp/original/ssp_train_dataset.parquet", engine="fastparquet")
+        unlabeled_train_df.to_parquet("data/dataset/ssp/original/ssp_train_dataset.parquet", engine="fastparquet", index=False)
 
 
 if __name__ == "__main__":

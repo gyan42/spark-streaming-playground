@@ -4,10 +4,12 @@ class StreamingConfigs(object):
     """
     Reads the config.ini using configparser
     """
-    def __init__(self, config_file_path):
+    def __init__(self, config_file_path, twitter_ini_file="twitter.ini"):
 
         self._config = ConfigManager(config_path=config_file_path)
-        self._twitter_config = ConfigManager(config_path="twitter.ini")
+
+        if twitter_ini_file:
+            self._twitter_config = ConfigManager(config_path=twitter_ini_file)
 
 
         # [spark]
@@ -18,10 +20,11 @@ class StreamingConfigs(object):
         self._processing_time = self._config.get_item("spark", "processing_time")
 
         # [twitter]
-        self._twitter_consumer_key = self._twitter_config.get_item("twitter", "consumer_key")
-        self._twitter_consumer_secret = self._twitter_config.get_item("twitter", "consumer_secret")
-        self._twitter_access_token = self._twitter_config.get_item("twitter", "access_token")
-        self._twitter_access_secret = self._twitter_config.get_item("twitter", "access_secret")
+        if twitter_ini_file:
+            self._twitter_consumer_key = self._twitter_config.get_item("twitter", "consumer_key")
+            self._twitter_consumer_secret = self._twitter_config.get_item("twitter", "consumer_secret")
+            self._twitter_access_token = self._twitter_config.get_item("twitter", "access_token")
+            self._twitter_access_secret = self._twitter_config.get_item("twitter", "access_secret")
         self._key_words = self._config.get_item("twitter", "key_words").split(",")
 
         # [dataset]

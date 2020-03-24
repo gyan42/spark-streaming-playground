@@ -19,3 +19,4 @@ pillow==7.0.0
 imgeio==2.6.1
 textacy==0.10.0
 tqdm
+swifter==0.301
