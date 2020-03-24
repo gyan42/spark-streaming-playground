@@ -7,6 +7,8 @@
 
 `Extract NER Tags from text with UDF : Raw Text -> REST API end point -> Kubernetes -> Docker -> Flask -> spaCy -> NER`
 
+![](../drawio/3_scalable_rest_api.png)
+
 ```
 #[docker/kubernetes]
 
