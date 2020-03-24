@@ -15,10 +15,14 @@ Dataset creation involves:
 - Dataset of format `parquet` with text column and label column. (parquet nicely packs special characters without the headache os parsing the CSV files)
 - Data splits
 
-Run `bin/dump_raw_data_as_file.sh`
-Run `bin/prepare_ssp_dataset.sh`
+Run..
 
- creates dataset @ [data/dataset/ssp/original](data/dataset/ssp/original)
+```
+bin/dump_raw_data_as_file.sh
+bin/prepare_ssp_dataset.sh
+```
+
+ creates dataset @ [data/dataset/ssp/original](../../data/dataset/ssp/original)
 
 |File Name|Records|Info|Columns|
 |---------|-------|----|------|
