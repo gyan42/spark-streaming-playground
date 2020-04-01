@@ -25,17 +25,23 @@ sudo rm -rf /var/lib/zookeeper/
 cd /opt/binaries/
 wget https://downloads.apache.org/kafka/2.4.0/kafka_2.11-2.4.0.tgz
 tar xvzf kafka_2.11-2.4.0.tgz -C /opt/binaries/kafka --strip-components=1
+cp spark-streaming-playground/docs/conf/kafka/server1.properties /opt/binaries/kafka/config/server1.properties
+cp spark-streaming-playground/docs/conf/kafka/server2.properties /opt/binaries/kafka/config/server2.properties
+
 ```
 ```
 # add following to ~/.bashrc
 export KAFKA_HOME="/opt/kafka/"
 export PATH="$PATH:${KAFKA_HOME}/bin"
 
-sudo ln -s $KAFKA_HOME/config/server.properties /etc/kafka.properties
-sudo kafka-server-start.sh /etc/kafka.properties
+# create 3 brokers for more parallelism
+sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server.properties
+sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server1.properties
+sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server2.properties
+
 
 #to create a topic
-kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter_data
+sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic twitter_data
 
 #to delete the topic
 sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
@@ -59,6 +65,7 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic testing --fr
 - https://linuxhint.com/install-apache-kafka-ubuntu/
 - https://www.digitalocean.com/community/tutorials/how-to-install-apache-kafka-on-ubuntu-18-04
 - https://github.com/vaquarkhan/Apache-Kafka-poc-and-notes
+- https://www.michael-noll.com/blog/2013/03/13/running-a-multi-broker-apache-kafka-cluster-on-a-single-node/
 
 ## Test with our code
 ```

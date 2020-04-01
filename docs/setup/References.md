@@ -10,3 +10,4 @@
 - https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
 - https://alexioannides.com/2019/01/10/deploying-python-ml-models-with-flask-docker-and-kubernetes/
 - https://github.com/udacity/FSND-Deploy-Flask-App-to-Kubernetes-Using-EKS
+- https://www.kdnuggets.com/2017/09/data-science-key-terms-explained.html

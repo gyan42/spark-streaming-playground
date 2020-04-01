@@ -8,7 +8,7 @@ from pyspark.ml.feature import IDF, Tokenizer
 from pyspark.ml.feature import StringIndexer
 from pyspark.ml.feature import CountVectorizer
 from pyspark.ml import Pipeline, PipelineModel
-from ssp.utils import ConfigManager, print_info
+from ssp.utils.pretty_print import print_info
 from pyspark.ml.classification import LogisticRegression
 from pyspark.ml.feature import NGram, VectorAssembler
 
@@ -31,7 +31,7 @@ class SentimentSparkModel(object):
         self._spark.sparkContext.setLogLevel("error")
         self._pipeline = None
 
-        self._twitter_dataset = self._config.get_item("dataset", "twitter_dataset")
+        self._twitter_dataset = self._config.get_item("streams", "twitter_dataset")
         self._model_path = self._config.get_item("sentiment_model", "store_path")
         self._warehouse_location = self._config.get_item("spark", "warehouse_location")
 
@@ -67,8 +67,8 @@ class SentimentSparkModel(object):
         lr = LogisticRegression(maxIter=100)
         self._pipeline = Pipeline(stages=[tokenizer, cv, idf, label_string_idx, lr])
 
-    def build_ngrams_wocs(self, inputCol="text", outputCol="target", n=3):
-        tokenizer = [Tokenizer(inputCol=inputCol, outputCol="words")]
+    def build_ngrams_wocs(self, inputcol="text", outputcol="target", n=3):
+        tokenizer = [Tokenizer(inputCol=inputcol, outputCol="words")]
         ngrams = [
             NGram(n=i, inputCol="words", outputCol="{0}_grams".format(i))
             for i in range(1, n + 1)
@@ -85,7 +85,7 @@ class SentimentSparkModel(object):
             inputCols=["{0}_tfidf".format(i) for i in range(1, n + 1)],
             outputCol="features"
         )]
-        label_stringIdx = [StringIndexer(inputCol=outputCol, outputCol="label")]
+        label_stringIdx = [StringIndexer(inputCol=outputcol, outputCol="label")]
         lr = [LogisticRegression(maxIter=100)]
         return Pipeline(stages=tokenizer + ngrams + cv + idf + assembler + label_stringIdx + lr)
 

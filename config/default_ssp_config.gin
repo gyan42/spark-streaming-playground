@@ -1,0 +1,32 @@
+import ssp.kafka.producer
+import ssp.dl.classifier
+import ssp.ml.dataset
+# In intellij : File -> Settings -> File Types -> Python -> Add *.gin
+
+TwitterProducer.twitter_consumer_key = None
+TwitterProducer.twitter_consumer_secret = None
+TwitterProducer.twitter_access_token = None
+TwitterProducer.twitter_access_secret = None
+TwitterProducer.kafka_address = 'localhost:9092'
+TwitterProducer.kafka_topic = 'twitter_data'
+
+
+NaiveTextClassifier.train_df_or_path = None
+NaiveTextClassifier.test_df_or_path = None
+NaiveTextClassifier.dev_df_or_path = None
+NaiveTextClassifier.model_dir = None
+NaiveTextClassifier.wipe_old_data = False
+NaiveTextClassifier.text_column = "text"
+NaiveTextClassifier.label_column = "naive_label"
+NaiveTextClassifier.num_words = 8000
+NaiveTextClassifier.seq_len = 128
+NaiveTextClassifier.embedding_size = 128
+NaiveTextClassifier.batch_size = 64
+
+SSPMLDataset.label_output_column = "naive_label",
+SSPMLDataset.raw_tweet_table_name_prefix = "raw_tweet_dataset",
+SSPMLDataset.SSPMLDataset.postgresql_host = "localhost",
+SSPMLDataset.postgresql_port = "5432",
+SSPMLDataset.postgresql_database = "sparkstreamingdb",
+SSPMLDataset.postgresql_user = "sparkstreaming",
+SSPMLDataset.postgresql_password = "sparkstreaming"

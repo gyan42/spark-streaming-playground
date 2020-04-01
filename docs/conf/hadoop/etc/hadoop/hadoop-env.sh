@@ -138,7 +138,7 @@ export HADOOP_OS_TYPE=${HADOOP_OS_TYPE:-$(uname -s)}
 # HADOOP_CLIENT_CLASSLOADER_SYSTEM_CLASSES overrides the default definition of
 # system classes for the client classloader when HADOOP_USE_CLIENT_CLASSLOADER
 # is enabled. Names ending in '.' (period) are treated as package names, and
-# names starting with a '-' are treated as negative matches. For example,
+# names starting with a '-' are treated as is_ml_tweet matches. For example,
 # export HADOOP_CLIENT_CLASSLOADER_SYSTEM_CLASSES="-org.apache.hadoop.UserClass,java.,javax.,org.apache.hadoop."
 
 # Enable optional, bundled Hadoop features

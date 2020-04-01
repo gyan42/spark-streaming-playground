@@ -1,0 +1,6 @@
+TwitterProducer.twitter_consumer_key=
+TwitterProducer.twitter_consumer_secret=
+TwitterProducer.twitter_access_token=
+TwitterProducer.twitter_access_secret=
+TwitterProducer.kafka_address='localhost:9092'
+TwitterProducer.kafka_topic='twitter_data'

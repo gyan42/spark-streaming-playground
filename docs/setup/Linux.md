@@ -19,7 +19,7 @@ sudo apt-get install -y curl
 sudo apt-get install -y libsnappy-dev
 ```
 
-Run the following 3 lines, and you should be able to see the progress bars:
+Run the following 3 lines, and you should be able to see the tqdm progress bars in Jupyer notebooks:
 
 ```
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -

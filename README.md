@@ -16,7 +16,7 @@ pytest -rP
 - [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
 - [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
 - WIP : Streaming ML Classification with Static Spark Model  
-- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  
+- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/6_full_ml_model_cycle.md)  
 
 
 
@@ -64,7 +64,7 @@ Guake is a background running terminal application in short, preventing you from
     sudo /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
     sudo /opt/binaries/kafka/bin/kafka-server-start.sh /etc/kafka.properties &
     sudo /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data 
-    sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic twitter_data
+    sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic twitter_data
     
     #or
     
@@ -152,13 +152,13 @@ Guake is a background running terminal application in short, preventing you from
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Configuration
-Check this [file](config.ini). We use Python `configparser` to read the configs from *.ini file.
+Check this [file](config/config.ini). We use Python `configparser` to read the configs from *.ini file.
 Choosen for its simpilicity over others.
 
-Make a note of the your machine name with command `hostname`, and update the [config.ini](config.ini) `spark master url` with it,
+Make a note of the your machine name with command `hostname`, and update the [config.ini](config/config.ini) `spark master url` with it,
 `eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
 
-Get the Twitter App credentials and update it here [twitter.ini](twitter.ini).
+Get the Twitter App credentials and update it here [twitter.ini](config/twitter.ini).
 
 ------------------------------------------------------------------------------------------------------------------------
 

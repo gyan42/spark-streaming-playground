@@ -1,22 +1,23 @@
 import argparse
+import gin
 from pyspark.sql import SparkSession
 
 from ssp.ml.sentiment_analysis_model_main import SentimentSparkModel
-from ssp.utils import ConfigManager
-
 from ssp.customudf.textblob_sentiment import textblob_sentiment_analysis_udf
 
-
+@gin.configurable
 class SentimentAnalysis(object):
-    def __init__(self, config_file_path):
-        self._config = ConfigManager(config_path=config_file_path)
+    def __init__(self,
+                 checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
+                 parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/silver/",
+                 warehouse_location="/opt/spark-warehouse/",
+                 spark_master="spark://IMCHLT276:7077"):
 
-        self._spark_master = self._config.get_item("spark", "master")
+        self._spark_master = spark_master
 
-        self._checkpoint_dir = self._config.get_item("dataset", "checkpoint_dir")
-        self._parquet_dir = self._config.get_item("dataset", "silver_parquet_dir")
-        self._warehouse_location = self._config.get_item("spark", "warehouse_location")
-
+        self._checkpoint_dir = checkpoint_dir
+        self._parquet_dir = parquet_dir
+        self._warehouse_location = warehouse_location
 
         self.spark = SparkSession.builder. \
             appName("twitter_stream"). \
@@ -55,6 +56,8 @@ if __name__ == "__main__":
 
     parsed_args = optparse.parse_args()
 
-    nlp_processing = SentimentAnalysis(config_file_path=parsed_args.config_file)
+    gin.parse_config_file(parsed_args.config_file)
+
+    nlp_processing = SentimentAnalysis()
 
     nlp_processing.process()
