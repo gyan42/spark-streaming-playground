@@ -45,9 +45,9 @@ if __name__ == "__main__":
                                     test_df_or_path=test_df,
                                     dev_df_or_path=dev_df,
                                     model_dir=opt.model_dir)
-    classifer.preprocess_text()
+    classifer.preprocess_train_data()
     classifer.train()
     classifer.evaluate()
     classifer.save_model()
 
-    print_info(classifer.predict(test_df["text"].values))
+    print_info(classifer.predict(test_df["text"].values)[:10])

@@ -2,14 +2,16 @@ import argparse
 import gin
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import explode, col
-from ssp.customudf.spacy_ner_udf import get_ner_udf
 
-from ssp.utils.configuration import StreamingConfigs
+from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
+from ssp.spark.udf.spacy_ner_udf import get_ner_udf
 
 
 @gin.configurable
-class NerExrtaction(object):
+class NerExtraction(TwitterStreamerBase):
     def __init__(self,
+                 kafka_bootstrap_servers="localhost:9092",
+                 kafka_topic="twitter_data",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",
@@ -18,7 +20,16 @@ class NerExrtaction(object):
                  postgresql_port="5432",
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
-                 postgresql_password="sparkstreaming"):
+                 postgresql_password="sparkstreaming",
+                 is_live_stream=True,
+                 is_docker=False):
+
+        TwitterStreamerBase.__init__(self,
+                                     spark_master=spark_master,
+                                     checkpoint_dir=checkpoint_dir,
+                                     warehouse_location=warehouse_location,
+                                     kafka_bootstrap_servers=kafka_bootstrap_servers,
+                                     kafka_topic=kafka_topic)
 
 
         self._spark_master = spark_master
@@ -41,18 +52,34 @@ class NerExrtaction(object):
 
         self.spark.sparkContext.setLogLevel("error")
 
+        self._is_live_stream = is_live_stream
+        self._is_docker = is_docker
 
-    def process(self):
+    def online_process(self):
+        tweet_stream = self.get_source_stream()
+        return tweet_stream
+
+    def hdfs_process(self):
         userSchema = self.spark.read.parquet(self._bronze_parquet_dir).schema
 
-        tweet_table_stream = self.spark.readStream. \
+        tweet_stream = self.spark.readStream. \
             schema(userSchema). \
             format("parquet"). \
             option("ignoreChanges", "true"). \
             load(self._bronze_parquet_dir)
+        return tweet_stream
 
-        tweet_table_stream = tweet_table_stream. \
-            withColumn("ner", explode(get_ner_udf(col("text"))))
+    def process(self):
+        if self._is_live_stream:
+            tweet_stream = self.online_process()
+        else:
+            tweet_stream = self.hdfs_process()
+
+        # Note: UDF with wrapper for different URL based on from where the code is triggered docker/local machine
+        ner_udf = get_ner_udf(is_docker=self._is_docker)
+        tweet_stream.printSchema()
+        tweet_stream = tweet_stream. \
+            withColumn("ner", explode(ner_udf(col("text"))))
 
         def foreach_batch_function(df, epoch_id):
             # Transform and write batchDF
@@ -66,23 +93,7 @@ class NerExrtaction(object):
             properties = {"user": self._postgresql_user,
                           "password": self._postgresql_password,
                           "driver": "org.postgresql.Driver"}
-            df.write.jdbc(url=url, table="ner", mode=mode, properties=properties)
+            # df.write.jdbc(url=url, table="ner", mode=mode, properties=properties)
 
-        tweet_table_stream.writeStream.foreachBatch(foreach_batch_function).start().awaitTermination()
+        tweet_stream.writeStream.foreachBatch(foreach_batch_function).start().awaitTermination()
 
-
-if __name__ == "__main__":
-    optparse = argparse.ArgumentParser("Twitter Spark Text Processor NLP pipeline:")
-
-    optparse.add_argument("-cfg", "--config_file",
-                          default="config.ini",
-                          required=False,
-                          help="File path of config.ini")
-
-    parsed_args = optparse.parse_args()
-
-    nlp_processing = NerExrtaction()
-
-    gin.parse_config_file(parsed_args.config_file)
-
-    nlp_processing.process()

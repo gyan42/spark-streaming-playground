@@ -2,16 +2,23 @@ from pyspark.sql import SparkSession
 
 
 class StreamerBase(object):
-    def __init__(self, spark_master, checkpoint_dir, warehouse_location, processing_time):
+    def __init__(self,
+                 spark_master,
+                 checkpoint_dir,
+                 warehouse_location,
+                 kafka_bootstrap_servers,
+                 kafka_topic):
         self._spark_master = spark_master
         self._checkpoint_dir = checkpoint_dir
         self._warehouse_location = warehouse_location
-        self._processing_time = processing_time
+        self._kafka_bootstrap_servers = kafka_bootstrap_servers
+        self._kafka_topic = kafka_topic
 
     def get_spark(self):
         """
         :return:Spark Session
         """
+
         spark = SparkSession.builder. \
             appName("TwitterRawDataIngestion"). \
             master(self._spark_master). \

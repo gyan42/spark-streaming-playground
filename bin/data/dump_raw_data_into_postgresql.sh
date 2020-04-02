@@ -17,4 +17,4 @@ spark-submit \
 --packages postgresql:postgresql:9.1-901-1.jdbc4 \
 --driver-class-path ~/.ivy2/jars/org.postgresql_postgresql-9.4.1211.jar \
 --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.4,org.apache.kafka:kafka-clients:2.4.0,io.delta:delta-core_2.11:0.4.0 \
---py-files dist/streaming_pipeline.zip src/ssp/kafka/consumer/twiteer_stream_consumer_main.py --run_id=0 --mode=dump_into_postgresql --seconds=1200
+--py-files dist/streaming_pipeline.zip src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py --run_id=1 --mode=dump_into_postgresql --seconds=1200

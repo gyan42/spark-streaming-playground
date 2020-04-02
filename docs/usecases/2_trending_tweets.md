@@ -17,7 +17,7 @@
 
 Below is the data flow path:
 
-`Bronze Lake -> Spark Structured Streaming Parquet Source -> Extract Hash Tags with UDF -> Spark Structured Streaming Postgresql Sink`
+`Bronze Lake/Live Stream -> Spark Structured Streaming Parquet Source -> Extract Hash Tags with UDF -> Spark Structured Streaming Postgresql Sink`
 
 `Postgresql -> Flask REST API -> Web Application`
 
@@ -35,20 +35,21 @@ This example needs two terminals:
 
 - Hashtag [bin/trending_tweet_hashtags.sh](../../bin/analytics/trending_tweet_hashtags.sh)
     - `Bronze Lake -> Spark Structured Streaming Parquet Source -> Extract Hash Tags with UDF -> Spark Structured Streaming Postgresql Sink`
-    - [src/ssp/analytics/trending_hashtags_main.py](../../src/ssp/analytics/trending_hashtags_main.py)    
-- Dashboard [bin/dashboard.sh](../../bin/flask/trending_hashtags_dashboard.sh)
+    - [src/ssp/spark/streaming/analytics/trending_hashtags_main.py](../../src/ssp/spark/streaming/analytics/trending_hashtags_main.py)    
+- Dashboard [bin/flask/trending_hashtags_dashboard.sh](../../bin/flask/trending_hashtags_dashboard.sh)
     - `Postgresql -> Flask REST API -> Web Application`
-    - [src/ssp/dashboard/app.py](../../src/ssp/flask/dashboard/app.py)
+    - [src/ssp/flask/dashboard/app.py](../../src/ssp/flask/dashboard/app.py)
     
 
 ```
-cd /path/to/ # Local machine
+cd /path/to/spark-streaming-playground/ # Local machine
 cd /host  # Docker
+
 #[hashtag] Guake terminal name! 
-    bin/trending_tweet_hashtags.sh
+    bin/analytics/trending_tweet_hashtags.sh
 
 #[dashboard] Guake terminal name! 
-    bin/dashboard.sh
+    bin/flask/trending_hashtags_dashboard.sh
 ```
  
 Head to http://0.0.0.0:5001/ for live count on the trending #hashtags

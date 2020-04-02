@@ -53,7 +53,7 @@ def trending_tags():
 
 
 if __name__ == '__main__':
-    config = ConfigManager(config_path="config.ini")
+    config = ConfigManager(config_path="config/config.ini")
     host = config.get_item("dashboard", "host")
     port = config.get_item("dashboard", "port")
     app.run(debug=True, host=host, port=port)

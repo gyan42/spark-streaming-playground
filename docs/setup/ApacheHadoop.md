@@ -42,3 +42,4 @@ java -version # 1.8.x.yyy
 
 **References**
 - https://data-flair.training/blogs/installation-of-hadoop-3-on-ubuntu/
+- https://towardsdatascience.com/a-gentle-introduction-to-apache-arrow-with-apache-spark-and-pandas-bb19ffe0ddae

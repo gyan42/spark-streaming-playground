@@ -11,3 +11,5 @@
 - https://alexioannides.com/2019/01/10/deploying-python-ml-models-with-flask-docker-and-kubernetes/
 - https://github.com/udacity/FSND-Deploy-Flask-App-to-Kubernetes-Using-EKS
 - https://www.kdnuggets.com/2017/09/data-science-key-terms-explained.html
+- https://towardsdatascience.com/guide-to-file-formats-for-machine-learning-columnar-training-inferencing-and-the-feature-store-2e0c3d18d4f9
+- https://medium.com/mostly-ai/tensorflow-records-what-they-are-and-how-to-use-them-c46bc4bbb564

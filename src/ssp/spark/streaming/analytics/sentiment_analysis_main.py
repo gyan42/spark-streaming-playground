@@ -2,7 +2,7 @@ import argparse
 import gin
 from pyspark.sql import SparkSession
 
-from ssp.ml.sentiment_analysis_model_main import SentimentSparkModel
+from ssp.spark.streaming.ml.sentiment_analysis_model_main import SentimentSparkModel
 from ssp.customudf.textblob_sentiment import textblob_sentiment_analysis_udf
 
 @gin.configurable

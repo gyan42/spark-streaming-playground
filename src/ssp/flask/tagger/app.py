@@ -115,7 +115,7 @@ def tag_text(file_name):
     data_df["id"] = data_df["id"].fillna(0).astype(int)
     data_df["label"] = data_df["label"].fillna(0).astype(int)
 
-    # Label dataframe, prepare the dictinaries
+    # Label dataframe, store the dictinaries
     label_df = pd.read_csv(STORE_PATH + "/labels/" + label_file)
     label_df["index"] = label_df["index"].astype(int)
     string_2_index = dict(zip(label_df["label"], label_df["index"]))

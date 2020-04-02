@@ -4,7 +4,6 @@ from pyspark.sql.types import BooleanType, IntegerType
 from sklearn.base import BaseEstimator, TransformerMixin
 from pyspark.sql.functions import udf
 from ssp.snorkel.ai_key_words import AIKeyWords
-from ssp.utils.configuration import StreamingConfigs
 
 
 def labelme(text, keywords=AIKeyWords.ALL.split("|")):

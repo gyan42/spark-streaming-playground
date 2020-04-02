@@ -1,7 +1,7 @@
-import gin
 import argparse
-from ssp.ml.dataset import SSPMLDataset
+import gin
 
+from ssp.spark.streaming.analytics.trending_hashtags import TrendingHashTags
 
 if __name__ == "__main__":
     optparse = argparse.ArgumentParser("Twitter Spark Text Processor pipeline:")
@@ -14,5 +14,7 @@ if __name__ == "__main__":
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
-    dataset = SSPMLDataset()
-    dataset.store()
+
+    nlp_processing = TrendingHashTags()
+
+    nlp_processing.process()

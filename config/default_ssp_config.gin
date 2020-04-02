@@ -1,7 +1,15 @@
 import ssp.kafka.producer
+# triggers Tensorflow imports TODO : move to different gin file?
 import ssp.dl.classifier
 import ssp.ml.dataset
+import ssp.spark.streaming.consumer
+import ssp.spark.streaming.analytics
+
 # In intellij : File -> Settings -> File Types -> Python -> Add *.gin
+
+#######################################################################################################################
+#                                               DATA                                                                  #
+#######################################################################################################################
 
 TwitterProducer.twitter_consumer_key = None
 TwitterProducer.twitter_consumer_secret = None
@@ -10,6 +18,53 @@ TwitterProducer.twitter_access_secret = None
 TwitterProducer.kafka_address = 'localhost:9092'
 TwitterProducer.kafka_topic = 'twitter_data'
 
+TwitterDataset.kafka_bootstrap_servers="localhost:9092"
+TwitterDataset.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+TwitterDataset.bronze_parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+TwitterDataset.warehouse_location = "/opt/spark-warehouse/"
+TwitterDataset.spark_master = "spark://IMCHLT276:7077"
+TwitterDataset.postgresql_host = "localhost"
+TwitterDataset.postgresql_port = "5432"
+TwitterDataset.postgresql_database = "sparkstreamingdb"
+TwitterDataset.postgresql_user = "sparkstreaming"
+TwitterDataset.postgresql_password = "sparkstreaming"
+TwitterDataset.kafka_topic = "twitter_data"
+
+#######################################################################################################################
+#                                               Analystics                                                            #
+#######################################################################################################################
+
+TrendingHashTags.kafka_bootstrap_servers = "localhost:9092"
+TrendingHashTags.kafka_topic = "twitter_data"
+TrendingHashTags.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+TrendingHashTags.bronze_parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+TrendingHashTags.warehouse_location = "/opt/spark-warehouse/"
+TrendingHashTags.spark_master = "spark://IMCHLT276:7077"
+TrendingHashTags.postgresql_host = "localhost"
+TrendingHashTags.postgresql_port = "5432"
+TrendingHashTags.postgresql_database = "sparkstreamingdb"
+TrendingHashTags.postgresql_user = "sparkstreaming"
+TrendingHashTags.postgresql_password = "sparkstreaming"
+TrendingHashTags.is_live_stream=True
+
+
+NerExtraction.kafka_bootstrap_servers="localhost:9092"
+NerExtraction.kafka_topic="twitter_data"
+NerExtraction.checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+NerExtraction.bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+NerExtraction.warehouse_location="/opt/spark-warehouse/"
+NerExtraction.spark_master="spark://IMCHLT276:7077"
+NerExtraction.postgresql_host="localhost"
+NerExtraction.postgresql_port="5432"
+NerExtraction.postgresql_database="sparkstreamingdb"
+NerExtraction.postgresql_user="sparkstreaming"
+NerExtraction.postgresql_password="sparkstreaming"
+NerExtraction.is_live_stream=True
+NerExtraction.is_docker=False
+
+#######################################################################################################################
+#                                               DL                                                                    #
+#######################################################################################################################
 
 NaiveTextClassifier.train_df_or_path = None
 NaiveTextClassifier.test_df_or_path = None
@@ -22,11 +77,17 @@ NaiveTextClassifier.num_words = 8000
 NaiveTextClassifier.seq_len = 128
 NaiveTextClassifier.embedding_size = 128
 NaiveTextClassifier.batch_size = 64
+NaiveTextClassifier.hdfs_port = 9000
+NaiveTextClassifier.hdfs_host = "localhost"
 
-SSPMLDataset.label_output_column = "naive_label",
-SSPMLDataset.raw_tweet_table_name_prefix = "raw_tweet_dataset",
-SSPMLDataset.SSPMLDataset.postgresql_host = "localhost",
-SSPMLDataset.postgresql_port = "5432",
-SSPMLDataset.postgresql_database = "sparkstreamingdb",
-SSPMLDataset.postgresql_user = "sparkstreaming",
+#######################################################################################################################
+#                                               ML                                                                    #
+#######################################################################################################################
+
+SSPMLDataset.label_output_column = "naive_label"
+SSPMLDataset.raw_tweet_table_name_prefix = "raw_tweet_dataset"
+SSPMLDataset.postgresql_host = "localhost"
+SSPMLDataset.postgresql_port = "5432"
+SSPMLDataset.postgresql_database = "sparkstreamingdb"
+SSPMLDataset.postgresql_user = "sparkstreaming"
 SSPMLDataset.postgresql_password = "sparkstreaming"

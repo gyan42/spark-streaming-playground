@@ -4,6 +4,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, col, explode
 from pyspark.sql.types import ArrayType, StringType
 
+from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
 from ssp.utils.config_manager import ConfigManager
 from ssp.utils.configuration import StreamingConfigs
 
@@ -22,8 +23,10 @@ def extract_hashtag(text):
 extract_hashtag_udf = udf(extract_hashtag, ArrayType(StringType()))
 
 @gin.configurable
-class TrendingHashTags(object):
+class TrendingHashTags(TwitterStreamerBase):
     def __init__(self,
+                 kafka_bootstrap_servers="localhost:9092",
+                 kafka_topic="twitter_data",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",
@@ -32,24 +35,18 @@ class TrendingHashTags(object):
                  postgresql_port="5432",
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
-                 postgresql_password="sparkstreaming"):
+                 postgresql_password="sparkstreaming",
+                 is_live_stream=True):
+        TwitterStreamerBase.__init__(self,
+                                     spark_master=spark_master,
+                                     checkpoint_dir=checkpoint_dir,
+                                     warehouse_location=warehouse_location,
+                                     kafka_bootstrap_servers=kafka_bootstrap_servers,
+                                     kafka_topic=kafka_topic)
 
-        self._spark_master = spark_master
-
-        self._checkpoint_dir = checkpoint_dir
         self._bronze_parquet_dir = bronze_parquet_dir
-        self._warehouse_location = warehouse_location
-
-
-        self.spark = SparkSession.builder. \
-            appName("TrendingHashTags"). \
-            config("spark.sql.warehouse.dir", self._warehouse_location). \
-            master(self._spark_master). \
-            config("spark.sql.streaming.checkpointLocation", self._checkpoint_dir). \
-            enableHiveSupport(). \
-            getOrCreate()
-
-        self.spark.sparkContext.setLogLevel("error")
+        self.spark = self.get_spark()
+        self.spark.sparkContext.setLogLevel("DEBUG")
 
         self._postgresql_host = postgresql_host
         self._postgresql_port = postgresql_port
@@ -57,18 +54,33 @@ class TrendingHashTags(object):
         self._postgresql_user = postgresql_user
         self._postgresql_password = postgresql_password
 
-    def process(self):
+        self._is_live_stream = is_live_stream
+
+
+    def online_process(self):
+        tweet_stream = self.get_source_stream()
+        return tweet_stream
+
+    def hdfs_process(self):
         userSchema = self.spark.read.parquet(self._bronze_parquet_dir).schema
-        tweet_table_stream = self.spark.readStream. \
+        tweet_stream = self.spark.readStream. \
             schema(userSchema).\
             format("parquet"). \
             option("ignoreChanges", "true"). \
             option("failOnDataLoss", "false"). \
             load(self._bronze_parquet_dir)
 
-        tweet_table_stream.printSchema()
+        return tweet_stream
 
-        tweet_table_stream = tweet_table_stream. \
+    def process(self):
+        if self._is_live_stream:
+            tweet_stream = self.online_process()
+        else:
+            tweet_stream = self.hdfs_process()
+
+        tweet_stream.printSchema()
+
+        tweet_stream = tweet_stream. \
             withColumn("hashtag", explode(extract_hashtag_udf(col("text")))). \
             groupBy("hashtag").count().sort(col("count").desc())
 
@@ -90,21 +102,4 @@ class TrendingHashTags(object):
             df.write.jdbc(url=url, table="trending_hashtags", mode=mode, properties=properties)
 
 
-        tweet_table_stream.writeStream.outputMode("complete").foreachBatch(foreach_batch_function).start().awaitTermination()
-
-
-if __name__ == "__main__":
-    optparse = argparse.ArgumentParser("Twitter Spark Text Processor pipeline:")
-
-    optparse.add_argument("-cfg", "--config_file",
-                          default="config.ini",
-                          required=False,
-                          help="File path of config.ini")
-
-    parsed_args = optparse.parse_args()
-
-    gin.parse_config_file(parsed_args.config_file)
-
-    nlp_processing = TrendingHashTags()
-
-    nlp_processing.process()
+        tweet_stream.writeStream.outputMode("complete").foreachBatch(foreach_batch_function).start().awaitTermination()
