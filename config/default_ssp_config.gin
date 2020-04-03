@@ -4,6 +4,7 @@ import ssp.dl.classifier
 import ssp.ml.dataset
 import ssp.spark.streaming.consumer
 import ssp.spark.streaming.analytics
+import ssp.spark.streaming.ml
 
 # In intellij : File -> Settings -> File Types -> Python -> Add *.gin
 
@@ -62,6 +63,15 @@ NerExtraction.postgresql_password="sparkstreaming"
 NerExtraction.is_live_stream=True
 NerExtraction.is_docker=False
 
+
+SentimentAnalysis.kafka_bootstrap_servers = "localhost:9092"
+SentimentAnalysis.kafka_topic = "twitter_data"
+SentimentAnalysis.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+SentimentAnalysis.parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/silver/"
+SentimentAnalysis.warehouse_location = "/opt/spark-warehouse/"
+SentimentAnalysis.spark_master = "spark://IMCHLT276:7077"
+SentimentAnalysis.is_live_stream = True
+
 #######################################################################################################################
 #                                               DL                                                                    #
 #######################################################################################################################
@@ -91,3 +101,12 @@ SSPMLDataset.postgresql_port = "5432"
 SSPMLDataset.postgresql_database = "sparkstreamingdb"
 SSPMLDataset.postgresql_user = "sparkstreaming"
 SSPMLDataset.postgresql_password = "sparkstreaming"
+
+
+SentimentSparkModel.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+SentimentSparkModel.warehouse_location = "/opt/spark-warehouse/"
+SentimentSparkModel.spark_master = "spark://IMCHLT276:7077"
+SentimentSparkModel.twitter_dataset_path = "data/dataset/sentiment/sentiment140/"
+SentimentSparkModel.model_dir = "~/ssp/data/model/sentiment/"
+SentimentSparkModel.hdfs_host = "localhost"
+SentimentSparkModel.hdfs_port = 9000

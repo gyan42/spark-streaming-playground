@@ -7,9 +7,17 @@ make build
 export EXEC_MEM=3g
 export NUM_CORES=5
 export CORES_MAX=10
+
+FILE=data/dataset/sentiment/sentiment140/training.1600000.processed.noemoticon.csv
+if test -f "$FILE"; then
+    echo "$FILE exist"
+else
+    unzip data/dataset/sentiment/sentiment140.zip -d data/dataset/sentiment/sentiment140/
+fi
+
 spark-submit \
 --conf "spark.executor.memory=${EXEC_MEM}" \
 --conf "spark.executor.cores=${NUM_CORES}" \
 --conf "spark.cores.max=${CORES_MAX}" \
 --py-files=dist/streaming_pipeline.zip \
---packages io.delta:delta-core_2.11:0.4.0 src/ml/sentiment_analysis_model_main.py
+--packages io.delta:delta-core_2.11:0.4.0 src/ssp/spark/streaming/ml/sentiment_analysis_model_main.py
