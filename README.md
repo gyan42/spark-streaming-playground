@@ -17,8 +17,9 @@ pytest -rx #shows the captured output of failed tests (default behaviour).
 - [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
 - [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
 - [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
-- WIP : Streaming ML Classification with Static Spark Model  
-- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/6_full_ml_model_cycle.md)  
+- [Streaming ML Classification with Static Spark Model](docs/usecases/4_spark_ml.md)
+- [Spark SQL Exploration with Stackoverflow dataset](docs/usecases/5_static_table_stackoverflow.md)
+- [Text Classification with Data Collection](docs/usecases/6_full_ml_model_cycle.md)  
 
 
 
@@ -30,9 +31,15 @@ pytest -rx #shows the captured output of failed tests (default behaviour).
 
 ------------------------------------------------------------------------------------------------------------------------
 
+Assuming that there is some idea of each components, lets cook up some use cases matching the real world project scenarios.
+These examples may seem simple or already been explained somewhere else on the web, however care has been taken such that the 
+use cases exploit the `scalable` nature on each framework. 
 
-Most of these examples involve multiple services running in the background on different terminals tabs for the pipeline to work.
-It is highly recommened to use terminal like [Guake](http://guake-project.org/).
+Our setup is configured to run on single machine, however with little bit of effoer same example applications 
+can scale to hundreads of nodes and GigaBytes of data by tuning the configurations of respective frameworks involved.
+
+Most of these examples involve multiple services running in the background on different terminal tabs for the pipeline to work.
+It is highly recommened to use application like [Guake](http://guake-project.org/).
 Guake is a background running terminal application in short, preventing you from closing the terminals.
 
 - **Local Machine Setup**
@@ -225,12 +232,6 @@ if you are an intermediate or experienced developer you can ignore it.
     - [Edureka 12 hours Course](https://www.youtube.com/watch?v=GwIo3gDZCVQ)  
     - [Simpilearn 6 hours Course](https://www.youtube.com/watch?v=9f-GarcDY58)  
 
-Assuming that there is some idea of each components, lets cook up some use cases matching the real world project scenarios.
-These examples may seem simple or already been explained somewhere else on the web, however care has been taken such that the 
-use cases exploit the `scalable` nature on each framework. 
 
-Our setup is configured to run on single machine, however with little bit of learning curve and trial & error 
-the same example applications can scale to hundreads of nodes and GigaBytes of data with right set of confgiurations
-with each framework involved.
 
 
