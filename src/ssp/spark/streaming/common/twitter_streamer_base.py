@@ -32,15 +32,18 @@ class TwitterStreamerBase(StreamerBase):
                  checkpoint_dir,
                  warehouse_location,
                  kafka_bootstrap_servers,
-                 kafka_topic):
+                 kafka_topic,
+                 processing_time='5 seconds'):
         StreamerBase.__init__(self,
                               spark_master=spark_master,
                               checkpoint_dir=checkpoint_dir,
                               warehouse_location=warehouse_location,
                               kafka_bootstrap_servers=kafka_bootstrap_servers,
-                              kafka_topic=kafka_topic)
+                              kafka_topic=kafka_topic,
+                              processing_time=processing_time)
 
-    def get_schema(self):
+    @staticmethod
+    def get_schema():
         # define the schema to extract the data we are interested
         # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
         urls = ArrayType(StructType(). \
@@ -87,7 +90,7 @@ class TwitterStreamerBase(StreamerBase):
         # extract the data as per our schema
         tweet_df = tweet_stream. \
             selectExpr("cast (value as STRING)"). \
-            select(from_json("value", self.get_schema()).
+            select(from_json("value", TwitterStreamerBase.get_schema()).
                    alias("temp")). \
             select(col("temp.id_str"),
                    col("temp.created_at"),

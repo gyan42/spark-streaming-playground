@@ -11,14 +11,16 @@ from ssp.logger.pretty_print import print_info, print_error
 from ssp.utils.misc import check_n_mk_dirs
 
 # https://stackoverflow.com/questions/55854885/unable-to-save-the-tensorflow-model-file-into-hdfs
-
+# https://towardsdatascience.com/a-gentle-introduction-to-apache-arrow-with-apache-spark-and-pandas-bb19ffe0ddae
+# https://tech.marksblogg.com/working-with-hdfs.html
 @gin.configurable
 class NaiveTextClassifier(object):
     def __init__(self,
                  train_df_or_path=None,
                  test_df_or_path=None,
                  dev_df_or_path=None,
-                 model_dir=None,
+                 model_root_dir=None,
+                 model_version=1,
                  wipe_old_data=False,
                  text_column="text",
                  label_column="label",
@@ -30,10 +32,11 @@ class NaiveTextClassifier(object):
                  hdfs_port=None):
         """
 
-        :param train_df_or_path:
+        HDFS will be considered for storage if HDFS host and port are given
+        :param train_df_or_path: Train data dandas dataframe or path
         :param test_df_or_path:
         :param dev_df_or_path:
-        :param model_dir: Local directory path or HDFS path
+        :param model_root_dir: Local directory path or HDFS path
         :param wipe_old_data:
         :param text_column:
         :param label_column:
@@ -41,6 +44,8 @@ class NaiveTextClassifier(object):
         :param seq_len:
         :param embedding_size:
         :param batch_size:
+        :param hdfs_host:
+        :param hdfs_port:
         """
         self._pre_trained = False
         self._text_column = text_column
@@ -66,53 +71,20 @@ class NaiveTextClassifier(object):
         self._train_seqs = None
         self._test_seqs = None
         self._model_name = "naive_text_classifier"
-        self._model_dir = model_dir
+        self._model_version = model_version
         self._hdfs_host, self._hdfs_port = hdfs_host, hdfs_port
+        self._wipe_old_data = wipe_old_data
+        if model_root_dir:
+            self._model_dir = os.path.expanduser(model_root_dir) + "/" + self._model_name + "/" + str(self._model_version) + "/"
+            self._model_export_dir = os.path.expanduser(model_root_dir) + "/" + self._model_name + "/exported/" + str(self._model_version) + "/"
 
+        # Format the path for HDFS storage
         if hdfs_host and hdfs_port:
-            self._hdfs_fs = pa.hdfs.connect(hdfs_host, hdfs_port)
-            self._is_local_dir = False
+            self._model_dir = f"{self._hdfs_port}/{self._model_dir}".replace("//", "/")
+            self._model_dir = f"hdfs://{self._hdfs_host}:" + self._model_dir
 
-            self._model_path = f"{self._hdfs_port}/{self._model_dir}/{self._model_name}".replace("//", "/")
-            self._model_path = f"hdfs://{self._hdfs_host}:" + self._model_path
-
-            if self._hdfs_fs.exists(self._model_dir + 'tokenizer.pickle'):
-                print_info(f"Loading tokenizer... {self._model_dir + 'tokenizer.pickle'}")
-                with self._hdfs_fs.open(self._model_dir + 'tokenizer.pickle', 'rb') as f:
-                    self._tokenizer = pickle.load(f)
-            else:
-                self._tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=self._num_words, oov_token='<UNK>')
-
-            if self._hdfs_fs.exists(self._model_dir + self._model_name):
-                self._pre_trained = True
-                print_info(f"Loading model...{self._model_path}")
-                self._model = tf.keras.models.load_model(self._model_path)
-            else:
-                self._model = self.get_model()
-        else:
-            check_n_mk_dirs(model_dir, is_remove=wipe_old_data)
-            if os.path.exists(self._model_dir + 'tokenizer.pickle'):
-                print_info(f"Loading tokenizer... {self._model_dir + 'tokenizer.pickle'}")
-                with open(self._model_dir + 'tokenizer.pickle', 'rb') as f:
-                    self._tokenizer = pickle.load(f)
-            else:
-                self._tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=self._num_words, oov_token='<UNK>')
-
-            if os.path.exists(self._model_dir + self._model_name):
-                self._pre_trained = True
-                print_info(f"Loading model...{self._model_dir + self._model_name}")
-                self._model = tf.keras.models.load_model(self._model_dir + self._model_name)
-            else:
-                self._model = self.get_model()
-
-            self._hdfs_fs = None
-            self._is_local_dir = True
-
-    @staticmethod
-    def load_parquet_data(train_file_path, test_file_path, dev_file_path):
-        return pd.read_parquet(train_file_path, engine="fastparquet"), \
-               pd.read_parquet(test_file_path, engine="fastparquet"), \
-               pd.read_parquet(dev_file_path, engine="fastparquet")
+            self._model_export_dir = f"{self._hdfs_port}/{self._model_export_dir}".replace("//", "/")
+            self._model_export_dir = f"hdfs://{self._hdfs_host}:" + self._model_export_dir
 
     def fit_tokenizer(self):
         if self._train_df is not None:
@@ -136,8 +108,7 @@ class NaiveTextClassifier(object):
         else:
             print_info("No data for training!")
 
-
-    def get_model(self):
+    def define_model(self):
         model = tf.keras.Sequential([
             tf.keras.layers.Embedding(self._num_words, self._embedding_size),
             tf.keras.layers.GlobalAveragePooling1D(),
@@ -167,21 +138,6 @@ class NaiveTextClassifier(object):
         res = self._model.evaluate(self._test_seqs, self._test_df[self._label_column].values)[1]
         print(res)
 
-    def save_model(self):
-        if self._is_local_dir:
-            if os.path.exists(self._model_dir + self._model_name):
-                return
-            self._model.save(self._model_dir + self._model_name)
-            with open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
-                pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        else:
-            if self._hdfs_fs.exists(self._model_path):
-                return
-            print_info(f"Saving model to {self._model_path}")
-            self._model.save(self._model_path)
-            with self._hdfs_fs.open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
-                pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
     def predict(self, X):
         if isinstance(X, list) or isinstance(X, np.ndarray):
             seqs = self.transform(text_list=X)
@@ -194,3 +150,121 @@ class NaiveTextClassifier(object):
             res = self.transform([X])
             return res[0]
 
+    def load_tokenizer(self, tokenizer_path=None):
+        """
+        Loads model and tokenizer.
+        Loads from HDFS if host and port number are available or local file system is used.
+
+        :return:
+        """
+        if tokenizer_path is None:
+            tokenizer_path = self._model_dir
+        else:
+            tokenizer_path = os.path.expanduser(tokenizer_path)
+
+        # If HDFS host and port number are
+        if self._hdfs_host and self._hdfs_port:
+            self._hdfs_fs = pa.hdfs.connect(self._hdfs_host, self._hdfs_port)
+            self._is_local_dir = False
+
+            if self._hdfs_fs.exists(tokenizer_path + 'tokenizer.pickle'):
+                print_info(f"Loading tokenizer... {self._model_dir + 'tokenizer.pickle'}")
+                with self._hdfs_fs.open(tokenizer_path + 'tokenizer.pickle', 'rb') as f:
+                    self._tokenizer = pickle.load(f)
+            else:
+                self._tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=self._num_words, oov_token='<UNK>')
+        else:
+            if os.path.exists(tokenizer_path + 'tokenizer.pickle'):
+                print_info(f"Loading tokenizer... {tokenizer_path + 'tokenizer.pickle'}")
+                with open(tokenizer_path + 'tokenizer.pickle', 'rb') as f:
+                    self._tokenizer = pickle.load(f)
+            else:
+                self._tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=self._num_words, oov_token='<UNK>')
+
+            self._hdfs_fs = None
+            self._is_local_dir = True
+
+    def load_model(self):
+        """
+        Loads models
+        Loads from HDFS if host and port number are available or local file system is used.
+
+        :return:
+        """
+        # If HDFS host and port number are
+        if self._hdfs_host and self._hdfs_port:
+            self._hdfs_fs = pa.hdfs.connect(self._hdfs_host, self._hdfs_port)
+            self._is_local_dir = False
+
+            if self._hdfs_fs.exists(self._model_dir):
+                self._pre_trained = True
+                print_info(f"Loading model...{self._model_dir}")
+                self._model = tf.keras.models.load_model(self._model_dir)
+            else:
+                self._model = self.define_model()
+        else:
+            if os.path.exists(self._model_dir):
+                self._pre_trained = True
+                print_info(f"Loading model...{self._model_dir}")
+                self._model = tf.keras.models.load_model(self._model_dir)
+            else:
+                self._model = self.define_model()
+
+            self._hdfs_fs = None
+            self._is_local_dir = True
+
+    def load(self):
+        self.load_tokenizer()
+        self.load_model()
+
+    @staticmethod
+    def load_parquet_data(train_file_path, test_file_path, dev_file_path):
+        train_file_path, test_file_path, dev_file_path = os.path.expanduser(train_file_path), \
+                                                         os.path.expanduser(test_file_path), \
+                                                         os.path.expanduser(dev_file_path)
+        return pd.read_parquet(train_file_path, engine="fastparquet"), \
+               pd.read_parquet(test_file_path, engine="fastparquet"), \
+               pd.read_parquet(dev_file_path, engine="fastparquet")
+
+    def export_tf_model(self, model, export_path):
+        tf.keras.models.save_model(
+            model,
+            export_path,
+            overwrite=True,
+            include_optimizer=True,
+            save_format=None,
+            signatures=None,
+            options=None
+        )
+
+    def save(self):
+        if self._is_local_dir:
+            if os.path.exists(self._model_dir):
+                print_info("Model exists")
+            check_n_mk_dirs(self._model_dir, is_remove=self._wipe_old_data)
+            self._model.save(self._model_dir)
+            with open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
+                pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        else:
+            if self._hdfs_fs.exists(self._model_dir):
+                return
+
+            print_info(f"Saving model to {self._model_dir}")
+            self._model.save(self._model_dir)
+            with self._hdfs_fs.open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
+                pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        self.export_tf_model(model=self._model, export_path=self._model_export_dir)
+
+
+
+"""
+export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0//naive_text_classifier/exported/
+
+saved_model_cli show --dir ${MODEL_DIR}/1/ --all
+
+
+tensorflow_model_server \
+  --rest_api_port=8501 \
+  --model_name="naive_text_clf" \
+  --model_base_path="${MODEL_DIR}"
+"""

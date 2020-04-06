@@ -31,10 +31,10 @@ if __name__ == "__main__":
                           required=True,
                           help="[dump_into_bronze_lake, visualize, local_dir_dump, dump_into_postgresql]")
 
-    optparse.add_argument("-s", "--seconds",
+    optparse.add_argument("-s", "--num_records",
                           required=False,
                           type=int,
-                          help="Wait seconds before shutting down")
+                          help="Number of records to collect before shutting down")
 
     optparse.add_argument("-id", "--run_id",
                           required=False,
@@ -59,6 +59,6 @@ if __name__ == "__main__":
     elif parsed_args.mode == "local_dir_dump":
         dataset.structured_streaming_dump(path=parsed_args.path, termination_time=int(parsed_args.seconds))
     elif parsed_args.mode == "dump_into_postgresql":
-        dataset.dump_into_postgresql(run_id=parsed_args.run_id, seconds=parsed_args.seconds)
+        dataset.dump_into_postgresql(run_id=parsed_args.run_id, num_records=parsed_args.num_records)
     else:
         raise RuntimeError("Invalid choice")

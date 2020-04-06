@@ -36,13 +36,15 @@ class TrendingHashTags(TwitterStreamerBase):
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
                  postgresql_password="sparkstreaming",
+                 processing_time='5 seconds',
                  is_live_stream=True):
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
                                      warehouse_location=warehouse_location,
                                      kafka_bootstrap_servers=kafka_bootstrap_servers,
-                                     kafka_topic=kafka_topic)
+                                     kafka_topic=kafka_topic,
+                                     processing_time=processing_time)
 
         self._bronze_parquet_dir = bronze_parquet_dir
         self.spark = self.get_spark()

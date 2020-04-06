@@ -7,12 +7,14 @@ class StreamerBase(object):
                  checkpoint_dir,
                  warehouse_location,
                  kafka_bootstrap_servers,
-                 kafka_topic):
+                 kafka_topic,
+                 processing_time='5 seconds'):
         self._spark_master = spark_master
         self._checkpoint_dir = checkpoint_dir
         self._warehouse_location = warehouse_location
         self._kafka_bootstrap_servers = kafka_bootstrap_servers
         self._kafka_topic = kafka_topic
+        self._processing_time = processing_time
 
     def get_spark(self):
         """
@@ -27,13 +29,15 @@ class StreamerBase(object):
             enableHiveSupport(). \
             getOrCreate()
         spark.sparkContext.setLogLevel("ERROR")
+        spark.conf.set("spark.sql.streaming.metricsEnabled", "true")
 
         return spark
 
     def get_source_stream(self):
         raise NotImplementedError
 
-    def get_schema(self):
+    @staticmethod
+    def get_schema():
         raise NotImplementedError
 
     def visualize(self):

@@ -100,7 +100,7 @@ Spark Streaming application
     cd /path/to/spark-streaming-playground/ # Local machine
     cd /host  # Docker
 
-    bin/analytics/ner_extraction_using_spacy.sh
+    bin/nlp/ner_extraction_using_spacy.sh
 ```  
 
 ![](../images/ner_out.png)

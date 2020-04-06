@@ -44,9 +44,11 @@ def text_clasification():
     # res = text_classifier.predict(text)
     return jsonify({"res": str(res)}), 201
 
-
-if __name__ == '__main__':
+def create_app():
     config = ConfigManager(config_path="config/config.ini")
     host = config.get_item("api", "host")
     port = config.get_item("api", "port")
     app.run(debug=True, host=host, port=port)
+
+if __name__ == '__main__':
+    create_app()

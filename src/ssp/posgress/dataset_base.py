@@ -56,12 +56,12 @@ class PostgresqlDatasetBase(object):
         df["id"] = np.arange(0, len(df), dtype=int)
         df.to_parquet(path, engine="fastparquet", index=False)
 
-    def to_posgresql(self, df, table_name):
+    def to_posgresql_table(self, df, table_name, if_exists="fail"):
         conn = self.get_sqlalchemy_connection()
         try:
             df.to_sql(name=table_name,
                       con=conn,
-                      if_exists="fail",
+                      if_exists=if_exists,
                       index=False)
         except ValueError as e:
             print_error(e)
@@ -74,23 +74,54 @@ class PostgresqlDatasetBase(object):
         FROM information_schema.tables 
         WHERE table_schema='public' AND table_type='BASE TABLE'
         """
+        return pd.read_sql(query, conn)["table_name"].values
 
+    def get_raw_dump_tables_list(self):
+        tables = self.get_tables_list()
         tables = sorted(
-            [table for table in pd.read_sql(query, conn)["table_name"].values if self._raw_tweet_table_name_prefix in table],
+            [table for table in tables if table.startswith(self._raw_tweet_table_name_prefix)],
             reverse=True)
+
+        print_info("List of raw dataset tables avaialable : {}\n\n".format("\n".join(tables)))
         if len(tables) == 0:
             raise UserWarning("No data found in Postgresql DB")
         return tables
 
     def get_latest_raw_dataset_name_n_version(self):
-        tables = self.get_tables_list()
+        tables = self.get_raw_dump_tables_list()
         table_name = tables[0]
         version = table_name.split("_")[-1]
         return table_name, version
 
+    def get_table(self, table_name):
+        conn = self.get_sqlalchemy_connection()
+        return pd.read_sql(f"select * from {table_name}", conn)
+
+    def store_table(self, df, table_name):
+        pass
+
     def get_processed_datasets(self):
+        conn = self.get_sqlalchemy_connection()
+
         raw_tweet_dataset_table_name, index = self.get_latest_raw_dataset_name_n_version()
         tables = self.get_tables_list()
+        print_error(tables)
+
+        res = list()
+
+        for table in [f"deduplicated_raw_tweet_dataset_{index}",
+                      f"test_dataset_{index}",
+                      f"dev_dataset_{index}",
+                      f"snorkel_train_dataset_{index}",
+                      f"train_dataset_{index}"]:
+            print_info(f"Checking for {table}...")
+
+            if table in tables:
+                print_info(f"Found {table}!")
+                res.append(pd.read_sql(f"select * from {table}", conn))
+
+        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = res
+        return raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df
 
     def prepare_dataset(self):
         conn = self.get_sqlalchemy_connection()

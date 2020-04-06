@@ -18,6 +18,7 @@ sudo apt-get install -y iproute2
 sudo apt-get install -y curl
 sudo apt-get install -y libsnappy-dev
 sudo apt-get install -y unzip
+sudo apt-get install -y p7zip-full
 ```
 
 Run the following 3 lines, and you should be able to see the tqdm progress bars in Jupyer notebooks:

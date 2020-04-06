@@ -1,5 +1,6 @@
 import argparse
 import gin
+import json
 from tweepy.auth import OAuthHandler
 from tweepy.streaming import Stream
 from tweepy.streaming import StreamListener
@@ -24,6 +25,8 @@ class TweetsListener(StreamListener):
 
     def on_data(self, data):
         print_info(data)
+        # with open("/tmp/tweets/{}.json".format(json.loads(data)["id_str"]), "wt", encoding='utf-8') as file:
+        #     file.write(data)
         self._kafka_producer.send(self._kafka_topic, data.encode('utf-8')).get(timeout=10)
         return True
 

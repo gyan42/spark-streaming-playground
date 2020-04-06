@@ -9,7 +9,9 @@ stream for Machine Learning and do interactive visualization from the data lake.
 
 Run pytest to check everything works fine...
 ```
-pytest -rP
+pytest -s
+pytest -rP #shows the captured output of passed tests.
+pytest -rx #shows the captured output of failed tests (default behaviour).
 ``` 
 
 - [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  

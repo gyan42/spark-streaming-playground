@@ -21,6 +21,7 @@ class NerExtraction(TwitterStreamerBase):
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
                  postgresql_password="sparkstreaming",
+                 processing_time='5 seconds',
                  is_live_stream=True,
                  is_docker=False):
 
@@ -29,7 +30,8 @@ class NerExtraction(TwitterStreamerBase):
                                      checkpoint_dir=checkpoint_dir,
                                      warehouse_location=warehouse_location,
                                      kafka_bootstrap_servers=kafka_bootstrap_servers,
-                                     kafka_topic=kafka_topic)
+                                     kafka_topic=kafka_topic,
+                                     processing_time=processing_time)
 
 
         self._spark_master = spark_master

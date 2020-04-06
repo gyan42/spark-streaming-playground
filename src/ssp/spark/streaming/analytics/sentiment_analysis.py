@@ -15,14 +15,16 @@ class SentimentAnalysis(TwitterStreamerBase):
                  parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/silver/",
                  warehouse_location="/opt/spark-warehouse/",
                  spark_master="spark://IMCHLT276:7077",
-                 is_live_stream=True):
+                 is_live_stream=True,
+                 processing_time='5 seconds'):
 
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
                                      warehouse_location=warehouse_location,
                                      kafka_bootstrap_servers=kafka_bootstrap_servers,
-                                     kafka_topic=kafka_topic)
+                                     kafka_topic=kafka_topic,
+                                     processing_time=processing_time)
         self._spark_master = spark_master
 
         self._checkpoint_dir = checkpoint_dir

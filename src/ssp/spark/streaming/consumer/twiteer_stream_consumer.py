@@ -16,12 +16,14 @@ __status__ = "Education Purpose"
 import os
 import shutil
 import gin
+import time
 
 import pandas as pd
 import glob
 from tqdm import tqdm
 import psycopg2
 # import socket
+import threading
 
 from pyspark.sql.functions import *
 from pyspark.sql.types import IntegerType
@@ -106,13 +108,15 @@ class TwitterDataset(TwitterStreamerBase):
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
                  postgresql_password="sparkstreaming",
-                 raw_tweet_table_name="raw_tweet_dataset"):
+                 raw_tweet_table_name="raw_tweet_dataset",
+                 processing_time='5 seconds'):
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
                                      warehouse_location=warehouse_location,
                                      kafka_bootstrap_servers=kafka_bootstrap_servers,
-                                     kafka_topic=kafka_topic)
+                                     kafka_topic=kafka_topic,
+                                     processing_time=processing_time)
         self._spark_master = spark_master
 
         self._kafka_bootstrap_servers = kafka_bootstrap_servers
@@ -153,12 +157,27 @@ class TwitterDataset(TwitterStreamerBase):
         except:
             print_info("Postgresql Error!")
 
-    def dump_into_postgresql(self, run_id, seconds):
+    def check_n_stop_streaming(self, query, num_records, raw_tweet_table_name):
+        while (True):
+            conn = self.get_postgresql_connection()
+            count = pd.read_sql(f"select count(*) from {raw_tweet_table_name}", conn)["count"][0]
+            if count > num_records:
+                print_info(f"Number of records received so far {count}")
+                query.stop()
+                break
+            else:
+                print_info(f"Number of records received so far {count}")
+            time.sleep(1)
+
+    def dump_into_postgresql(self, run_id, num_records=35000):
 
         tweet_stream = self.get_source_stream()
-        raw_tweet_table_name = self._raw_tweet_table_name + "_version_{}".format(run_id)
+        raw_tweet_table_name = self._raw_tweet_table_name + "_{}".format(run_id)
 
-        def postgresql_all_tweets_data_dump(df, epoch_id, raw_tweet_table_name):
+
+        def postgresql_all_tweets_data_dump(df,
+                                            epoch_id,
+                                            raw_tweet_table_name):
 
             # DROP TABLE IF EXISTS ssp_raw_tweet_dataset_0 CASCADE;
             # Transform and write batchDF
@@ -176,8 +195,16 @@ class TwitterDataset(TwitterStreamerBase):
             df.write.jdbc(url=url, table=raw_tweet_table_name, mode=mode, properties=properties)
 
 
-        tweet_stream.writeStream.outputMode("append"). \
+        query = tweet_stream.writeStream.outputMode("append"). \
             foreachBatch(lambda df, id :
                          postgresql_all_tweets_data_dump(df=df,
                                                          epoch_id=id,
-                                                         raw_tweet_table_name=raw_tweet_table_name)).start().awaitTermination(seconds)
+                                                         raw_tweet_table_name=raw_tweet_table_name)).start()
+
+
+        stop_thread = threading.Thread(target=self.check_n_stop_streaming, args=(query, num_records, raw_tweet_table_name, ))
+        stop_thread.setDaemon(True)
+        stop_thread.start()
+
+        query.awaitTermination()
+        stop_thread.join()

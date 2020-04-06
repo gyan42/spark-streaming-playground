@@ -30,10 +30,7 @@ class SSPMLDataset(PostgresqlDatasetBase):
                                        postgresql_user=postgresql_user,
                                        postgresql_password=postgresql_password)
 
-
-
     def store(self):
-
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.prepare_dataset()
 
         raw_tweet_dataset_table_name, index = self.get_latest_raw_dataset_name_n_version()
@@ -41,32 +38,32 @@ class SSPMLDataset(PostgresqlDatasetBase):
         check_n_mk_dirs(f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}")
 
         # Store the deduplicated tweets collected with respective to AI keywords
-        self.to_posgresql(df=raw_tweet_dataset_df_deduplicated,
-                          table_name=f"tweet_classification_base_dataset_version_{index}")
+        self.to_posgresql_table(df=raw_tweet_dataset_df_deduplicated,
+                                table_name=f"deduplicated_raw_tweet_dataset_{index}")
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         self.store_df_as_parquet(df=test_df,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/test.parquet")
-        self.to_posgresql(df=test_df,
-                          table_name=f"test_dataset_version_{index}")
+        self.to_posgresql_table(df=test_df,
+                                table_name=f"test_dataset_{index}")
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         self.store_df_as_parquet(df=dev_df,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/dev.parquet")
-        self.to_posgresql(df=dev_df,
-                          table_name=f"dev_dataset_version_{index}")
+        self.to_posgresql_table(df=dev_df,
+                                table_name=f"dev_dataset_{index}")
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         self.store_df_as_parquet(df=snorkel_train_df,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/snorkel_train_df.parquet")
-        self.to_posgresql(df=snorkel_train_df,
-                          table_name=f"snorkel_train_dataset_version_{index}")
+        self.to_posgresql_table(df=snorkel_train_df,
+                                table_name=f"snorkel_train_dataset_{index}")
 
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         self.store_df_as_parquet(train_df,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/train.parquet")
-        self.to_posgresql(df=train_df,
-                          table_name=f"train_dataset_version_{index}")
+        self.to_posgresql_table(df=train_df,
+                                table_name=f"train_dataset_{index}")
 
 
 if __name__ == "__main__":

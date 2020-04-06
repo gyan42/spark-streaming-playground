@@ -14,7 +14,7 @@ Tweets -> Twitter Stream -> Tweepy -> Producer -> Kafka -> Consumer -> Spark Str
 Posgresql -> Raw Dataset Table -> SSPLabeler -> Train/Test/Dev/Snorkel dataset tables -> Snorkel Labeler -> Train models 
 
 ```
-## Dataset
+### Dataset
 We are interested to collect tweets that talks about Artificial Intelligence / Data Science in general.
 
 Dataset creation involves:
@@ -22,15 +22,6 @@ Dataset creation involves:
 - Sample relevant tweets, with possible false positive data (i.r irrelevant tweets)
 - Dataset of format `parquet` with text column and label column. (parquet nicely packs special characters without the headache os parsing the CSV files)
 - Data splits
-
-Run..
-
-```
-#by default 20mins of tweets will be collected and dumbed into the table
-bin/dump_raw_data_into_postgresql.sh
-#Reads the table as pandas dataframe, applies naive labelling, prepares the dataset needed for Text classifier and snorkel labelling 
-bin/prepare_ssp_dataset.sh
-```
 
 creates dataset @ [data/dataset/ssp/original](../../data/dataset/ssp/original)
 
@@ -43,7 +34,8 @@ creates dataset @ [data/dataset/ssp/original](../../data/dataset/ssp/original)
 |ssp_val_dataset.parquet | 500|Validation Data|["id", "text"]|
 
 
-## Labeling
+
+### Labeling
 ```
 Raw Data -> Run python code to tag programmatically -> Vanilla Version -> Tagger -> Golden Version (small dataset) 
 
@@ -79,30 +71,49 @@ Large Labelled Dataset -> ML Model -> Prediction
     
     Main Tagger Screen...
     ![](../images/text_tagger_screen.png)
+
     
 - **[Snorkel](https://www.snorkel.org/)**
     A semi automated way of preparing the dataset at scale for later use.
 
-    `bin/models/run_snorkel_labeeler.sh`
 
-## Text Classifier Training
+## How to run?
 
-**Naive DL Classifier**
+There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
+is the difference, once the terminal is launched, the steps are common. 
+
+To get a new terminal for our docker instance run : `docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash`
+Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`
+
+This example needs three terminals:
 
 ```
- bin/models/build_naive_dl_text_classifier.sh 
+cd /path/to/spark-streaming-playground/ # Local machine
+cd /host  # On Docker 'spark-streaming-playground' is mountes as a volume at /host/
+
+#[producer] Guake terminal name! 
+    bin/data/start_kafka_producer.sh
+
+#[dump data]
+    #by default 35K tweets will be collected and dumbed into the table
+    bin/data/dump_raw_data_into_postgresql.sh
+
+#[ssp data]
+    #Reads the table as pandas dataframe, applies naive labelling, prepares the dataset needed for Text classifier and snorkel labelling
+    bin/data/prepare_ssp_dataset.sh
+
+#[tagger]
+    bin/flask/tagger.sh
+
+#[snorkell] # TODO
+    bin/models/run_snorkel_labeeler.sh
+
+#[DL Text classification Model]
+    bin/models/build_naive_dl_text_classifier.sh 
+
+# [Spark Streaming]
+    bin/nlp/spark_dl_text_classification_main.sh
 ```
-
-## API Server
-
-TODO
-
-## Spark Streaming Application for Classification
-
-TODO
-
-## Text Dashboard
-
 
 ### References
 - https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65
