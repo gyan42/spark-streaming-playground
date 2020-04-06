@@ -9,14 +9,16 @@ stream for Machine Learning and do interactive visualization from the data lake.
 
 Run pytest to check everything works fine...
 ```
-pytest -rP
+pytest -s
+pytest -rP #shows the captured output of passed tests.
+pytest -rx #shows the captured output of failed tests (default behaviour).
 ``` 
 
 - [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
 - [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
 - [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
 - WIP : Streaming ML Classification with Static Spark Model  
-- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  
+- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/6_full_ml_model_cycle.md)  
 
 
 
@@ -57,14 +59,21 @@ Guake is a background running terminal application in short, preventing you from
     based on your machine some steps may vary.
     
     ```
+    # swipe out previous run data, if needed!
     sudo rm -rf /tmp/kafka-ogs 
     sudo rm -rf /var/lib/zookeeper/
+    sudo rm -rf /tmp/kafka-logs*
+    rm -rf /opt/spark-warehouse/
+    hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
     
+    # Lookout of errors int he jungle of service logs...
     /opt/binaries/hive/bin/hiveserver2 &
     sudo /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
-    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /etc/kafka.properties &
+    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server.properties &
+    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server1.properties &
+    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server2.properties &
     sudo /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data 
-    sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic twitter_data
+    sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic twitter_data
     
     #or
     
@@ -86,6 +95,7 @@ Guake is a background running terminal application in short, preventing you from
     If you wanna stop playing...
     ```
     sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+    sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
     $HADOOP_HOME/sbin/stop-dfs.sh
     $HADOOP_HOME/sbin/stop-yarn.sh
     $SPARK_HOME/sbin/stop-all.sh
@@ -152,26 +162,34 @@ Guake is a background running terminal application in short, preventing you from
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Configuration
-Check this [file](config.ini). We use Python `configparser` to read the configs from *.ini file.
+Check this [file](config/config.ini). We use Python `configparser` to read the configs from *.ini file.
 Choosen for its simpilicity over others.
 
-Make a note of the your machine name with command `hostname`, and update the [config.ini](config.ini) `spark master url` with it,
+Make a note of the your machine name with command `hostname`, and update the [config.ini](config/config.ini) `spark master url` with it,
 `eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
 
-Get the Twitter App credentials and update it here [twitter.ini](twitter.ini).
+Get the Twitter App credentials and update it here [twitter.ini](config/twitter.ini).
 
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Debugging
 
-In case you see any error with Spark Structured Streaming run:
+Since we stop and start Spark Streaming Kafka consumer, restart Kafka server, sometimes the offset can go for a toss.
+
+To solve the issue we need to clear the Kafka data and Spark warehouse data.
+ 
 ```
-rm -rf /tmp/kafka-logs/
-rm -rf /tmp/ssp/raw_data/
+sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
+
+sudo rm -rf /tmp/kafka-logs*
 rm -rf /opt/spark-warehouse/
 hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 ```
 
+Now head back to **Local Machine Setup** ans start kafka related services.
+
+ 
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Learning Materials

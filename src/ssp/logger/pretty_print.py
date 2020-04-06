@@ -7,10 +7,10 @@ CBLINK2   = '\33[6m'
 CSELECTED = '\33[7m'
 
 CBLACK  = '\33[30m'
-CRED    = '\33[31m'
+
 CGREEN  = '\33[32m'
 CYELLOW = '\33[33m'
-CBLUE   = '\33[34m'
+
 CVIOLET = '\33[35m'
 CBEIGE  = '\33[36m'
 CWHITE  = '\33[37m'
@@ -26,8 +26,8 @@ CWHITEBG  = '\33[47m'
 
 CGREY    = '\33[90m'
 CRED2    = '\33[91m'
-CGREEN2  = '\33[92m'
-CYELLOW2 = '\33[93m'
+
+
 CBLUE2   = '\33[94m'
 CVIOLET2 = '\33[95m'
 CBEIGE2  = '\33[96m'
@@ -42,6 +42,10 @@ CVIOLETBG2 = '\33[105m'
 CBEIGEBG2  = '\33[106m'
 CWHITEBG2  = '\33[107m'
 
+CBLUE   = '\33[34m'
+CYELLOW2 = '\33[93m'
+CRED    = '\33[31m'
+CGREEN2  = '\33[92m'
 
 def print_info(*args):
     """

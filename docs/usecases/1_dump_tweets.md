@@ -1,6 +1,6 @@
 # Use Case : Dump Tweet data into Data Lake
 
-## Requiremetns  
+## Requirements  
 
 - Come up with [Data Lake](https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/)  
 - Listen to Twitter streams, collect tweets that talk about `Data Science/AI/Machine Learning/Big Data` and dump into bronze lake.
@@ -41,12 +41,12 @@ Note: We pull our container run id with `$(docker ps | grep sparkstructuredstrea
 
 This example needs three terminals:
 
-- Producer [bin/start_kafka_producer.sh](../../bin/start_kafka_producer.sh)
+- Producer [bin/data/start_kafka_producer.sh](../../bin/data/start_kafka_producer.sh)
     - `Twitter API -> Kafka Producer -> Kafka Server`
-    - [src/ssp/dataset/twiteer_stream_ingestion_main.py](../../src/ssp/dataset/twiteer_stream_ingestion_main.py)    
-- Consumer [bin/dump_raw_data_into_bronze_lake.sh](../../bin/dump_raw_data_into_bronze_lake.sh)
+    - [src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py](../../src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py)    
+- Consumer [bin/data/dump_raw_data_into_bronze_lake.sh](../../bin/data/dump_raw_data_into_bronze_lake.sh)
     - `Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake`
-    - [src/ssp/dataset/twiteer_stream_ingestion_main.py](../../src/ssp/dataset/twiteer_stream_ingestion_main.py)
+    - [src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py](../../src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py)
     - `spark-submit` is used to run the application.
     - Which submits the application to Spark master, if the application has SparkSession in it, then it will
       be considered as Spark Application and the cluster is used to run the application
@@ -61,10 +61,13 @@ cd /path/to/spark-streaming-playground/ # Local machine
 cd /host  # On Docker 'spark-streaming-playground' is mountes as a volume at /host/
 
 #[producer] Guake terminal name! 
-    bin/start_kafka_producer.sh
+    bin/data/start_kafka_producer.sh
+
+#[visualize]
+    bin/data/visulaize_raw_text.sh
 
 #[consumer]
-    bin/dump_raw_data_into_bronze_lake.sh
+    bin/data/dump_raw_data_into_bronze_lake.sh
 
 #[hdfs]
     hdfs dfs -ls /tmp/ssp/data/lake/bronze/delta/
@@ -78,7 +81,7 @@ cd /host  # On Docker 'spark-streaming-playground' is mountes as a volume at /ho
     - http://docs.tweepy.org/en/latest/streaming_how_to.html
 - Understand to use Apache Kafka topic
     - `sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic twitter_data` 
-- Dumping the data to Kafka topic : [TweetsListener](../../src/ssp/dataset/twiteer_stream_ingestion_main.py)
+- Dumping the data to Kafka topic : [TweetsListener](../../src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py)
     - Define `KafkaProducer` with Kafka master url
     - Send the data to specific topic
 - Using Spark Structured Streaming to read Kafka topic

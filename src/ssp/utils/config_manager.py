@@ -1,7 +1,7 @@
 import configparser
 import os
 from configparser import ExtendedInterpolation, NoOptionError
-from ssp.utils.pretty_print import *
+from ssp.logger.pretty_print import *
 
 
 class ConfigManager(object):

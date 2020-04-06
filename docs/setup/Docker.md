@@ -55,7 +55,7 @@ systemctl start docker
 systemctl enable docker
 
 #build the image
-docker build --network host -f docker/Dockerfile -t spacy-flask-ner-python:latest .
+docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
 # run docker in interactive mode
 docker run -ti spacy-flask-ner-python /bin/bash
 # start the app
