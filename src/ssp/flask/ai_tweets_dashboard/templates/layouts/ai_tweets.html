@@ -40,12 +40,36 @@
         <h3>AI Classified Tweets</h3>
     </div>
     <br>
-  <div id = 1 style="font-size:30px; word-break: break-all; word-wrap: break-word;
-    background-color:lightskyblue;",  class="boxed">
-      <a name="tweet_1">
-          "via @RichardEudes - Trustworthy and reliable: why making data privacy a priority leads to stronger customer relationships  https://t.co/QKNUXaNIfP  #bigdata, #compliance, #datagovernance, #dataprivacy, #datascience #ds <a href=https://t.co/kU2QIbS6wK>https://t.co/kU2QIbS6wK</a>
-      </a>
-  </div>
+        <br>
+    {{ pagination.links }}
+    <br>
+
+   <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+
+
+       {%for i in range(0, len)%}
+            <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word; background-color:lightskyblue;",  class="boxed">
+            <a name="text_{{ i|string }}">{{ text[i]|safe }}</a>
+                <br>
+            {{ prob[i] }}
+
+            </div>
+           <br>
+       {%endfor%}
+
+        <input name="prob{{ i|string }}" value={{ prob[i] }} type="hidden" size="5"  />
+        <input name="page" value={{ page }} type="hidden" size="5"  />
+        <input name="per_page" value={{ per_page }} type="hidden" size="5"  />
+        <input name="offset" value={{ offset }} type="hidden" size="5"  />
+
+
+    <br>
+    {{ pagination.links }}
+    <br>
+
+    <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
 
 </body>
 </html>

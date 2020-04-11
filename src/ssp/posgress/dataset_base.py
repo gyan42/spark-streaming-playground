@@ -13,6 +13,7 @@ from ssp.logger.pretty_print import print_error, print_info
 from absl import flags
 from absl import app
 
+@gin.configurable
 class PostgresqlDatasetBase(object):
     def __init__(self,
                  text_column="text",
@@ -96,6 +97,11 @@ class PostgresqlDatasetBase(object):
         conn = self.get_sqlalchemy_connection()
         return pd.read_sql(f"select * from {table_name}", conn)
 
+    def execute(self, query):
+        conn = self.get_sqlalchemy_connection()
+        return pd.read_sql(query, conn)
+
+
     def store_table(self, df, table_name):
         pass
 
@@ -129,6 +135,7 @@ class PostgresqlDatasetBase(object):
         # Download dataset from postgresql
         raw_tweet_dataset_df = pd.read_sql(f"select * from {raw_tweet_dataset_table_name}", conn)
 
+        # TODO deduplicate here ?
         raw_tweet_dataset_df[self._text_column] = raw_tweet_dataset_df[self._text_column].swifter.apply(lambda t: t.strip())
 
         raw_tweet_dataset_df_deduplicated = raw_tweet_dataset_df.drop_duplicates(self._text_column)
