@@ -1,0 +1,46 @@
+<configurations>
+
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>org.postgresql.Driver</value>
+        <description>PostgreSQL metastore driver class name</description>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:postgresql://localhost:5432/hive</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>hive</value>
+        <description>username to use against metastore database</description>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>hive</value>
+        <description>password to use against metastore database</description>
+    </property>
+
+    <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+        <description>To disable the schema check, so that Spark and Hive can work together</description>
+    </property>
+
+    <property>
+      <name>hive.server2.thrift.port</name>
+      <value>10001</value>
+      <description>TCP port number to listen on, default 10000</description>
+    </property>
+
+    <property>
+        <name>hive.server2.enable.doAs</name>
+        <value>false</value>
+        <description>
+          Setting this property to true will have HiveServer2 execute
+          Hive operations as the user making the calls to it.
+        </description>
+    </property>
+</configurations>

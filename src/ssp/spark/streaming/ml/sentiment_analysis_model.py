@@ -22,7 +22,7 @@ class SentimentSparkModel(object):
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  warehouse_location="/opt/spark-warehouse/",
                  spark_master="spark://IMCHLT276:7077",
-                 twitter_dataset_path="data/dataset/sentiment140/",
+                 ai_tweets_topicset_path="data/dataset/sentiment140/",
                  model_dir="~/ssp/data/model/sentiment/",
                  hdfs_host=None,
                  hdfs_port=None):
@@ -65,9 +65,9 @@ class SentimentSparkModel(object):
         self._spark.sparkContext.setLogLevel("error")
         self._pipeline = None
 
-        self._twitter_dataset_path = "file:///" + os.path.abspath(twitter_dataset_path)
+        self._ai_tweets_topicset_path = "file:///" + os.path.abspath(ai_tweets_topicset_path)
 
-        self._twitter_dataset_schema = StructType([
+        self._ai_tweets_topicset_schema = StructType([
             StructField("target", StringType(), False),
             StructField("id", StringType(), False),
             StructField("date", StringType(), False),
@@ -79,7 +79,7 @@ class SentimentSparkModel(object):
         self._train_df, self._val_df, self._test_df = None, None, None
 
     def prepare_data(self):
-        df = self._spark.read.csv(self._twitter_dataset_path, schema=self._twitter_dataset_schema)
+        df = self._spark.read.csv(self._ai_tweets_topicset_path, schema=self._ai_tweets_topicset_schema)
         self._train_df, self._val_df, self._test_df = df.randomSplit([0.8, 0.1, 0.1])
         print_info("Train data count : {}".format(self._train_df.count()))
         print_info("Val data count : {}".format(self._val_df.count()))

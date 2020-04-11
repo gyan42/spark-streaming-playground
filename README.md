@@ -67,21 +67,24 @@ Guake is a background running terminal application in short, preventing you from
     
     ```
     # swipe out previous run data, if needed!
-    sudo rm -rf /tmp/kafka-ogs 
+    /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic ai_tweets_topic 
+    /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic mix_tweets_topic
+    sudo rm -rf /tmp/kafka-logs 
     sudo rm -rf /var/lib/zookeeper/
     sudo rm -rf /tmp/kafka-logs*
     rm -rf /opt/spark-warehouse/
     hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
+
     
     # Lookout of errors int he jungle of service logs...
     /opt/binaries/hive/bin/hiveserver2 &
-    sudo /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
-    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server.properties &
-    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server1.properties &
-    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server2.properties &
-    sudo /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data 
-    sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic twitter_data
-    
+    /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
+    /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server.properties &
+    /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server1.properties &
+    /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server2.properties &
+    /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic ai_tweets_topic
+    /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic mix_tweets_topic
+
     #or
     
     # use start supervisord, check docker/supervisor.conf for list of back ground services
@@ -213,11 +216,13 @@ if you are an intermediate or experienced developer you can ignore it.
     - [HDFS Explained](https://www.youtube.com/watch?v=GJYEsEEfjvk)  
 - [Apache Spark](https://spark.apache.org/docs/latest/)  
     - [My own post on Spark Jargons](https://medium.com/@mageswaran1989/spark-jargon-for-starters-af1fd8117ada)  
-    - [RDD Basics](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html)  
+    - [RDD Basics](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html)
+    - [PySpark on Google Colab](https://towardsdatascience.com/a-neanderthals-guide-to-apache-spark-in-python-9ef1f156d427)  
     - [DataFrame/Dataset Basics](https://medium.com/swlh/spark-dataset-apis-a-gentle-introduction-108cdeafdea5)  
     - [Spark Streaming](https://spark.apache.org/docs/latest/streaming-programming-guide.html)  
     - [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html)  
-    - [1 day Edureka Full Course](https://www.youtube.com/watch?v=F8pyaR4uQ2g)  
+    - [1 day Edureka Full Course](https://www.youtube.com/watch?v=F8pyaR4uQ2g)
+    - [Saark Internals](https://github.com/JerryLead/SparkInternals)  
 - [Apache Kafka](https://kafka.apache.org/)  
     - [what you need to know?](https://intellipaat.com/blog/what-is-apache-kafka/)  
     - [Kafka + Apache Spark](https://www.youtube.com/watch?v=65lHphtrfo0)  
@@ -234,4 +239,7 @@ if you are an intermediate or experienced developer you can ignore it.
 
 
 
+
+## Good Reads
+- [https://www.linkedin.com/pulse/blog-series-changing-landscape-data-platforms-ml-sandeep/](https://www.linkedin.com/pulse/blog-series-changing-landscape-data-platforms-ml-sandeep/)
 

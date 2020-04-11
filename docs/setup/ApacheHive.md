@@ -9,7 +9,7 @@ Below notes form [here](https://data-flair.training/blogs/apache-hive-installati
       mv apache-hive-3.1.2-bin hive  
     ```
  - Following files are needed before you can start the service:
-    - [hive/conf/hive-site.xml](../conf/hive/conf)
+    - [hive/conf/hive-site.xml](../../docker/conf/hive/conf)
     
 - Add to the `PATH` variable
     ```

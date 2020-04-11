@@ -215,7 +215,7 @@ def download(file_name):
 def tables_list():
     try:
         db = PostgresqlDatasetBase(text_column="text",
-                                   label_output_column="naive_label",
+                                   label_output_column="slabel",
                                    raw_tweet_table_name_prefix="raw_tweet_dataset",
                                    postgresql_host="localhost",
                                    postgresql_port="5432",
@@ -229,6 +229,7 @@ def tables_list():
     data_files = [table for table in tables_list if table.startswith("test") or table.startswith("dev")]
     return render_template('layouts/dumped_tables_list.html', len=len(data_files), files=data_files)
 
+
 @app.route('/tag_table/<table_name>', methods=['GET', 'POST'])
 def tag_table(table_name):
     """
@@ -236,14 +237,13 @@ def tag_table(table_name):
     :return:
     """
     db = PostgresqlDatasetBase(text_column="text",
-                               label_output_column="naive_label",
+                               label_output_column="slabel",
                                raw_tweet_table_name_prefix="raw_tweet_dataset",
                                postgresql_host="localhost",
                                postgresql_port="5432",
                                postgresql_database="sparkstreamingdb",
                                postgresql_user="sparkstreaming",
                                postgresql_password="sparkstreaming")
-    print_error(table_name)
     data_df = db.get_table(table_name)
 
     total = data_df.shape[0]
@@ -252,6 +252,10 @@ def tag_table(table_name):
 
     # Type cast the columns as required
     data_df["id"] = list(range(0, data_df.shape[0]))
+
+    if "label" not in data_df.columns:
+        data_df["label"] = data_df["slabel"].fillna(0).astype(int)
+
     data_df["label"] = data_df["label"].fillna(0).astype(int)
 
     # Label dataframe, store the dictinaries

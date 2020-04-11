@@ -1,12 +1,11 @@
 import pandas as pd
-import swifter
-from pyspark.sql.types import BooleanType, IntegerType
+from pyspark.sql.types import IntegerType
 from sklearn.base import BaseEstimator, TransformerMixin
 from pyspark.sql.functions import udf
-from ssp.snorkel.ai_key_words import AIKeyWords
+from ssp.utils.ai_key_words import AIKeyWords
 
 
-def labelme(text, keywords=AIKeyWords.ALL.split("|")):
+def labelme(text, keywords=AIKeyWords.POSITIVE.split("|")):
     text = text.replace("#", "").replace("@", "")
     res = 0
     for keyword in keywords:
@@ -28,11 +27,11 @@ class SSPTextLabeler(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None):
         if isinstance(X, pd.DataFrame):
             if self._input_col:
-               X[self._output_col] = X[self._input_col].swifter.apply(lambda x: labelme(x, AIKeyWords.ALL))
+               X[self._output_col] = X[self._input_col].swifter.apply(lambda x: labelme(x, AIKeyWords.POSITIVE))
                print(X[self._output_col].value_counts())
                return X
         elif isinstance(X, list):
-            X = [self.labelme(x, AIKeyWords.ALL) for x in X]
+            X = [self.labelme(x, AIKeyWords.POSITIVE) for x in X]
             return X
         elif isinstance(X, str):
-            return self.labelme(X, AIKeyWords.ALL)
+            return self.labelme(X, AIKeyWords.POSITIVE)

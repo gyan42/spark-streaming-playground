@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
     optparse.add_argument("-s", "--num_records",
                           required=False,
+                          default=50000,
                           type=int,
                           help="Number of records to collect before shutting down")
 

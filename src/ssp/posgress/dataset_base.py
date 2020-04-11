@@ -5,16 +5,18 @@ import pandas as pd
 import numpy as np
 import psycopg2
 import sqlalchemy
+import swifter
 
 from sklearn.model_selection import train_test_split
 from ssp.logger.pretty_print import print_error, print_info
-from ssp.ml.transformer.ssp_labeller import SSPTextLabeler
 
+from absl import flags
+from absl import app
 
 class PostgresqlDatasetBase(object):
     def __init__(self,
                  text_column="text",
-                 label_output_column="naive_label",
+                 label_output_column="slabel",
                  raw_tweet_table_name_prefix="raw_tweet_dataset",
                  postgresql_host="localhost",
                  postgresql_port="5432",
@@ -32,9 +34,6 @@ class PostgresqlDatasetBase(object):
 
         self._label_output_column = label_output_column
         self._text_column = text_column
-
-        self._labeler = SSPTextLabeler(input_col="text", output_col=label_output_column)
-
 
     def get_sqlalchemy_connection(self):
         url = "postgresql+psycopg2://{}:{}@{}:{}/{}".format(self._postgresql_user,
@@ -80,18 +79,18 @@ class PostgresqlDatasetBase(object):
         tables = self.get_tables_list()
         tables = sorted(
             [table for table in tables if table.startswith(self._raw_tweet_table_name_prefix)],
-            reverse=True)
+            reverse=False)
 
         print_info("List of raw dataset tables avaialable : {}\n\n".format("\n".join(tables)))
         if len(tables) == 0:
             raise UserWarning("No data found in Postgresql DB")
         return tables
 
-    def get_latest_raw_dataset_name_n_version(self):
+    def get_latest_raw_dataset_name_n_version(self, version=0):
         tables = self.get_raw_dump_tables_list()
-        table_name = tables[0]
-        version = table_name.split("_")[-1]
-        return table_name, version
+        table_name = tables[version]
+        assert version == int(table_name.split("_")[-1])
+        return table_name
 
     def get_table(self, table_name):
         conn = self.get_sqlalchemy_connection()
@@ -100,20 +99,20 @@ class PostgresqlDatasetBase(object):
     def store_table(self, df, table_name):
         pass
 
-    def get_processed_datasets(self):
+    def get_processed_datasets(self, version=0):
         conn = self.get_sqlalchemy_connection()
 
-        raw_tweet_dataset_table_name, index = self.get_latest_raw_dataset_name_n_version()
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
         tables = self.get_tables_list()
         print_error(tables)
 
         res = list()
 
-        for table in [f"deduplicated_raw_tweet_dataset_{index}",
-                      f"test_dataset_{index}",
-                      f"dev_dataset_{index}",
-                      f"snorkel_train_dataset_{index}",
-                      f"train_dataset_{index}"]:
+        for table in [f"deduplicated_raw_tweet_dataset_{version}",
+                      f"test_dataset_{version}",
+                      f"dev_dataset_{version}",
+                      f"snorkel_train_dataset_{version}",
+                      f"train_dataset_{version}"]:
             print_info(f"Checking for {table}...")
 
             if table in tables:
@@ -123,33 +122,53 @@ class PostgresqlDatasetBase(object):
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = res
         return raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df
 
-    def prepare_dataset(self):
+    def split_dataset_table(self, version=0):
         conn = self.get_sqlalchemy_connection()
-        raw_tweet_dataset_table_name, index = self.get_latest_raw_dataset_name_n_version()
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
 
         # Download dataset from postgresql
         raw_tweet_dataset_df = pd.read_sql(f"select * from {raw_tweet_dataset_table_name}", conn)
 
-        raw_tweet_dataset_df_deduplicated = raw_tweet_dataset_df.drop_duplicates("text")
+        raw_tweet_dataset_df[self._text_column] = raw_tweet_dataset_df[self._text_column].swifter.apply(lambda t: t.strip())
 
-        raw_tweet_dataset_df_deduplicated = self._labeler.transform(raw_tweet_dataset_df_deduplicated)
+        raw_tweet_dataset_df_deduplicated = raw_tweet_dataset_df.drop_duplicates(self._text_column)
 
-        print_info("Record counts per label : ")
-        print_info(raw_tweet_dataset_df_deduplicated[self._label_output_column].value_counts())
+        raw_tweet_dataset_df_deduplicated = raw_tweet_dataset_df_deduplicated.sample(frac=1, random_state=42).reset_index(drop=True)
+
+        # remove new lines and carriage returns
 
         df, test_df = train_test_split(raw_tweet_dataset_df_deduplicated,
                                        test_size=1000,
-                                       random_state=42,
-                                       stratify=raw_tweet_dataset_df_deduplicated[self._label_output_column])
+                                       random_state=42)
+        # stratify=raw_tweet_dataset_df_deduplicated[self._label_output_column])
 
         df, dev_df = train_test_split(df,
                                       test_size=500,
-                                      random_state=42,
-                                      stratify=df[self._label_output_column])
+                                      random_state=42)
+        # stratify=df[self._label_output_column])
 
         train_df, snorkel_train_df = train_test_split(df,
                                                       test_size=10000,
-                                                      random_state=42,
-                                                      stratify=df[self._label_output_column])
+                                                      random_state=42)
+        # stratify=df[self._label_output_column])
 
         return raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df
+
+
+flags.DEFINE_string("mode", "download", "download/upload tables")
+FLAGS = flags.FLAGS
+
+
+def main(argv):
+    db = PostgresqlDatasetBase()
+    if FLAGS.mode == "download":
+        df = db.get_table("raw_tweet_dataset_2")
+        df.to_parquet("data/dataset/ssp/dump/raw_tweet_dataset_0.parquet", engine="fastparquet")
+    else:
+        df = pd.read_parquet("data/dataset/ssp/dump/raw_tweet_dataset_0.parquet", engine="fastparquet")
+
+        db.to_posgresql_table(df=df, table_name="raw_tweet_dataset_0", if_exists="fail")
+
+
+if __name__ == "__main__":
+    app.run(main)

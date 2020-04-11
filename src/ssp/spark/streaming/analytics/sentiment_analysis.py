@@ -10,7 +10,7 @@ from ssp.spark.streaming.ml.sentiment_analysis_model_main import SentimentSparkM
 class SentimentAnalysis(TwitterStreamerBase):
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
-                 kafka_topic="twitter_data",
+                 kafka_topic="ai_tweets_topic",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/silver/",
                  warehouse_location="/opt/spark-warehouse/",

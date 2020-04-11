@@ -80,7 +80,7 @@ cd /host  # On Docker 'spark-streaming-playground' is mountes as a volume at /ho
 - Learn to use Python library Tweepy to listen to Twitter stream
     - http://docs.tweepy.org/en/latest/streaming_how_to.html
 - Understand to use Apache Kafka topic
-    - `sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic twitter_data` 
+    - `sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic ai_tweets_topic` 
 - Dumping the data to Kafka topic : [TweetsListener](../../src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py)
     - Define `KafkaProducer` with Kafka master url
     - Send the data to specific topic

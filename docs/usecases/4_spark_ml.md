@@ -26,6 +26,7 @@ Spark Streaming application
     cd /path/to/spark-streaming-playground/ # Local machine
     cd /host  # Docker
     
+    unzip data/dataset/sentiment/sentiment140.zip -d data/dataset/sentiment/sentiment140
     #builds and stores the model in HDFS
     bin/models/build_sentiment_spark_model_offline.sh
     # Runs the model against live stream unless configured to HDFS path

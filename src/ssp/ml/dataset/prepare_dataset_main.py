@@ -11,8 +11,14 @@ if __name__ == "__main__":
                           required=False,
                           help="File path of config.ini")
 
+    optparse.add_argument("-v", "--version",
+                          default=0,
+                          type=int,
+                          required=True,
+                          help="Version of raw tweet dump data to use ")
+
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
     dataset = SSPMLDataset()
-    dataset.store()
+    dataset.store(parsed_args.version)

@@ -1,1 +1,0 @@
-from ssp.dl.classifier.naive_text_classifier import NaiveTextClassifier

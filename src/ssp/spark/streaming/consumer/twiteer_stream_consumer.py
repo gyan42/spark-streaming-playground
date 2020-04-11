@@ -29,7 +29,7 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import IntegerType
 from ssp.logger.pretty_print import print_info
 
-from ssp.snorkel.ai_key_words import AIKeyWords
+from ssp.utils.ai_key_words import AIKeyWords
 from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
 
 # Twitter Filter Tags
@@ -80,7 +80,7 @@ def get_raw_dataset(path):
 
 def filter_possible_ai_tweet(text):
     text = text.replace("#", "").replace("@", "")
-    for tag in AIKeyWords.ALL.split("|"):
+    for tag in AIKeyWords.POSITIVE.split("|"):
         if f' {tag.lower()} ' in f' {text.lower()} ':
             return 1
     return 0
@@ -98,7 +98,7 @@ class TwitterDataset(TwitterStreamerBase):
     """
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
-                 kafka_topic="twitter_data",
+                 kafka_topic="mix_tweets_topic",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",
@@ -108,8 +108,24 @@ class TwitterDataset(TwitterStreamerBase):
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
                  postgresql_password="sparkstreaming",
-                 raw_tweet_table_name="raw_tweet_dataset",
+                 raw_tweet_table_name_prefix="raw_tweet_dataset",
                  processing_time='5 seconds'):
+        """
+
+        :param kafka_bootstrap_servers:
+        :param kafka_topic:
+        :param checkpoint_dir: For fault tolerance
+        :param bronze_parquet_dir:
+        :param warehouse_location:
+        :param spark_master:
+        :param postgresql_host:
+        :param postgresql_port:
+        :param postgresql_database:
+        :param postgresql_user:
+        :param postgresql_password:
+        :param raw_tweet_table_name_prefix:
+        :param processing_time:
+        """
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
@@ -132,8 +148,9 @@ class TwitterDataset(TwitterStreamerBase):
         self._broad_cast_raw_tweet_count = self.get_spark().sparkContext.accumulator(0)
 
         self._kafka_topic = kafka_topic
+        self._kafka_ai_topic = "ai_tweets_topic"
 
-        self._raw_tweet_table_name = raw_tweet_table_name
+        self._raw_tweet_table_name_prefix = raw_tweet_table_name_prefix
 
     def dump_into_bronze_lake(self):
         self.structured_streaming_dump(path=self._bronze_parquet_dir)
@@ -157,22 +174,31 @@ class TwitterDataset(TwitterStreamerBase):
         except:
             print_info("Postgresql Error!")
 
-    def check_n_stop_streaming(self, query, num_records, raw_tweet_table_name):
+    def check_n_stop_streaming(self, topic, query, num_records, raw_tweet_table_name):
         while (True):
             conn = self.get_postgresql_connection()
-            count = pd.read_sql(f"select count(*) from {raw_tweet_table_name}", conn)["count"][0]
+            try:
+                count = pd.read_sql(f"select count(*) from {raw_tweet_table_name}", conn)["count"][0]
+            except Exception as e:
+                count = 0
+
+            try:
+                print_info(query.lastProgress())
+            except:
+                print_info("No stream progress")
+
             if count > num_records:
-                print_info(f"Number of records received so far {count}")
+                print_info(f"Number of records received so far in topic {topic} is {count}")
                 query.stop()
                 break
             else:
-                print_info(f"Number of records received so far {count}")
+                print_info(f"Number of records received so far in topic {topic} is {count}")
             time.sleep(1)
 
-    def dump_into_postgresql(self, run_id, num_records=35000):
+    def dump_into_postgresql_internal(self, run_id, kafka_topic, num_records=25000):
 
-        tweet_stream = self.get_source_stream()
-        raw_tweet_table_name = self._raw_tweet_table_name + "_{}".format(run_id)
+        tweet_stream = self.get_source_stream(kafka_topic)
+        raw_tweet_table_name = self._raw_tweet_table_name_prefix + "_{}".format(run_id)
 
 
         def postgresql_all_tweets_data_dump(df,
@@ -199,12 +225,18 @@ class TwitterDataset(TwitterStreamerBase):
             foreachBatch(lambda df, id :
                          postgresql_all_tweets_data_dump(df=df,
                                                          epoch_id=id,
-                                                         raw_tweet_table_name=raw_tweet_table_name)).start()
+                                                         raw_tweet_table_name=raw_tweet_table_name)).\
+            trigger(processingTime=self._processing_time). \
+            start()
 
 
-        stop_thread = threading.Thread(target=self.check_n_stop_streaming, args=(query, num_records, raw_tweet_table_name, ))
-        stop_thread.setDaemon(True)
-        stop_thread.start()
+        monitor_thread = threading.Thread(target=self.check_n_stop_streaming, args=(kafka_topic, query, num_records, raw_tweet_table_name, ))
+        monitor_thread.setDaemon(True)
+        monitor_thread.start()
 
         query.awaitTermination()
-        stop_thread.join()
+        monitor_thread.join()
+
+    def dump_into_postgresql(self, run_id, num_records=50000):
+        self.dump_into_postgresql_internal(run_id=run_id, kafka_topic=self._kafka_topic, num_records=num_records//2)
+        self.dump_into_postgresql_internal(run_id=run_id, kafka_topic=self._kafka_ai_topic, num_records=num_records)

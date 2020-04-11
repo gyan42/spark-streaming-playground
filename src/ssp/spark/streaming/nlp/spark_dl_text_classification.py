@@ -11,7 +11,7 @@ from ssp.spark.udf.tensorflow_serving_api_udf import get_text_classifier_udf
 class SreamingTextClassifier(TwitterStreamerBase):
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
-                 kafka_topic="twitter_data",
+                 kafka_topic="ai_tweets_topic",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",
@@ -83,21 +83,22 @@ class SreamingTextClassifier(TwitterStreamerBase):
         text_clsfier = get_text_classifier_udf(is_docker=self._is_docker, tokenizer_path=self._tokenizer_path)
         tweet_stream.printSchema()
         tweet_stream = tweet_stream. \
-            withColumn("datascience_prob", text_clsfier(col("text")))
+            withColumn("ai_prob", text_clsfier(col("text"))). \
+            where(col("ai_prob") > 0.5)
 
         def foreach_batch_function(df, epoch_id):
             # Transform and write batchDF
             df.printSchema()
-            df.select(["datascience_prob"]).show(50, False)
+            df.select(["text", "ai_prob"]).show(50, False)
 
-            mode = "overwrite"
+            mode = "append"
             url = "jdbc:postgresql://{}:{}/{}".format(self._postgresql_host,
                                                       self._postgresql_port,
                                                       self._postgresql_database)
             properties = {"user": self._postgresql_user,
                           "password": self._postgresql_password,
                           "driver": "org.postgresql.Driver"}
-            # df.write.jdbc(url=url, table="text_classification", mode=mode, properties=properties)
+            df.write.jdbc(url=url, table="ai_tweets", mode=mode, properties=properties)
 
         tweet_stream.writeStream.foreachBatch(foreach_batch_function).start().awaitTermination()
 

@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 
-
+# Must read : https://www.slideshare.net/databricks/deep-dive-into-stateful-stream-processing-in-structured-streaming-with-tathagata-das
 class StreamerBase(object):
     def __init__(self,
                  spark_master,
@@ -33,7 +33,7 @@ class StreamerBase(object):
 
         return spark
 
-    def get_source_stream(self):
+    def get_source_stream(self, kafka_topic):
         raise NotImplementedError
 
     @staticmethod

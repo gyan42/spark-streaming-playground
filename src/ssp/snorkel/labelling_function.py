@@ -1,4 +1,3 @@
-import re
 import pandas as pd
 import gin
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -12,7 +11,7 @@ from snorkel.labeling import LabelModel
 from ssp.logger.pretty_print import print_error
 from ssp.logger.pretty_print import print_info
 from ssp.posgress.dataset_base import PostgresqlDatasetBase
-from ssp.snorkel.ai_key_words import AIKeyWords
+from ssp.utils.ai_key_words import AIKeyWords
 
 class SSPTweetLabeller(BaseEstimator, TransformerMixin):
     # Set voting values.
@@ -23,38 +22,65 @@ class SSPTweetLabeller(BaseEstimator, TransformerMixin):
     # tweets that are not
     NEGATIVE = 0
 
-    def __init__(self):
+    def __init__(self,
+                 input_col="text",
+                 output_col="label"):
         self._labelling_functions = [self.is_ai_tweet,
-                                     self.is_ml_tweet,
-                                     self.is_dl_tweet,
-                                     self.is_computer_vision_tweet,
-                                     self.is_nlp_tweet,
-                                     self.is_data_tweet,
-                                     self.is_ai_hash_tags_tweet,
+                                     self.is_not_ai_tweet,
                                      self.not_data_science,
-                                     self.not_neural_network]
+                                     self.not_neural_network,
+                                     self.not_big_data,
+                                     self.not_nlp,
+                                     self.not_ai,
+                                     self.not_cv]
 
         self._pandas_applier = PandasLFApplier(lfs=self._labelling_functions)
+        self._input_col = input_col
+        self._output_col = output_col
         self._list_applier = LFApplier(lfs=self._labelling_functions)
 
-        self._label_model = LabelModel(cardinality=2, verbose=True, )
+        self._label_model = LabelModel(cardinality=2, verbose=True)
 
     def fit(self, X, y=None):
+        """
+
+        :param X:
+        :param y:
+        :return: Numpy Array [num of samples, num of LF functions]
+        """
         if isinstance(X, str):
             X = [X]
 
         if isinstance(X, pd.DataFrame):
             X_labels = self._pandas_applier.apply(X)
             print_info(LFAnalysis(L=X_labels, lfs=self._labelling_functions).lf_summary())
+            print_info("Training LabelModel")
             self._label_model.fit(L_train=X_labels, n_epochs=500, log_freq=100, seed=42)
         elif isinstance(X, list):
             X_labels = self._list_applier.apply(X)
             print_info(LFAnalysis(L=X_labels, lfs=self._labelling_functions).lf_summary())
+            print_info("Training LabelModel")
             self._label_model.fit(L_train=X_labels, n_epochs=500, log_freq=100, seed=42)
         else:
             raise RuntimeError("Unknown type...")
         
         return self
+
+    def normalize_prob(self, res):
+        return [1 if r > 0.5 else 0 for r in res]
+
+    def transform(self, X, y=None):
+        if isinstance(X, pd.DataFrame):
+            if self._input_col:
+               res  = self.predict(X[self._input_col])[:, 1]
+               X[self._output_col] = self.normalize_prob(res)
+               return X
+        elif isinstance(X, list):
+            res = self.predict(X)[:, 1]
+            return self.normalize_prob(res)
+        elif isinstance(X, str):
+            res = self.predict([X])[:, 1]
+            return self.normalize_prob(res)[0]
 
     def predict(self, X):
         return self._label_model.predict_proba(L=self._list_applier.apply(X))
@@ -65,6 +91,7 @@ class SSPTweetLabeller(BaseEstimator, TransformerMixin):
             label_model_acc = self._label_model.score(L=X_labels, Y=y, tie_break_policy="random")[
                 "accuracy"
             ]
+            print_info(LFAnalysis(L=X_labels, lfs=self._labelling_functions).lf_summary())
             print(f"{'Label Model Accuracy:':<25} {label_model_acc * 100:.1f}%")
         elif isinstance(X, pd.DataFrame):
             X_labels = self._pandas_applier.apply(X)
@@ -83,100 +110,97 @@ class SSPTweetLabeller(BaseEstimator, TransformerMixin):
         data = data.replace("#", "").replace("@", "")
         for keyword in key_words:
             if f' {keyword.lower()} ' in f' {data.lower()} ':
-                # print_info(data)
                 return SSPTweetLabeller.POSITIVE
         return SSPTweetLabeller.ABSTAIN
 
     @staticmethod
-    def negative_search(data, key_words):
+    def negative_search(data, positive_keywords, false_positive_keywords):
         if not isinstance(data, str):
             data = data.text #Dataframe series
-
         data = data.replace("#", "").replace("@", "")
-        for keyword in key_words:
+
+        positive = False
+        false_positive = False
+        for keyword in positive_keywords:
             if f' {keyword.lower()} ' in f' {data.lower()} ':
-                # print_error(data)
-                return SSPTweetLabeller.NEGATIVE
+                positive = True
+
+        for keyword in false_positive_keywords:
+            if f' {keyword.lower()} ' in f' {data.lower()} ':
+                false_positive = True
+
+        if false_positive and not positive:
+            # print_info(data)
+            return SSPTweetLabeller.NEGATIVE
+
         return SSPTweetLabeller.ABSTAIN
 
+    @staticmethod
+    def bigram_check(x, word1, word2):
+        if not isinstance(x, str):
+            x = x.text
+        # Get bigrams and check tuple exists or not
+        bigrm = list(nltk.bigrams(x.split()))
+        bigrm = list(map(' '.join, bigrm))
+        count = 0
+        for pair in bigrm:
+            if word1 in pair and word2 not in pair:
+
+                count += 1
+        if count > 0:
+            return SSPTweetLabeller.NEGATIVE
+        else:
+            return SSPTweetLabeller.ABSTAIN
 
     @staticmethod
     @labeling_function()
     def is_ai_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.AI.split("|"))
+        return SSPTweetLabeller.positive_search(x, AIKeyWords.POSITIVE.split("|"))
 
     @staticmethod
     @labeling_function()
-    def is_ml_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.ML.split("|"))
-
-    @staticmethod
-    @labeling_function()
-    def is_dl_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.DL.split("|"))
-
-    @staticmethod
-    @labeling_function()
-    def is_computer_vision_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.CV.split("|"))
-
-    @staticmethod
-    @labeling_function()
-    def is_nlp_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.NLP.split("|"))
-
-    @staticmethod
-    @labeling_function()
-    def is_data_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.DATA.split("|"))
-
-    @staticmethod
-    @labeling_function()
-    def is_ai_hash_tags_tweet(x):
-        return SSPTweetLabeller.positive_search(x, AIKeyWords.TWEET_HASH_TAGS.split("|"))
-
-    # @staticmethod
-    # @labeling_function()
-    # def false_positive_tweets(x):
-    #     return SSPTweetLabeller.negative_search(x, AIKeyWords.FALSE_POSITIVE.split("|"))
+    def is_not_ai_tweet(x):
+        return SSPTweetLabeller.negative_search(data=x,
+                                                positive_keywords=AIKeyWords.POSITIVE.split("|"),
+                                                false_positive_keywords=AIKeyWords.FALSE_POSITIVE.split("|"))
 
     @staticmethod
     @labeling_function()
     def not_data_science(x):
-        if not isinstance(x, str):
-            x = x.text
-        # Get bigrams and check whetehr there is data science or not
-        bigrm = list(nltk.bigrams(x.split()))
-        bigrm = list(map(' '.join, bigrm))
-        for pair in bigrm:
-            if "science" in pair and "data" not in pair:
-                # print_error(x)
-                return SSPTweetLabeller.NEGATIVE
-        else:
-            return SSPTweetLabeller.ABSTAIN
-
+        return SSPTweetLabeller.bigram_check(x, "data", "science")
 
     @staticmethod
     @labeling_function()
     def not_neural_network(x):
-        if not isinstance(x, str):
-            x = x.text
-        # Get bigrams and check whetehr there is data science or not
-        bigrm = list(nltk.bigrams(x.split()))
-        bigrm = list(map(' '.join, bigrm))
-        for pair in bigrm:
-            if "network" in pair and "neural" not in pair:
-                # print_error(x)
-                return SSPTweetLabeller.NEGATIVE
-        else:
-            return SSPTweetLabeller.ABSTAIN
+        return SSPTweetLabeller.bigram_check(x, "neural", "network")
+
+    @staticmethod
+    @labeling_function()
+    def not_big_data(x):
+        return SSPTweetLabeller.bigram_check(x, "big", "data")
+
+    @staticmethod
+    @labeling_function()
+    def not_nlp(x):
+        return SSPTweetLabeller.bigram_check(x, "natural", "language")
+
+    @staticmethod
+    @labeling_function()
+    def not_ai(x):
+        return SSPTweetLabeller.bigram_check(x, "artificial", "intelligence")
+
+    @staticmethod
+    @labeling_function()
+    def not_cv(x):
+        return SSPTweetLabeller.bigram_check(x, "computer", "vision")
+
 
 @gin.configurable
 class SSPPostgresqlTweetLabelling(PostgresqlDatasetBase):
     def __init__(self,
                  snorker_label_column="snorkel_label",
                  text_column="text",
-                 label_output_column="naive_label",
+                 label_output_column="slabel",
                  raw_tweet_table_name_prefix="raw_tweet_dataset",
                  postgresql_host="localhost",
                  postgresql_port="5432",
@@ -200,8 +224,26 @@ class SSPPostgresqlTweetLabelling(PostgresqlDatasetBase):
     def run_labeler(self):
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.get_processed_datasets()
 
+        # snorkel_train_df["label"] = snorkel_train_df["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
+        # print_info(snorkel_train_df["label"].value_counts())
+        # print_error(snorkel_train_df[snorkel_train_df["label"]==0]["text"].tolist()[:10])
+
+        # print_info(snorkel_train_df[snorkel_train_df["label"]==1]["text"].tolist()[:10])
         self._snorkel_labeler.fit(snorkel_train_df)
         self._snorkel_labeler.evaluate(test_df, test_df[self._label_output_column])
-        # res = self._snorkel_labeler.predict(train_df[self._text_column])
-        # print_info(res[:, 0])
+        res = self._snorkel_labeler.predict(train_df[self._text_column])
+        res = res[:, 1]
+        res = [1 if r >= 0.5 else 0 for r in res]
+        print_error(train_df.shape[0])
+        print_info(sum(res))
+        train_df["snorkel_label"] = res
+        for label, group in train_df[["text", "snorkel_label"]].groupby("snorkel_label"):
+            if label == 1:
+                print(label)
+                print_info(group.shape[0])
+                group.reset_index(inplace=True)
+                # print_info("\n".join(group["text"].tolist()[:10]))
+                group["label"] = group["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
+                print_info("\n".join(group[group["label"]==1]["text"].tolist()[:100]))
+
 

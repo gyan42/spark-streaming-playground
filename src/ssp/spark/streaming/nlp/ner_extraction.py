@@ -11,7 +11,7 @@ from ssp.spark.udf.spacy_ner_udf import get_ner_udf
 class NerExtraction(TwitterStreamerBase):
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
-                 kafka_topic="twitter_data",
+                 kafka_topic="ai_tweets_topic",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",

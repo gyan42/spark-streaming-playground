@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 
 import re
 
-from ssp.logger.pretty_print import print_error
+from ssp.logger.pretty_print import print_error, print_info
 from ssp.spark.streaming.common.streamer_base import StreamerBase
 from pyspark.sql.types import StructType, StringType, IntegerType, ArrayType
 from pyspark.sql.functions import col, isnull
@@ -25,6 +25,16 @@ def pick_text(text, rtext, etext):
 
 pick_text_udf = udf(pick_text, StringType())
 
+"""
+When it comes to describing the semantics of a delivery mechanism, there are three basic categories:
+
+    at-most-once delivery means that for each message handed to the mechanism, that message is delivered once or not at all; in more casual terms it means that messages may be lost.
+    at-least-once delivery means that for each message handed to the mechanism potentially multiple attempts are made at delivering it, such that at least one succeeds; again, in more casual terms this means that messages may be duplicated but not lost.
+    exactly-once delivery means that for each message handed to the mechanism exactly one delivery is made to the recipient; the message can neither be lost nor duplicated.
+
+The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.
+
+"""
 
 class TwitterStreamerBase(StreamerBase):
     def __init__(self,
@@ -71,39 +81,54 @@ class TwitterStreamerBase(StreamerBase):
 
         return schema
 
-    def get_source_stream(self):
+    def get_source_stream(self, kafka_topic="mix_tweets_topic"):
+
+        print_info("\n\n------------------------------------------------------------------------------------------\n\n")
+        print_info(f"\t\t\t Kafka topis is {kafka_topic}")
+        print_info("\n\n------------------------------------------------------------------------------------------\n\n")
+
         spark = self.get_spark()
 
-        print_error(f"{self._kafka_topic}, {self._kafka_bootstrap_servers}")
         # read the tweets from kafka topic
         tweet_stream = spark \
             .readStream \
             .format("kafka") \
             .option("kafka.bootstrap.servers", self._kafka_bootstrap_servers) \
-            .option("subscribe", self._kafka_topic) \
+            .option("subscribe", kafka_topic) \
             .option("startingOffsets", "latest") \
             .option("failOnDataLoss", "false") \
             .load()
 
         tweet_stream.printSchema()
 
+        # converts the incoming data to string
+        # parses the data with inbuild Json parser
         # extract the data as per our schema
+        # cleans the html tags
+        # extracts the `text` from the tweets
+        # creates hash column
+        # filer out null id columns
+        # watermark : how late data can arrive and get considered for aggregation
+        # processing time : how often to emt update, generally handled at writestream side
         tweet_df = tweet_stream. \
             selectExpr("cast (value as STRING)"). \
             select(from_json("value", TwitterStreamerBase.get_schema()).
-                   alias("temp")). \
-            select(col("temp.id_str"),
-                   col("temp.created_at"),
-                   col("temp.source"),
-                   col("temp.text"),
-                   col("temp.extended_tweet.full_text").alias("etext"),
-                   col("temp.retweeted_status.extended_tweet.full_text").alias("rtext"),
-                   col("temp.entities.urls.expanded_url"),
-                   col("temp.entities.media.media_url_https")). \
+                   alias("tweet")). \
+            select(col("tweet.id_str"),
+                   col("tweet.created_at"),
+                   col("tweet.source"),
+                   col("tweet.text"),
+                   col("tweet.extended_tweet.full_text").alias("etext"),
+                   col("tweet.retweeted_status.extended_tweet.full_text").alias("rtext"),
+                   col("tweet.entities.urls.expanded_url"),
+                   col("tweet.entities.media.media_url_https")). \
             withColumn("source", regexp_replace("source", "<[^>]*>", "")). \
             withColumn("text", pick_text_udf(col("text"), col("rtext"), col("etext"))). \
             withColumn("hash", sha2("text", 256)). \
             drop("rtext", "etext"). \
             where(~isnull(col("id_str")))
+            # TODO https://stackoverflow.com/questions/45474270/how-to-expire-state-of-dropduplicates-in-structured-streaming-to-avoid-oom
+            # withWatermark("timestamp", "10 minutes"). \
+            # dropDuplicates("id_str")
 
         return tweet_df

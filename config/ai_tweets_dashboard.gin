@@ -1,0 +1,8 @@
+ai_tweets_dashboard.host = "0.0.0.0"
+ai_tweets_dashboard.port = "8765"
+
+PostgresqlInfo.host = "localhost"
+PostgresqlInfo.port = "5432"
+PostgresqlInfo.database = "sparkstreamingdb"
+PostgresqlInfo.user = "sparkstreamingdb"
+PostgresqlInfo.password = "sparkstreaming"

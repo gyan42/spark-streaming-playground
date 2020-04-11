@@ -41,7 +41,7 @@ sudo /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/se
 
 
 #to create a topic
-sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic twitter_data
+sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic ai_tweets_topic
 
 #to delete the topic
 sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
@@ -49,7 +49,7 @@ sudo rm -rf /tmp/kafka-logs
 vim /etc/kafka.properties
     delete.topic.enable = true
 
-kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data
+kafka-topics.sh --delete --zookeeper localhost:2181 --topic ai_tweets_topic
 ```
 
 **Testing**
@@ -72,5 +72,5 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic testing --fr
 cd {project_root}/ 
 export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 python src/dataset/tweet_dataset.py --mode=start_tweet_stream
-kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic twitter_data --from-beginning
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic ai_tweets_topic --from-beginning
 ```

@@ -45,6 +45,9 @@ This example needs two terminals:
 cd /path/to/spark-streaming-playground/ # Local machine
 cd /host  # Docker
 
+#[producer] Guake terminal name! 
+    bin/data/start_kafka_producer.sh
+
 #[hashtag] Guake terminal name! 
     bin/analytics/trending_tweet_hashtags.sh
 
@@ -59,3 +62,5 @@ Head to http://0.0.0.0:5001/ for live count on the trending #hashtags
 For people who are looking for more advanced dashboard can refer these links:
 - https://medium.com/analytics-vidhya/building-a-dashboard-app-using-plotlys-dash-a-complete-guide-from-beginner-to-pro-61e890bdc423
 - https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f
+- https://github.com/Chulong-Li/Real-time-Sentiment-Tracking-on-Twitter-for-Brand-Improvement-and-Trend-Recognition (TODO)
+- http://davidiscoding.com/real-time-twitter-analysis-4-displaying-the-data

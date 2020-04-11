@@ -26,7 +26,7 @@ extract_hashtag_udf = udf(extract_hashtag, ArrayType(StringType()))
 class TrendingHashTags(TwitterStreamerBase):
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
-                 kafka_topic="twitter_data",
+                 kafka_topic="ai_tweets_topic",
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",

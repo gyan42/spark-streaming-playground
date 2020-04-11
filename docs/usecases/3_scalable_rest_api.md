@@ -92,14 +92,18 @@ Spark Streaming application
         export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
         python3 src/ssp/spark/udf/spacy_ner_udf.py # test it to see everything working
         ```
-      
+    
 - Spark Streaming Application
 
 ```   
+#[producer] Guake terminal name! 
+    bin/data/start_kafka_producer.sh
+
 #[ner]
     cd /path/to/spark-streaming-playground/ # Local machine
     cd /host  # Docker
 
+    sudo netstat -tulpen | grep 30123 # check the port is in use or not
     bin/nlp/ner_extraction_using_spacy.sh
 ```  
 
