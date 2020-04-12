@@ -1,0 +1,145 @@
+import ssp.kafka.producer
+ # triggers Tensorflow imports TODO : move to different gin file?
+import ssp.dl.tf.classifier
+import ssp.ml.dataset
+import ssp.spark.streaming.consumer
+import ssp.spark.streaming.analytics
+import ssp.spark.streaming.ml
+import ssp.spark.streaming.nlp
+
+# In intellij : File -> Settings -> File Types -> Python -> Add *.gin
+
+#######################################################################################################################
+#                                               Constants                                                                  #
+#######################################################################################################################
+kafka_address = 'localhost:9092'
+kafka_topic_1 = 'ai_tweets_topic'
+kafka_topic_2 = 'mix_tweets_topic'
+
+#######################################################################################################################
+#                                               DATA                                                                  #
+#######################################################################################################################
+
+TwitterDataset.kafka_bootstrap_servers="localhost:9092"
+TwitterDataset.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+TwitterDataset.bronze_parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+TwitterDataset.warehouse_location = "/opt/spark-warehouse/"
+TwitterDataset.spark_master = "spark://IMCHLT276:7077"
+TwitterDataset.postgresql_host = "localhost"
+TwitterDataset.postgresql_port = "5432"
+TwitterDataset.postgresql_database = "sparkstreamingdb"
+TwitterDataset.postgresql_user = "sparkstreaming"
+TwitterDataset.postgresql_password = "sparkstreaming"
+TwitterDataset.kafka_topic = %kafka_topic_2
+TwitterDataset.raw_tweet_table_name_prefix = "raw_tweet_dataset"
+TwitterDataset.processing_time = '5 seconds'
+
+
+#######################################################################################################################
+#                                               Analystics                                                            #
+#######################################################################################################################
+
+TrendingHashTags.kafka_bootstrap_servers = "localhost:9092"
+TrendingHashTags.kafka_topic = %kafka_topic_2
+TrendingHashTags.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+TrendingHashTags.bronze_parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+TrendingHashTags.warehouse_location = "/opt/spark-warehouse/"
+TrendingHashTags.spark_master = "spark://IMCHLT276:7077"
+TrendingHashTags.postgresql_host = "localhost"
+TrendingHashTags.postgresql_port = "5432"
+TrendingHashTags.postgresql_database = "sparkstreamingdb"
+TrendingHashTags.postgresql_user = "sparkstreaming"
+TrendingHashTags.postgresql_password = "sparkstreaming"
+TrendingHashTags.is_live_stream=True
+TrendingHashTags.processing_time = '5 seconds'
+
+
+SentimentAnalysis.kafka_bootstrap_servers = "localhost:9092"
+SentimentAnalysis.kafka_topic = %kafka_topic_2
+SentimentAnalysis.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+SentimentAnalysis.parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/silver/"
+SentimentAnalysis.warehouse_location = "/opt/spark-warehouse/"
+SentimentAnalysis.spark_master = "spark://IMCHLT276:7077"
+SentimentAnalysis.is_live_stream = True
+SentimentAnalysis.processing_time = '5 seconds'
+
+
+#######################################################################################################################
+#                                               DL                                                                    #
+#######################################################################################################################
+
+NaiveTextClassifier.train_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_2/train.parquet"
+NaiveTextClassifier.test_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_2/test.parquet"
+NaiveTextClassifier.dev_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_2/dev.parquet"
+NaiveTextClassifier.model_root_dir = "~/ssp/model/raw_tweet_dataset_2/"
+NaiveTextClassifier.model_version = 1
+NaiveTextClassifier.wipe_old_data = False
+NaiveTextClassifier.text_column = "text"
+NaiveTextClassifier.label_column = "slabel"
+NaiveTextClassifier.num_words = 8000
+NaiveTextClassifier.seq_len = 128
+NaiveTextClassifier.embedding_size = 128
+NaiveTextClassifier.batch_size = 64
+NaiveTextClassifier.hdfs_port = None
+NaiveTextClassifier.hdfs_host = None
+
+#######################################################################################################################
+#                                               ML                                                                    #
+#######################################################################################################################
+
+SSPMLDataset.label_output_column = "slabel"
+SSPMLDataset.text_column = "text"
+SSPMLDataset.raw_tweet_table_name_prefix = "raw_tweet_dataset"
+SSPMLDataset.postgresql_host = "localhost"
+SSPMLDataset.postgresql_port = "5432"
+SSPMLDataset.postgresql_database = "sparkstreamingdb"
+SSPMLDataset.postgresql_user = "sparkstreaming"
+SSPMLDataset.postgresql_password = "sparkstreaming"
+SSPMLDataset.overwrite = True
+
+
+
+SentimentSparkModel.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+SentimentSparkModel.warehouse_location = "/opt/spark-warehouse/"
+SentimentSparkModel.spark_master = "spark://IMCHLT276:7077"
+SentimentSparkModel.ai_tweets_topicset_path = "data/dataset/sentiment/sentiment140/"
+SentimentSparkModel.model_dir = "~/ssp/data/model/sentiment/"
+SentimentSparkModel.hdfs_host = "localhost"
+SentimentSparkModel.hdfs_port = 9000
+
+#######################################################################################################################
+#                                               NLP                                                                    #
+#######################################################################################################################
+
+
+NerExtraction.kafka_bootstrap_servers = "localhost:9092"
+NerExtraction.kafka_topic = %kafka_topic_2
+NerExtraction.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+NerExtraction.bronze_parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+NerExtraction.warehouse_location = "/opt/spark-warehouse/"
+NerExtraction.spark_master = "spark://IMCHLT276:7077"
+NerExtraction.postgresql_host = "localhost"
+NerExtraction.postgresql_port = "5432"
+NerExtraction.postgresql_database = "sparkstreamingdb"
+NerExtraction.postgresql_user = "sparkstreaming"
+NerExtraction.postgresql_password = "sparkstreaming"
+NerExtraction.is_live_stream = True
+NerExtraction.is_docker = False
+NerExtraction.processing_time = '5 seconds'
+
+
+SreamingTextClassifier.kafka_bootstrap_servers = "localhost:9092"
+SreamingTextClassifier.kafka_topic = %kafka_topic_2
+SreamingTextClassifier.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
+SreamingTextClassifier.bronze_parquet_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/bronze/"
+SreamingTextClassifier.warehouse_location = "/opt/spark-warehouse/"
+SreamingTextClassifier.spark_master = "spark://IMCHLT276:7077"
+SreamingTextClassifier.postgresql_host = "localhost"
+SreamingTextClassifier.postgresql_port = "5432"
+SreamingTextClassifier.postgresql_database = "sparkstreamingdb"
+SreamingTextClassifier.postgresql_user = "sparkstreaming"
+SreamingTextClassifier.postgresql_password = "sparkstreaming"
+SreamingTextClassifier.tokenizer_path = "~/ssp/model/raw_tweet_dataset_0/naive_text_classifier/1/"
+SreamingTextClassifier.is_live_stream = True
+SreamingTextClassifier.is_docker = False
+SreamingTextClassifier.processing_time = '5 seconds'

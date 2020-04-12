@@ -44,7 +44,7 @@ sbin/start-all.sh
 sbin/stop-all.sh
 ```
 
-A [config](../conf) folder is maintained for quick reference, please head there to find related config xml files and move it to your
+A [config](../../docker/conf) folder is maintained for quick reference, please head there to find related config xml files and move it to your
 Spark `conf` folder.  
 
 UI      : http://localhost:8080

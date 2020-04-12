@@ -1,0 +1,9 @@
+import ssp.utils
+
+TwitterProducer.twitter_consumer_key="2DBNLKerbSN0RclFcCGA96z9D"
+TwitterProducer.twitter_consumer_secret="888Gz6h6fsuHM5yqTnJSYjVc4K99Kl41yvduIcWqyoekSHKUux"
+TwitterProducer.twitter_access_token="1203929079688220672-iSKyHRz6UeXYXcRW4iWSp5kKiSMb7t"
+TwitterProducer.twitter_access_secret="A9ANwQrHilp8upBnIbwnXhQ5Xtly71dmN0lmo03Hc3LQA"
+TwitterProducer.kafka_address='localhost:9092'
+TwitterProducer.kafka_topic_1='ai_tweets_topic'
+TwitterProducer.kafka_topic_2='mix_tweets_topic'

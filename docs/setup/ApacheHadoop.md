@@ -13,11 +13,11 @@ java -version # 1.8.x.yyy
     mv hadoop-3.1.2.tar.gz hadoop
 ```
 - Following files are needed before you can start the service:
-    - [hadoop/etc/hadoop/hadoop-env.sh](../conf/hadoop/etc/hadoop)
-    - [hadoop/etc/hadoop/core-site.xml](../conf/hadoop/etc/hadoop)
-    - [hadoop/etc/hadoop/hdfs-site.xml](../conf/hadoop/etc/hadoop)
-    - [hadoop/etc/hadoop/mapred-site.xml](../conf/hadoop/etc/hadoop)
-    - [hadoop/etc/hadoop/yarn-site.xml](../conf/hadoop/etc/hadoop)
+    - [hadoop/etc/hadoop/hadoop-env.sh](../../docker/conf/hadoop/etc/hadoop)
+    - [hadoop/etc/hadoop/core-site.xml](../../docker/conf/hadoop/etc/hadoop)
+    - [hadoop/etc/hadoop/hdfs-site.xml](../../docker/conf/hadoop/etc/hadoop)
+    - [hadoop/etc/hadoop/mapred-site.xml](../../docker/conf/hadoop/etc/hadoop)
+    - [hadoop/etc/hadoop/yarn-site.xml](../../docker/conf/hadoop/etc/hadoop)
 - `vim ~/.bashrc`
     ```shell script
     export HADOOP_HOME="/opt/binaries/hadoop"
@@ -42,3 +42,4 @@ java -version # 1.8.x.yyy
 
 **References**
 - https://data-flair.training/blogs/installation-of-hadoop-3-on-ubuntu/
+- https://towardsdatascience.com/a-gentle-introduction-to-apache-arrow-with-apache-spark-and-pandas-bb19ffe0ddae

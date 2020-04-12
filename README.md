@@ -9,14 +9,17 @@ stream for Machine Learning and do interactive visualization from the data lake.
 
 Run pytest to check everything works fine...
 ```
-pytest -rP
+pytest -s
+pytest -rP #shows the captured output of passed tests.
+pytest -rx #shows the captured output of failed tests (default behaviour).
 ``` 
 
 - [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
 - [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
 - [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
-- WIP : Streaming ML Classification with Static Spark Model  
-- WIP : [Streaming ML Classification with Active Learning Model](docs/usecases/5_full_ml_model_cycle.md)  
+- [Streaming ML Classification with Static Spark Model](docs/usecases/4_spark_ml.md)
+- [Spark SQL Exploration with Stackoverflow dataset](docs/usecases/5_static_table_stackoverflow.md)
+- [Text Classification with Data Collection](docs/usecases/6_full_ml_model_cycle.md)  
 
 
 
@@ -28,9 +31,15 @@ pytest -rP
 
 ------------------------------------------------------------------------------------------------------------------------
 
+Assuming that there is some idea of each components, lets cook up some use cases matching the real world project scenarios.
+These examples may seem simple or already been explained somewhere else on the web, however care has been taken such that the 
+use cases exploit the `scalable` nature on each framework. 
 
-Most of these examples involve multiple services running in the background on different terminals tabs for the pipeline to work.
-It is highly recommened to use terminal like [Guake](http://guake-project.org/).
+Our setup is configured to run on single machine, however with little bit of effoer same example applications 
+can scale to hundreads of nodes and GigaBytes of data by tuning the configurations of respective frameworks involved.
+
+Most of these examples involve multiple services running in the background on different terminal tabs for the pipeline to work.
+It is highly recommened to use application like [Guake](http://guake-project.org/).
 Guake is a background running terminal application in short, preventing you from closing the terminals.
 
 - **Local Machine Setup**
@@ -57,15 +66,25 @@ Guake is a background running terminal application in short, preventing you from
     based on your machine some steps may vary.
     
     ```
-    sudo rm -rf /tmp/kafka-ogs 
+    # swipe out previous run data, if needed!
+    /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic ai_tweets_topic 
+    /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic mix_tweets_topic
+    sudo rm -rf /tmp/kafka-logs 
     sudo rm -rf /var/lib/zookeeper/
+    sudo rm -rf /tmp/kafka-logs*
+    rm -rf /opt/spark-warehouse/
+    hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
+
     
+    # Lookout of errors int he jungle of service logs...
     /opt/binaries/hive/bin/hiveserver2 &
-    sudo /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
-    sudo /opt/binaries/kafka/bin/kafka-server-start.sh /etc/kafka.properties &
-    sudo /opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic twitter_data 
-    sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic twitter_data
-    
+    /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
+    /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server.properties &
+    /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server1.properties &
+    /opt/binaries/kafka/bin/kafka-server-start.sh /opt/binaries/kafka/config/server2.properties &
+    /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic ai_tweets_topic
+    /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic mix_tweets_topic
+
     #or
     
     # use start supervisord, check docker/supervisor.conf for list of back ground services
@@ -86,6 +105,7 @@ Guake is a background running terminal application in short, preventing you from
     If you wanna stop playing...
     ```
     sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+    sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
     $HADOOP_HOME/sbin/stop-dfs.sh
     $HADOOP_HOME/sbin/stop-yarn.sh
     $SPARK_HOME/sbin/stop-all.sh
@@ -152,26 +172,34 @@ Guake is a background running terminal application in short, preventing you from
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Configuration
-Check this [file](config.ini). We use Python `configparser` to read the configs from *.ini file.
+Check this [file](config/config.ini). We use Python `configparser` to read the configs from *.ini file.
 Choosen for its simpilicity over others.
 
-Make a note of the your machine name with command `hostname`, and update the [config.ini](config.ini) `spark master url` with it,
+Make a note of the your machine name with command `hostname`, and update the [config.ini](config/config.ini) `spark master url` with it,
 `eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
 
-Get the Twitter App credentials and update it here [twitter.ini](twitter.ini).
+Get the Twitter App credentials and update it here [twitter.ini](config/twitter.ini).
 
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Debugging
 
-In case you see any error with Spark Structured Streaming run:
+Since we stop and start Spark Streaming Kafka consumer, restart Kafka server, sometimes the offset can go for a toss.
+
+To solve the issue we need to clear the Kafka data and Spark warehouse data.
+ 
 ```
-rm -rf /tmp/kafka-logs/
-rm -rf /tmp/ssp/raw_data/
+sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
+
+sudo rm -rf /tmp/kafka-logs*
 rm -rf /opt/spark-warehouse/
 hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 ```
 
+Now head back to **Local Machine Setup** ans start kafka related services.
+
+ 
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Learning Materials
@@ -188,11 +216,13 @@ if you are an intermediate or experienced developer you can ignore it.
     - [HDFS Explained](https://www.youtube.com/watch?v=GJYEsEEfjvk)  
 - [Apache Spark](https://spark.apache.org/docs/latest/)  
     - [My own post on Spark Jargons](https://medium.com/@mageswaran1989/spark-jargon-for-starters-af1fd8117ada)  
-    - [RDD Basics](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html)  
+    - [RDD Basics](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html)
+    - [PySpark on Google Colab](https://towardsdatascience.com/a-neanderthals-guide-to-apache-spark-in-python-9ef1f156d427)  
     - [DataFrame/Dataset Basics](https://medium.com/swlh/spark-dataset-apis-a-gentle-introduction-108cdeafdea5)  
     - [Spark Streaming](https://spark.apache.org/docs/latest/streaming-programming-guide.html)  
     - [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html)  
-    - [1 day Edureka Full Course](https://www.youtube.com/watch?v=F8pyaR4uQ2g)  
+    - [1 day Edureka Full Course](https://www.youtube.com/watch?v=F8pyaR4uQ2g)
+    - [Saark Internals](https://github.com/JerryLead/SparkInternals)  
 - [Apache Kafka](https://kafka.apache.org/)  
     - [what you need to know?](https://intellipaat.com/blog/what-is-apache-kafka/)  
     - [Kafka + Apache Spark](https://www.youtube.com/watch?v=65lHphtrfo0)  
@@ -207,12 +237,9 @@ if you are an intermediate or experienced developer you can ignore it.
     - [Edureka 12 hours Course](https://www.youtube.com/watch?v=GwIo3gDZCVQ)  
     - [Simpilearn 6 hours Course](https://www.youtube.com/watch?v=9f-GarcDY58)  
 
-Assuming that there is some idea of each components, lets cook up some use cases matching the real world project scenarios.
-These examples may seem simple or already been explained somewhere else on the web, however care has been taken such that the 
-use cases exploit the `scalable` nature on each framework. 
 
-Our setup is configured to run on single machine, however with little bit of learning curve and trial & error 
-the same example applications can scale to hundreads of nodes and GigaBytes of data with right set of confgiurations
-with each framework involved.
 
+
+## Good Reads
+- [https://www.linkedin.com/pulse/blog-series-changing-landscape-data-platforms-ml-sandeep/](https://www.linkedin.com/pulse/blog-series-changing-landscape-data-platforms-ml-sandeep/)
 
