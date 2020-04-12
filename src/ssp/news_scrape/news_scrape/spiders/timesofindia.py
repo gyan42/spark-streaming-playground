@@ -6,7 +6,6 @@ from scrapy.spiders.crawl import Rule, CrawlSpider
 from w3lib.html import remove_tags, replace_escape_chars
 
 from news_scrape.items import NewsScrapeItem
-from scrapy.http.request import Request
 
 
 class TimesofindiaSpider(CrawlSpider):
@@ -19,19 +18,11 @@ class TimesofindiaSpider(CrawlSpider):
         'CONCURRENT_REQUESTS': 5
         }
     
-    """rules = (Rule(LxmlLinkExtractor(restrict_xpaths=('//div[@id="c_wdt_list_1"]//ul[@class="curpgcss"]/li[@class="current"]/following-sibling::li[1]/a',))
+    rules = (Rule(LxmlLinkExtractor(restrict_xpaths=('//div[@id="c_wdt_list_1"]//ul[@class="curpgcss"]/li[@class="current"]/following-sibling::li[1]/a',))
                , follow=True,),
           Rule (LxmlLinkExtractor(restrict_css=('div#c_wdt_list_1 ul.list5.clearfix li span.w_tle a'))
                 , callback='parse_article',),
-          )"""
-
-    def parse(self, response):
-        for i in response.css('div#c_wdt_list_1 ul.list5.clearfix li span.w_tle a::attr(href)')[:2]:
-            
-            yield Request(response.urljoin(i.extract()), callback=self.parse_article,
-                              meta=response.request.meta)
-        # print("========================>")
-        # print(response.xpath('//div[@id="c_wdt_list_1"]//ul[@class="curpgcss"]/li[@class="current"]/following-sibling::li[1]/a').extract())
+          )
     
     def parse_article(self, response): 
         # print(response.css('div._38kVl h1.K55Ut::text').extract())

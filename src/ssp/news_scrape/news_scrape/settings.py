@@ -74,7 +74,7 @@ COOKIES_ENABLED = False
 
 ITEM_PIPELINES = {
     'news_scrape.pipelines.cleaning.DataCorrectionPipeline':1,
-    'news_scrape.pipelines.publisher.KafkaPipeline':None,
+    'news_scrape.pipelines.publisher.KafkaPipeline':998,
     'news_scrape.pipelines.file.JsonFileWriter': 999,
  }
 
