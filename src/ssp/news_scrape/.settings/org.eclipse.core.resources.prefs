@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//news_scrape/items.py=utf-8
+encoding//news_scrape/middlewares.py=utf-8
+encoding//news_scrape/pipelines.py=utf-8
+encoding//news_scrape/settings.py=utf-8
+encoding//news_scrape/spiders/TheguardianSpider.py=utf-8
+encoding//news_scrape/spiders/indianexpress.py=utf-8
+encoding//news_scrape/spiders/newindianexpress.py=utf-8
+encoding//news_scrape/spiders/thehindu.py=utf-8
+encoding//news_scrape/spiders/timesofindia.py=utf-8
