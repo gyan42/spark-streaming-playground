@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">Spark Streaming Playground API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/modules.html">ssp</a></li>
 </ul>
 
             
@@ -177,7 +177,7 @@
 <span class="c1"># we create this class that inherits from the StreamListener in tweepy StreamListener</span>
 <span class="kn">from</span> <span class="nn">ssp.utils.eda</span> <span class="kn">import</span> <span class="n">get_stop_words</span>
 
-<span class="k">def</span> <span class="nf">pick_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">rtext</span><span class="p">,</span> <span class="n">etext</span><span class="p">):</span>
+<div class="viewcode-block" id="pick_text"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.pick_text">[docs]</a><span class="k">def</span> <span class="nf">pick_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">rtext</span><span class="p">,</span> <span class="n">etext</span><span class="p">):</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">etext</span><span class="p">:</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">etext</span>
@@ -188,9 +188,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">|</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">|</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
 
-<span class="k">class</span> <span class="nc">TweetsListener</span><span class="p">(</span><span class="n">StreamListener</span><span class="p">):</span>
+<div class="viewcode-block" id="TweetsListener"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TweetsListener">[docs]</a><span class="k">class</span> <span class="nc">TweetsListener</span><span class="p">(</span><span class="n">StreamListener</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">kafka_addr</span><span class="o">=</span><span class="s1">&#39;localhost:9092&#39;</span><span class="p">,</span>
                  <span class="n">topic</span><span class="o">=</span><span class="s1">&#39;ai_tweets_topic&#39;</span><span class="p">,</span>
@@ -201,7 +201,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span> <span class="o">=</span> <span class="n">topic</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_ai</span> <span class="o">=</span> <span class="n">is_ai</span>
 
-    <span class="k">def</span> <span class="nf">on_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="TweetsListener.on_data"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TweetsListener.on_data">[docs]</a>    <span class="k">def</span> <span class="nf">on_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="n">data_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -231,13 +231,13 @@
         <span class="c1"># with open(&quot;/tmp/tweets/{}.json&quot;.format(json.loads(data)[&quot;id_str&quot;]), &quot;wt&quot;, encoding=&#39;utf-8&#39;) as file:</span>
         <span class="c1">#     file.write(data)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_producer</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="k">def</span> <span class="nf">if_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<div class="viewcode-block" id="TweetsListener.if_error"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TweetsListener.if_error">[docs]</a>    <span class="k">def</span> <span class="nf">if_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
 
-<div class="viewcode-block" id="TwitterProducer"><a class="viewcode-back" href="../../../../ssp/kafka/TwitterProducer.html#ssp.kafka.producer.twitter_producer.TwitterProducer">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<div class="viewcode-block" id="TwitterProducer"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TwitterProducer">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">TwitterProducer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Twitter ingestion class</span>
@@ -267,7 +267,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
 
-<div class="viewcode-block" id="TwitterProducer.twitter_kafka_stream"><a class="viewcode-back" href="../../../../ssp/kafka/TwitterProducer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.twitter_kafka_stream">[docs]</a>    <span class="k">def</span> <span class="nf">twitter_kafka_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span> <span class="n">is_ai</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="TwitterProducer.twitter_kafka_stream"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.twitter_kafka_stream">[docs]</a>    <span class="k">def</span> <span class="nf">twitter_kafka_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span> <span class="n">is_ai</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        :param kafka_topic:</span>
@@ -287,7 +287,7 @@
         <span class="c1"># https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters</span>
         <span class="n">twitter_stream</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">track</span><span class="o">=</span><span class="n">keywords</span><span class="p">,</span> <span class="n">languages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;en&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="TwitterProducer.run"><a class="viewcode-back" href="../../../../ssp/kafka/TwitterProducer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TwitterProducer.run"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Starts two Kafka producers</span>
 <span class="sd">        :return:</span>

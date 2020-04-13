@@ -20,5 +20,10 @@ pytest -rP #shows the captured output of passed tests.
 pytest -rx #shows the captured output of failed tests (default behaviour).
 ```
 
+**Build Documents**
+```
+cd docs
+make ssp
+```
 
 

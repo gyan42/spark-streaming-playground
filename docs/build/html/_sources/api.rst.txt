@@ -6,3 +6,9 @@ Spark Streaming Playground API
    :caption: Kafka:
 
    ssp/kafka/producer.rst
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Spark:
+
+   ssp/spark/streaming.rst

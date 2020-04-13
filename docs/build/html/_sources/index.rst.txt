@@ -30,7 +30,7 @@ stream for Machine Learning and do interactive visualization from the data lake.
    :maxdepth: 1
    :caption: API:
 
-   api.rst
+   ssp/modules.rst
 
 Indices and tables
 ==================

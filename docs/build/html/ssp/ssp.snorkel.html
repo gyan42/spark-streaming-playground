@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.snorkel &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp.spark" href="ssp.spark.html" />
+    <link rel="prev" title="ssp.posgress" href="ssp.posgress.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ssp</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ssp.snorkel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">ssp</a> &raquo;</li>
+        
+          <li><a href="ssp.html">ssp</a> &raquo;</li>
+        
+      <li>ssp.snorkel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ssp/ssp.snorkel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ssp.snorkel">
+<span id="ssp-snorkel"></span><h1>ssp.snorkel<a class="headerlink" href="#module-ssp.snorkel" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<span class="target" id="module-ssp.snorkel.labelling_function"></span><dl class="py class">
+<dt id="ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.snorkel.labelling_function.</code><code class="sig-name descname">SSPPostgresqlTweetLabelling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">snorker_label_column</span><span class="o">=</span><span class="default_value">'snorkel_label'</span></em>, <em class="sig-param"><span class="n">text_column</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">label_output_column</span><span class="o">=</span><span class="default_value">'slabel'</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="default_value">'raw_tweet_dataset'</span></em>, <em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPPostgresqlTweetLabelling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase" title="ssp.posgress.dataset_base.PostgresqlDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.posgress.dataset_base.PostgresqlDatasetBase</span></code></a></p>
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling.run_labeler">
+<code class="sig-name descname">run_labeler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPPostgresqlTweetLabelling.run_labeler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling.run_labeler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.snorkel.labelling_function.</code><code class="sig-name descname">SSPTweetLabeller</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_col</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">output_col</span><span class="o">=</span><span class="default_value">'label'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.ABSTAIN">
+<code class="sig-name descname">ABSTAIN</code><em class="property"> = -1</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.ABSTAIN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.NEGATIVE">
+<code class="sig-name descname">NEGATIVE</code><em class="property"> = 0</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.NEGATIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.POSITIVE">
+<code class="sig-name descname">POSITIVE</code><em class="property"> = 1</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.POSITIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.bigram_check">
+<em class="property">static </em><code class="sig-name descname">bigram_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">word1</span></em>, <em class="sig-param"><span class="n">word2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.bigram_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.bigram_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – </p></li>
+<li><p><strong>y</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy Array [num of samples, num of LF functions]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.is_ai_tweet">
+<code class="sig-name descname">is_ai_tweet</code><em class="property"> = LabelingFunction is_ai_tweet, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.is_ai_tweet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.is_not_ai_tweet">
+<code class="sig-name descname">is_not_ai_tweet</code><em class="property"> = LabelingFunction is_not_ai_tweet, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.is_not_ai_tweet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.negative_search">
+<em class="property">static </em><code class="sig-name descname">negative_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">positive_keywords</span></em>, <em class="sig-param"><span class="n">false_positive_keywords</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.negative_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.negative_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.normalize_prob">
+<code class="sig-name descname">normalize_prob</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">res</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.normalize_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.normalize_prob" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.not_ai">
+<code class="sig-name descname">not_ai</code><em class="property"> = LabelingFunction not_ai, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.not_ai" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.not_big_data">
+<code class="sig-name descname">not_big_data</code><em class="property"> = LabelingFunction not_big_data, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.not_big_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.not_cv">
+<code class="sig-name descname">not_cv</code><em class="property"> = LabelingFunction not_cv, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.not_cv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.not_data_science">
+<code class="sig-name descname">not_data_science</code><em class="property"> = LabelingFunction not_data_science, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.not_data_science" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.not_neural_network">
+<code class="sig-name descname">not_neural_network</code><em class="property"> = LabelingFunction not_neural_network, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.not_neural_network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.not_nlp">
+<code class="sig-name descname">not_nlp</code><em class="property"> = LabelingFunction not_nlp, Preprocessors: []</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.not_nlp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.positive_search">
+<em class="property">static </em><code class="sig-name descname">positive_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">key_words</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.positive_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.positive_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.transform">
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ssp.snorkel.labelling_function_main"></span></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ssp.spark.html" class="btn btn-neutral float-right" title="ssp.spark" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ssp.posgress.html" class="btn btn-neutral float-left" title="ssp.posgress" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

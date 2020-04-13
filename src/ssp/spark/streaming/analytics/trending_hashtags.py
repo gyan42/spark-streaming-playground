@@ -10,6 +10,11 @@ from ssp.utils.configuration import StreamingConfigs
 
 
 def extract_hashtag(text):
+    """
+    Extracts the twitter #hashtag from the text
+    :param text: Twitter text
+    :return: List of hashtags
+    """
     if text is not None:
         text = text.replace('\n', ' ').replace('\r', '')
         text = text.split(" ")

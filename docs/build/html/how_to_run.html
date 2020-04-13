@@ -104,7 +104,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Spark Streaming Playground API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssp/modules.html">ssp</a></li>
 </ul>
 
             
@@ -182,7 +182,7 @@ values on *.sh file located in <a class="reference external" href="https://githu
 <li><p>Add your Twitter credentials &#64; <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/twitter_ssp_config.gin">twitter_ssp_config.gin</a></p></li>
 <li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/master/config/default_ssp_config.gin">default_ssp_config.gin</a> is used for most of the use case examples.</p></li>
 </ul>
-<p>Make a note of the your machine name with command <code class="docutils literal notranslate"><span class="pre">hostname</span></code>, and update the <code class="docutils literal notranslate"><span class="pre">spark</span> <span class="pre">master</span> <span class="pre">url</span></code> with it in <code class="docutils literal notranslate"><span class="pre">default_ssp_config.gin</span></code>,
+<p>Make a note of the your machine name with command <code class="docutils literal notranslate"><span class="pre">hostname</span></code>, and update the <code class="docutils literal notranslate"><span class="pre">spark</span> <span class="pre">master</span> <span class="pre">url</span></code> with the new value in <code class="docutils literal notranslate"><span class="pre">default_ssp_config.gin</span></code>,
 <code class="docutils literal notranslate"><span class="pre">eg:</span> <span class="pre">spark://IMCHLT276:7077</span></code>, <code class="docutils literal notranslate"><span class="pre">IMCHLT276</span></code> should be your machine name.</p>
 </div>
 <div class="section" id="on-local-machine">
@@ -202,7 +202,7 @@ values on *.sh file located in <a class="reference external" href="https://githu
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Start the services mannually as a background processes (Lookout of errors int he jungle of service logs…)</p></li>
+<li><p>Start the services manually as a background processes (Lookout of errors int he jungle of service logs…)</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">hive</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">hiveserver2</span> <span class="o">&amp;</span>
 <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">zookeeper</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">start</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">zookeeper</span><span class="o">.</span><span class="n">properties</span> <span class="o">&amp;</span>
@@ -214,7 +214,7 @@ values on *.sh file located in <a class="reference external" href="https://githu
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> to start all the services, check <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/master/docker/supervisor.conf">docker/supervisor.conf</a> for list of back ground services</p></li>
+<li><p>Or you could use <a class="reference external" href="http://supervisord.org/">supervisor</a> to start all the services, check <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/master/docker/supervisor.conf">docker/supervisor.conf</a> for list of back ground services</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisord</span> <span class="o">-</span><span class="n">c</span> <span class="n">docker</span><span class="o">/</span><span class="n">supervisor</span><span class="o">.</span><span class="n">conf</span> <span class="c1"># restart if you see any error</span>
 </pre></div>

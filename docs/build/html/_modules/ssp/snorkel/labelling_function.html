@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.snorkel.labelling_function &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.snorkel.labelling_function</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.snorkel.labelling_function</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">gin</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+
+<span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">labeling_function</span>
+<span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">PandasLFApplier</span><span class="p">,</span> <span class="n">LFApplier</span>
+<span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">LFAnalysis</span>
+<span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">LabelModel</span>
+
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span>
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_info</span>
+<span class="kn">from</span> <span class="nn">ssp.posgress.dataset_base</span> <span class="kn">import</span> <span class="n">PostgresqlDatasetBase</span>
+<span class="kn">from</span> <span class="nn">ssp.utils.ai_key_words</span> <span class="kn">import</span> <span class="n">AIKeyWords</span>
+
+<div class="viewcode-block" id="SSPTweetLabeller"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller">[docs]</a><span class="k">class</span> <span class="nc">SSPTweetLabeller</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="c1"># Set voting values.</span>
+    <span class="c1"># all other tweets</span>
+    <span class="n">ABSTAIN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="c1"># tweets that talks about science, AI, data</span>
+    <span class="n">POSITIVE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># tweets that are not</span>
+    <span class="n">NEGATIVE</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">input_col</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                 <span class="n">output_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">is_ai_tweet</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">is_not_ai_tweet</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">not_data_science</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">not_neural_network</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">not_big_data</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">not_nlp</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">not_ai</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">not_cv</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pandas_applier</span> <span class="o">=</span> <span class="n">PandasLFApplier</span><span class="p">(</span><span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_col</span> <span class="o">=</span> <span class="n">input_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_col</span> <span class="o">=</span> <span class="n">output_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span> <span class="o">=</span> <span class="n">LFApplier</span><span class="p">(</span><span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span> <span class="o">=</span> <span class="n">LabelModel</span><span class="p">(</span><span class="n">cardinality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SSPTweetLabeller.fit"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param X:</span>
+<span class="sd">        :param y:</span>
+<span class="sd">        :return: Numpy Array [num of samples, num of LF functions]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pandas_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="n">LFAnalysis</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span><span class="o">.</span><span class="n">lf_summary</span><span class="p">())</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Training LabelModel&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">L_train</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">log_freq</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="n">LFAnalysis</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span><span class="o">.</span><span class="n">lf_summary</span><span class="p">())</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Training LabelModel&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">L_train</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">log_freq</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unknown type...&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="SSPTweetLabeller.normalize_prob"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.normalize_prob">[docs]</a>    <span class="k">def</span> <span class="nf">normalize_prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SSPTweetLabeller.transform"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_col</span><span class="p">:</span>
+               <span class="n">res</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_col</span><span class="p">])[:,</span> <span class="mi">1</span><span class="p">]</span>
+               <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_prob</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+               <span class="k">return</span> <span class="n">X</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_prob</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">])[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_prob</span><span class="p">(</span><span class="n">res</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SSPTweetLabeller.predict"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="SSPTweetLabeller.evaluate"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">label_model_acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">tie_break_policy</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">)[</span>
+                <span class="s2">&quot;accuracy&quot;</span>
+            <span class="p">]</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="n">LFAnalysis</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span><span class="o">.</span><span class="n">lf_summary</span><span class="p">())</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Label Model Accuracy:&#39;</span><span class="si">:</span><span class="s2">&lt;25</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">label_model_acc</span> <span class="o">*</span> <span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pandas_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">label_model_acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">tie_break_policy</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">)[</span>
+                <span class="s2">&quot;accuracy&quot;</span>
+            <span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Label Model Accuracy:&#39;</span><span class="si">:</span><span class="s2">&lt;25</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">label_model_acc</span> <span class="o">*</span> <span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unknown type...&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SSPTweetLabeller.positive_search"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.positive_search">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">positive_search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key_words</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">text</span> <span class="c1">#Dataframe series</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">key_words</span><span class="p">:</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span> <span class="ow">in</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">POSITIVE</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">ABSTAIN</span></div>
+
+<div class="viewcode-block" id="SSPTweetLabeller.negative_search"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.negative_search">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">negative_search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">positive_keywords</span><span class="p">,</span> <span class="n">false_positive_keywords</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">text</span> <span class="c1">#Dataframe series</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">positive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">false_positive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">positive_keywords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span> <span class="ow">in</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">:</span>
+                <span class="n">positive</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">false_positive_keywords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span> <span class="ow">in</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">:</span>
+                <span class="n">false_positive</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">false_positive</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">positive</span><span class="p">:</span>
+            <span class="c1"># print_info(data)</span>
+            <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">NEGATIVE</span>
+
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">ABSTAIN</span></div>
+
+<div class="viewcode-block" id="SSPTweetLabeller.bigram_check"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.bigram_check">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">word1</span><span class="p">,</span> <span class="n">word2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">text</span>
+        <span class="c1"># Get bigrams and check tuple exists or not</span>
+        <span class="n">bigrm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nltk</span><span class="o">.</span><span class="n">bigrams</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+        <span class="n">bigrm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">,</span> <span class="n">bigrm</span><span class="p">))</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">bigrm</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word1</span> <span class="ow">in</span> <span class="n">pair</span> <span class="ow">and</span> <span class="n">word2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pair</span><span class="p">:</span>
+
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">NEGATIVE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">ABSTAIN</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">is_ai_tweet</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">positive_search</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">AIKeyWords</span><span class="o">.</span><span class="n">POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">is_not_ai_tweet</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">negative_search</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                                                <span class="n">positive_keywords</span><span class="o">=</span><span class="n">AIKeyWords</span><span class="o">.</span><span class="n">POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>
+                                                <span class="n">false_positive_keywords</span><span class="o">=</span><span class="n">AIKeyWords</span><span class="o">.</span><span class="n">FALSE_POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">not_data_science</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;science&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">not_neural_network</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;neural&quot;</span><span class="p">,</span> <span class="s2">&quot;network&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">not_big_data</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">not_nlp</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;natural&quot;</span><span class="p">,</span> <span class="s2">&quot;language&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">not_ai</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;artificial&quot;</span><span class="p">,</span> <span class="s2">&quot;intelligence&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@labeling_function</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">not_cv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;computer&quot;</span><span class="p">,</span> <span class="s2">&quot;vision&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SSPPostgresqlTweetLabelling"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">SSPPostgresqlTweetLabelling</span><span class="p">(</span><span class="n">PostgresqlDatasetBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">snorker_label_column</span><span class="o">=</span><span class="s2">&quot;snorkel_label&quot;</span><span class="p">,</span>
+                 <span class="n">text_column</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                 <span class="n">label_output_column</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">,</span>
+                 <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_database</span><span class="o">=</span><span class="s2">&quot;sparkstreamingdb&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_user</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">):</span>
+
+        <span class="n">PostgresqlDatasetBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                       <span class="n">text_column</span><span class="o">=</span><span class="n">text_column</span><span class="p">,</span>
+                                       <span class="n">label_output_column</span><span class="o">=</span><span class="n">label_output_column</span><span class="p">,</span>
+                                       <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="n">raw_tweet_table_name_prefix</span><span class="p">,</span>
+                                       <span class="n">postgresql_host</span><span class="o">=</span><span class="n">postgresql_host</span><span class="p">,</span>
+                                       <span class="n">postgresql_port</span><span class="o">=</span><span class="n">postgresql_port</span><span class="p">,</span>
+                                       <span class="n">postgresql_database</span><span class="o">=</span><span class="n">postgresql_database</span><span class="p">,</span>
+                                       <span class="n">postgresql_user</span><span class="o">=</span><span class="n">postgresql_user</span><span class="p">,</span>
+                                       <span class="n">postgresql_password</span><span class="o">=</span><span class="n">postgresql_password</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span> <span class="o">=</span> <span class="n">SSPTweetLabeller</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snorker_label_column</span> <span class="o">=</span> <span class="n">snorker_label_column</span>
+
+<div class="viewcode-block" id="SSPPostgresqlTweetLabelling.run_labeler"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling.run_labeler">[docs]</a>    <span class="k">def</span> <span class="nf">run_labeler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_processed_datasets</span><span class="p">()</span>
+
+        <span class="c1"># snorkel_train_df[&quot;label&quot;] = snorkel_train_df[&quot;text&quot;].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))</span>
+        <span class="c1"># print_info(snorkel_train_df[&quot;label&quot;].value_counts())</span>
+        <span class="c1"># print_error(snorkel_train_df[snorkel_train_df[&quot;label&quot;]==0][&quot;text&quot;].tolist()[:10])</span>
+
+        <span class="c1"># print_info(snorkel_train_df[snorkel_train_df[&quot;label&quot;]==1][&quot;text&quot;].tolist()[:10])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">snorkel_train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span><span class="p">])</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span><span class="p">])</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+        <span class="n">print_error</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;snorkel_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span>
+        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">train_df</span><span class="p">[[</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;snorkel_label&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;snorkel_label&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">group</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="c1"># print_info(&quot;\n&quot;.join(group[&quot;text&quot;].tolist()[:10]))</span>
+                <span class="n">group</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">is_ai_tweet</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[:</span><span class="mi">100</span><span class="p">]))</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

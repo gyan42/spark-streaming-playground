@@ -14,7 +14,7 @@ We use [Gin-config](https://github.com/google/gin-config) and Python `configpars
 - Add your Twitter credentials @ [twitter_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/tree/master/config/twitter_ssp_config.gin)
 - [default_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/blob/master/config/default_ssp_config.gin) is used for most of the use case examples.
 
-Make a note of the your machine name with command `hostname`, and update the `spark master url` with it in `default_ssp_config.gin`,
+Make a note of the your machine name with command `hostname`, and update the `spark master url` with the new value in `default_ssp_config.gin`,
 `eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
 
 
@@ -33,7 +33,7 @@ rm -rf /opt/spark-warehouse/
 hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 ```
 
-- Start the services mannually as a background processes (Lookout of errors int he jungle of service logs...)
+- Start the services manually as a background processes (Lookout of errors int he jungle of service logs...)
 ```
 /opt/binaries/hive/bin/hiveserver2 &
 /opt/binaries/kafka/bin/zookeeper-server-start.sh /opt/binaries/kafka/config/zookeeper.properties &
@@ -44,7 +44,7 @@ hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic mix_tweets_topic
 ```
 
-- Use `supervisor` to start all the services, check [docker/supervisor.conf](https://github.com/gyan42/spark-streaming-playground/blob/master/docker/supervisor.conf) for list of back ground services
+- Or you could use [supervisor](http://supervisord.org/) to start all the services, check [docker/supervisor.conf](https://github.com/gyan42/spark-streaming-playground/blob/master/docker/supervisor.conf) for list of back ground services
 ```
 sudo /usr/bin/supervisord -c docker/supervisor.conf # restart if you see any error
 ```

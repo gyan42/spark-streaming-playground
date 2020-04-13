@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.spark.streaming.consumer.twiteer_stream_consumer &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.spark.streaming.consumer.twiteer_stream_consumer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.spark.streaming.consumer.twiteer_stream_consumer</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">SSP modules that handles all data at ingestion level frm Twitter stream</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2020, The Spark Structured Playground Project&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Apache License&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;mageswaran1989@gmail.com&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;Education Purpose&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">gin</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="c1"># import socket</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">IntegerType</span>
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_info</span>
+
+<span class="kn">from</span> <span class="nn">ssp.utils.ai_key_words</span> <span class="kn">import</span> <span class="n">AIKeyWords</span>
+<span class="kn">from</span> <span class="nn">ssp.spark.streaming.common.twitter_streamer_base</span> <span class="kn">import</span> <span class="n">TwitterStreamerBase</span>
+
+<span class="c1"># Twitter Filter Tags</span>
+
+
+<div class="viewcode-block" id="get_create_table_sql"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.get_create_table_sql">[docs]</a><span class="k">def</span> <span class="nf">get_create_table_sql</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+    <span class="n">sql_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    CREATE TABLE  IF NOT EXISTS </span><span class="si">{}</span><span class="s2"> (</span>
+<span class="s2">       id_str VARCHAR (100) NOT NULL,</span>
+<span class="s2">       created_at VARCHAR (100) NOT NULL,</span>
+<span class="s2">       source VARCHAR (50) NOT NULL,</span>
+<span class="s2">       text VARCHAR (2048) NOT NULL,</span>
+<span class="s2">       expanded_url VARCHAR (1024),</span>
+<span class="s2">       media_url_https VARCHAR (1024),</span>
+<span class="s2">       hash VARCHAR (512));</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sql_str</span></div>
+
+<div class="viewcode-block" id="check_table_exists"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.check_table_exists">[docs]</a><span class="k">def</span> <span class="nf">check_table_exists</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;public&quot;</span><span class="p">):</span>
+    <span class="n">sql_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT to_regclass(&#39;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&#39;) as table;</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sql_str</span></div>
+
+<div class="viewcode-block" id="check_n_mk_dirs"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.check_n_mk_dirs">[docs]</a><span class="k">def</span> <span class="nf">check_n_mk_dirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">is_remove</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_remove</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_raw_dataset"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.get_raw_dataset">[docs]</a><span class="k">def</span> <span class="nf">get_raw_dataset</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combines all parquet file as one in given path</span>
+<span class="sd">    :param path: Folder path</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/*.parquet&quot;</span><span class="p">)</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">all_files</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">)</span>
+        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+
+<div class="viewcode-block" id="filter_possible_ai_tweet"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.filter_possible_ai_tweet">[docs]</a><span class="k">def</span> <span class="nf">filter_possible_ai_tweet</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">AIKeyWords</span><span class="o">.</span><span class="n">POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">tag</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span> <span class="ow">in</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<span class="n">filter_possible_ai_tweet_udf</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="n">filter_possible_ai_tweet</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="TwitterDataset"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">TwitterDataset</span><span class="p">(</span><span class="n">TwitterStreamerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Twitter ingestion class</span>
+<span class="sd">    - Gets the twitter stream data and dumps the data into Kafka topic</span>
+<span class="sd">    - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">,</span>
+                 <span class="n">kafka_topic</span><span class="o">=</span><span class="s2">&quot;mix_tweets_topic&quot;</span><span class="p">,</span>
+                 <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s2">&quot;hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/&quot;</span><span class="p">,</span>
+                 <span class="n">bronze_parquet_dir</span><span class="o">=</span><span class="s2">&quot;hdfs://localhost:9000/tmp/ssp/data/lake/bronze/&quot;</span><span class="p">,</span>
+                 <span class="n">warehouse_location</span><span class="o">=</span><span class="s2">&quot;/opt/spark-warehouse/&quot;</span><span class="p">,</span>
+                 <span class="n">spark_master</span><span class="o">=</span><span class="s2">&quot;spark://IMCHLT276:7077&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_database</span><span class="o">=</span><span class="s2">&quot;sparkstreamingdb&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_user</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
+                 <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
+                 <span class="n">processing_time</span><span class="o">=</span><span class="s1">&#39;5 seconds&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param kafka_bootstrap_servers:</span>
+<span class="sd">        :param kafka_topic:</span>
+<span class="sd">        :param checkpoint_dir: For fault tolerance</span>
+<span class="sd">        :param bronze_parquet_dir:</span>
+<span class="sd">        :param warehouse_location:</span>
+<span class="sd">        :param spark_master:</span>
+<span class="sd">        :param postgresql_host:</span>
+<span class="sd">        :param postgresql_port:</span>
+<span class="sd">        :param postgresql_database:</span>
+<span class="sd">        :param postgresql_user:</span>
+<span class="sd">        :param postgresql_password:</span>
+<span class="sd">        :param raw_tweet_table_name_prefix:</span>
+<span class="sd">        :param processing_time:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">TwitterStreamerBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                     <span class="n">spark_master</span><span class="o">=</span><span class="n">spark_master</span><span class="p">,</span>
+                                     <span class="n">checkpoint_dir</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">,</span>
+                                     <span class="n">warehouse_location</span><span class="o">=</span><span class="n">warehouse_location</span><span class="p">,</span>
+                                     <span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="n">kafka_bootstrap_servers</span><span class="p">,</span>
+                                     <span class="n">kafka_topic</span><span class="o">=</span><span class="n">kafka_topic</span><span class="p">,</span>
+                                     <span class="n">processing_time</span><span class="o">=</span><span class="n">processing_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span> <span class="o">=</span> <span class="n">spark_master</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_bootstrap_servers</span> <span class="o">=</span> <span class="n">kafka_bootstrap_servers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_dir</span> <span class="o">=</span> <span class="n">checkpoint_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bronze_parquet_dir</span> <span class="o">=</span> <span class="n">bronze_parquet_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span> <span class="o">=</span> <span class="n">warehouse_location</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span> <span class="o">=</span> <span class="n">postgresql_host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span> <span class="o">=</span> <span class="n">postgresql_port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span> <span class="o">=</span> <span class="n">postgresql_database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span> <span class="o">=</span> <span class="n">postgresql_user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span> <span class="o">=</span> <span class="n">postgresql_password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_broad_cast_raw_tweet_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spark</span><span class="p">()</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">accumulator</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span> <span class="o">=</span> <span class="n">kafka_topic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_ai_topic</span> <span class="o">=</span> <span class="s2">&quot;ai_tweets_topic&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span> <span class="o">=</span> <span class="n">raw_tweet_table_name_prefix</span>
+
+<div class="viewcode-block" id="TwitterDataset.dump_into_bronze_lake"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_bronze_lake">[docs]</a>    <span class="k">def</span> <span class="nf">dump_into_bronze_lake</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structured_streaming_dump</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bronze_parquet_dir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TwitterDataset.get_postgresql_connection"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.get_postgresql_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_postgresql_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span><span class="p">,</span>
+                                <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span><span class="p">,</span>
+                                <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span><span class="p">,</span>
+                                <span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span><span class="p">,</span>
+                                <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TwitterDataset.check_n_define_table_schema"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_define_table_schema">[docs]</a>    <span class="k">def</span> <span class="nf">check_n_define_table_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_postgresql_connection</span><span class="p">()</span>
+        <span class="c1"># Load the data</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="c1"># execute the INSERT statement</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">get_create_table_sql</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Postgresql Error!&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TwitterDataset.check_n_stop_streaming"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_stop_streaming">[docs]</a>    <span class="k">def</span> <span class="nf">check_n_stop_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">num_records</span><span class="p">,</span> <span class="n">raw_tweet_table_name</span><span class="p">):</span>
+        <span class="k">while</span> <span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_postgresql_connection</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select count(*) from </span><span class="si">{</span><span class="n">raw_tweet_table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)[</span><span class="s2">&quot;count&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">lastProgress</span><span class="p">())</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;No stream progress&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">num_records</span><span class="p">:</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of records received so far in topic </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">query</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of records received so far in topic </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TwitterDataset.dump_into_postgresql_internal"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql_internal">[docs]</a>    <span class="k">def</span> <span class="nf">dump_into_postgresql_internal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="mi">25000</span><span class="p">):</span>
+
+        <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source_stream</span><span class="p">(</span><span class="n">kafka_topic</span><span class="p">)</span>
+        <span class="n">raw_tweet_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span> <span class="o">+</span> <span class="s2">&quot;_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+
+
+        <span class="k">def</span> <span class="nf">postgresql_all_tweets_data_dump</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+                                            <span class="n">epoch_id</span><span class="p">,</span>
+                                            <span class="n">raw_tweet_table_name</span><span class="p">):</span>
+
+            <span class="c1"># DROP TABLE IF EXISTS ssp_raw_tweet_dataset_0 CASCADE;</span>
+            <span class="c1"># Transform and write batchDF</span>
+
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Raw  Tweets...&quot;</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s2">&quot;text&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;jdbc:postgresql://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span><span class="p">,</span>
+                                                      <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span><span class="p">,</span>
+                                                      <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span><span class="p">)</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span><span class="p">,</span>
+                          <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span><span class="p">,</span>
+                          <span class="s2">&quot;driver&quot;</span><span class="p">:</span> <span class="s2">&quot;org.postgresql.Driver&quot;</span><span class="p">}</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">jdbc</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="n">raw_tweet_table_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">)</span>
+
+
+        <span class="n">query</span> <span class="o">=</span> <span class="n">tweet_stream</span><span class="o">.</span><span class="n">writeStream</span><span class="o">.</span><span class="n">outputMode</span><span class="p">(</span><span class="s2">&quot;append&quot;</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">foreachBatch</span><span class="p">(</span><span class="k">lambda</span> <span class="n">df</span><span class="p">,</span> <span class="nb">id</span> <span class="p">:</span>
+                         <span class="n">postgresql_all_tweets_data_dump</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+                                                         <span class="n">epoch_id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+                                                         <span class="n">raw_tweet_table_name</span><span class="o">=</span><span class="n">raw_tweet_table_name</span><span class="p">))</span><span class="o">.</span>\
+            <span class="n">trigger</span><span class="p">(</span><span class="n">processingTime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_processing_time</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">start</span><span class="p">()</span>
+
+
+        <span class="n">monitor_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">check_n_stop_streaming</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">kafka_topic</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">num_records</span><span class="p">,</span> <span class="n">raw_tweet_table_name</span><span class="p">,</span> <span class="p">))</span>
+        <span class="n">monitor_thread</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">monitor_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="n">query</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span>
+        <span class="n">monitor_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TwitterDataset.dump_into_postgresql"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql">[docs]</a>    <span class="k">def</span> <span class="nf">dump_into_postgresql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="mi">50000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_into_postgresql_internal</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="n">num_records</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_into_postgresql_internal</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_ai_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="n">num_records</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

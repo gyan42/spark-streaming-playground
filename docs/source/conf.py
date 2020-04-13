@@ -54,6 +54,7 @@ extensions = ['recommonmark',
               'sphinx.ext.ifconfig',
               'sphinx.ext.viewcode',
               'sphinx_markdown_tables',
+              # 'sphinxarg.ext',
               # 'm2r', # https://github.com/miyakogi/m2r/pull/55
               'sphinx.ext.githubpages']
               # 'sphinxcontrib.bibtex',

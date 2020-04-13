@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.spark.streaming.common.streamer_base &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.spark.streaming.common.streamer_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.spark.streaming.common.streamer_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+
+<span class="c1"># Must read : https://www.slideshare.net/databricks/deep-dive-into-stateful-stream-processing-in-structured-streaming-with-tathagata-das</span>
+<div class="viewcode-block" id="StreamerBase"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase">[docs]</a><span class="k">class</span> <span class="nc">StreamerBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">spark_master</span><span class="p">,</span>
+                 <span class="n">checkpoint_dir</span><span class="p">,</span>
+                 <span class="n">warehouse_location</span><span class="p">,</span>
+                 <span class="n">kafka_bootstrap_servers</span><span class="p">,</span>
+                 <span class="n">kafka_topic</span><span class="p">,</span>
+                 <span class="n">processing_time</span><span class="o">=</span><span class="s1">&#39;5 seconds&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span> <span class="o">=</span> <span class="n">spark_master</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_dir</span> <span class="o">=</span> <span class="n">checkpoint_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span> <span class="o">=</span> <span class="n">warehouse_location</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_bootstrap_servers</span> <span class="o">=</span> <span class="n">kafka_bootstrap_servers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span> <span class="o">=</span> <span class="n">kafka_topic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_processing_time</span> <span class="o">=</span> <span class="n">processing_time</span>
+
+<div class="viewcode-block" id="StreamerBase.get_spark"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark">[docs]</a>    <span class="k">def</span> <span class="nf">get_spark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return:Spark Session</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span> \
+            <span class="n">appName</span><span class="p">(</span><span class="s2">&quot;TwitterRawDataIngestion&quot;</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">master</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.checkpointLocation&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_dir</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.warehouse.dir&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">enableHiveSupport</span><span class="p">()</span><span class="o">.</span> \
+            <span class="n">getOrCreate</span><span class="p">()</span>
+        <span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+        <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.metricsEnabled&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">spark</span></div>
+
+<div class="viewcode-block" id="StreamerBase.get_source_stream"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_source_stream">[docs]</a>    <span class="k">def</span> <span class="nf">get_source_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="StreamerBase.get_schema"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_schema">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_schema</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="StreamerBase.visualize"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.visualize">[docs]</a>    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For debugging purporse</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source_stream</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">foreach_batch_function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epoch_id</span><span class="p">):</span>
+            <span class="c1"># Transform and write batchDF</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">sdf</span><span class="o">.</span><span class="n">writeStream</span><span class="o">.</span><span class="n">foreachBatch</span><span class="p">(</span><span class="n">foreach_batch_function</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StreamerBase.structured_streaming_dump"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.structured_streaming_dump">[docs]</a>    <span class="k">def</span> <span class="nf">structured_streaming_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">termination_time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># dump the data into bronze lake path</span>
+        <span class="n">sdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source_stream</span><span class="p">()</span>
+
+        <span class="n">storeDF</span> <span class="o">=</span> <span class="n">sdf</span><span class="o">.</span><span class="n">writeStream</span><span class="o">.</span> \
+            <span class="nb">format</span><span class="p">(</span><span class="s2">&quot;parquet&quot;</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">outputMode</span><span class="p">(</span><span class="s2">&quot;append&quot;</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">option</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">option</span><span class="p">(</span><span class="s2">&quot;checkpointLocation&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_dir</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">trigger</span><span class="p">(</span><span class="n">processingTime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_processing_time</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">start</span><span class="p">()</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">(</span><span class="n">termination_time</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

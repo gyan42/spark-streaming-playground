@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.spark.streaming.consumer &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp.spark.streaming.ml" href="ssp.spark.streaming.ml.html" />
+    <link rel="prev" title="ssp.spark.streaming.common" href="ssp.spark.streaming.common.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ssp</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ssp.spark.html">ssp.spark</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="ssp.spark.streaming.html">ssp.spark.streaming</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.udf.html">ssp.spark.udf</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">ssp</a> &raquo;</li>
+        
+          <li><a href="ssp.html">ssp</a> &raquo;</li>
+        
+          <li><a href="ssp.spark.html">ssp.spark</a> &raquo;</li>
+        
+          <li><a href="ssp.spark.streaming.html">ssp.spark.streaming</a> &raquo;</li>
+        
+      <li>ssp.spark.streaming.consumer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ssp/ssp.spark.streaming.consumer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ssp.spark.streaming.consumer">
+<span id="ssp-spark-streaming-consumer"></span><h1>ssp.spark.streaming.consumer<a class="headerlink" href="#module-ssp.spark.streaming.consumer" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<span class="target" id="module-ssp.spark.streaming.consumer.tweet_web_scrappy"></span><span class="target" id="module-ssp.spark.streaming.consumer.twiteer_stream_consumer"></span><p>SSP modules that handles all data at ingestion level frm Twitter stream</p>
+<dl class="py class">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">TwitterDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="default_value">'localhost:9092'</span></em>, <em class="sig-param"><span class="n">kafka_topic</span><span class="o">=</span><span class="default_value">'mix_tweets_topic'</span></em>, <em class="sig-param"><span class="n">checkpoint_dir</span><span class="o">=</span><span class="default_value">'hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/'</span></em>, <em class="sig-param"><span class="n">bronze_parquet_dir</span><span class="o">=</span><span class="default_value">'hdfs://localhost:9000/tmp/ssp/data/lake/bronze/'</span></em>, <em class="sig-param"><span class="n">warehouse_location</span><span class="o">=</span><span class="default_value">'/opt/spark-warehouse/'</span></em>, <em class="sig-param"><span class="n">spark_master</span><span class="o">=</span><span class="default_value">'spark://IMCHLT276:7077'</span></em>, <em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="default_value">'raw_tweet_dataset'</span></em>, <em class="sig-param"><span class="n">processing_time</span><span class="o">=</span><span class="default_value">'5 seconds'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ssp.spark.streaming.common.html#ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase" title="ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase</span></code></a></p>
+<p>Twitter ingestion class
+- Gets the twitter stream data and dumps the data into Kafka topic
+- Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS</p>
+<dl class="py method">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_define_table_schema">
+<code class="sig-name descname">check_n_define_table_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset.check_n_define_table_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_define_table_schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_stop_streaming">
+<code class="sig-name descname">check_n_stop_streaming</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic</span></em>, <em class="sig-param"><span class="n">query</span></em>, <em class="sig-param"><span class="n">num_records</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset.check_n_stop_streaming"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_stop_streaming" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_bronze_lake">
+<code class="sig-name descname">dump_into_bronze_lake</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset.dump_into_bronze_lake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_bronze_lake" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql">
+<code class="sig-name descname">dump_into_postgresql</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">run_id</span></em>, <em class="sig-param"><span class="n">num_records</span><span class="o">=</span><span class="default_value">50000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset.dump_into_postgresql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql_internal">
+<code class="sig-name descname">dump_into_postgresql_internal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">run_id</span></em>, <em class="sig-param"><span class="n">kafka_topic</span></em>, <em class="sig-param"><span class="n">num_records</span><span class="o">=</span><span class="default_value">25000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset.dump_into_postgresql_internal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql_internal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.get_postgresql_connection">
+<code class="sig-name descname">get_postgresql_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset.get_postgresql_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.get_postgresql_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.check_n_mk_dirs">
+<code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">check_n_mk_dirs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">is_remove</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#check_n_mk_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.check_n_mk_dirs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.check_table_exists">
+<code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">check_table_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table_name</span></em>, <em class="sig-param"><span class="n">schema</span><span class="o">=</span><span class="default_value">'public'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#check_table_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.check_table_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.filter_possible_ai_tweet">
+<code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">filter_possible_ai_tweet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#filter_possible_ai_tweet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.filter_possible_ai_tweet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.filter_possible_ai_tweet_udf">
+<code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">filter_possible_ai_tweet_udf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.filter_possible_ai_tweet_udf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.get_create_table_sql">
+<code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">get_create_table_sql</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#get_create_table_sql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.get_create_table_sql" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.get_raw_dataset">
+<code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">get_raw_dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#get_raw_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.get_raw_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines all parquet file as one in given path
+:param path: Folder path
+:return:</p>
+</dd></dl>
+
+<span class="target" id="module-ssp.spark.streaming.consumer.twiteer_stream_consumer_main"></span><p>SSP modules that handles all data at ingestion level frm Twitter stream</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ssp.spark.streaming.ml.html" class="btn btn-neutral float-right" title="ssp.spark.streaming.ml" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ssp.spark.streaming.common.html" class="btn btn-neutral float-left" title="ssp.spark.streaming.common" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

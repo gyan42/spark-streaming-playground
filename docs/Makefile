@@ -22,6 +22,13 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-github:
+ssp:
+	rm source/ssp/*.rst
+	sphinx-apidoc -E -M -d 2 -f ../src/ssp/ -o source/ssp/
+	cd source/ssp/ && sed -i 's/ package//g' *.rst
+	cd source/ssp/ && sed -i 's/Submodules//g' *.rst
+	cd source/ssp/ && sed -i 's/Subpackages//g' *.rst
+	@make clean
 	@make html
 	git add -f build/
+	git add .

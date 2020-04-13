@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.posgress.dataset_base &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.posgress.dataset_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.posgress.dataset_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">gin</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">import</span> <span class="nn">swifter</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span><span class="p">,</span> <span class="n">print_info</span>
+
+<span class="kn">from</span> <span class="nn">absl</span> <span class="kn">import</span> <span class="n">flags</span>
+<span class="kn">from</span> <span class="nn">absl</span> <span class="kn">import</span> <span class="n">app</span>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">PostgresqlDatasetBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">text_column</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                 <span class="n">label_output_column</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">,</span>
+                 <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_database</span><span class="o">=</span><span class="s2">&quot;sparkstreamingdb&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_user</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span> <span class="o">=</span> <span class="n">postgresql_host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span> <span class="o">=</span> <span class="n">postgresql_port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span> <span class="o">=</span> <span class="n">postgresql_database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span> <span class="o">=</span> <span class="n">postgresql_user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span> <span class="o">=</span> <span class="n">postgresql_password</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span> <span class="o">=</span> <span class="n">raw_tweet_table_name_prefix</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span> <span class="o">=</span> <span class="n">label_output_column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span> <span class="o">=</span> <span class="n">text_column</span>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.get_sqlalchemy_connection"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_sqlalchemy_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_sqlalchemy_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;postgresql+psycopg2://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span><span class="p">,</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span><span class="p">,</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span><span class="p">,</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span><span class="p">,</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span><span class="p">)</span>
+        <span class="c1"># Connect to database (Note: The package psychopg2 is required for Postgres to work with SQLAlchemy)</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">con</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">con</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.store_df_as_parquet"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.store_df_as_parquet">[docs]</a>    <span class="k">def</span> <span class="nf">store_df_as_parquet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> records will be written to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">print_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File path </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> exists!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.to_posgresql_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.to_posgresql_table">[docs]</a>    <span class="k">def</span> <span class="nf">to_posgresql_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;fail&quot;</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+                      <span class="n">con</span><span class="o">=</span><span class="n">conn</span><span class="p">,</span>
+                      <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span>
+                      <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">print_error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.get_tables_list"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_tables_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_tables_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT table_name </span>
+<span class="s2">        FROM information_schema.tables </span>
+<span class="s2">        WHERE table_schema=&#39;public&#39; AND table_type=&#39;BASE TABLE&#39;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)[</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.get_raw_dump_tables_list"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_raw_dump_tables_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_dump_tables_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tables_list</span><span class="p">()</span>
+        <span class="n">tables</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">table</span> <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="n">table</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span><span class="p">)],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;List of raw dataset tables avaialable : </span><span class="si">{}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tables</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tables</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="s2">&quot;No data found in Postgresql DB&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tables</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.get_latest_raw_dataset_name_n_version"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_latest_raw_dataset_name_n_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">tables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_raw_dump_tables_list</span><span class="p">()</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="n">tables</span><span class="p">[</span><span class="n">version</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">version</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">table_name</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.get_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select * from </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.execute"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.store_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.store_table">[docs]</a>    <span class="k">def</span> <span class="nf">store_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.get_processed_datasets"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_processed_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">get_processed_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
+
+        <span class="n">raw_tweet_dataset_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="n">tables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tables_list</span><span class="p">()</span>
+        <span class="n">print_error</span><span class="p">(</span><span class="n">tables</span><span class="p">)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;deduplicated_raw_tweet_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="sa">f</span><span class="s2">&quot;test_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="sa">f</span><span class="s2">&quot;dev_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="sa">f</span><span class="s2">&quot;snorkel_train_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="sa">f</span><span class="s2">&quot;train_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]:</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checking for </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select * from </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">))</span>
+
+        <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="n">res</span>
+        <span class="k">return</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span></div>
+
+<div class="viewcode-block" id="PostgresqlDatasetBase.split_dataset_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.split_dataset_table">[docs]</a>    <span class="k">def</span> <span class="nf">split_dataset_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
+        <span class="n">raw_tweet_dataset_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+
+        <span class="c1"># Download dataset from postgresql</span>
+        <span class="n">raw_tweet_dataset_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select * from </span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+
+        <span class="c1"># TODO deduplicate here ?</span>
+        <span class="n">raw_tweet_dataset_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_tweet_dataset_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span><span class="p">]</span><span class="o">.</span><span class="n">swifter</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="n">raw_tweet_dataset_df_deduplicated</span> <span class="o">=</span> <span class="n">raw_tweet_dataset_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span><span class="p">)</span>
+
+        <span class="n">raw_tweet_dataset_df_deduplicated</span> <span class="o">=</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># remove new lines and carriage returns</span>
+
+        <span class="n">df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span>
+                                       <span class="n">test_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                       <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="c1"># stratify=raw_tweet_dataset_df_deduplicated[self._label_output_column])</span>
+
+        <span class="n">df</span><span class="p">,</span> <span class="n">dev_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+                                      <span class="n">test_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                                      <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="c1"># stratify=df[self._label_output_column])</span>
+
+        <span class="n">train_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+                                                      <span class="n">test_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                                                      <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="c1"># stratify=df[self._label_output_column])</span>
+
+        <span class="k">return</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span></div></div>
+
+
+<span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_string</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;download/upload tables&quot;</span><span class="p">)</span>
+<span class="n">FLAGS</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">FLAGS</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="p">):</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">PostgresqlDatasetBase</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;download&quot;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s2">&quot;raw_tweet_dataset_2&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;data/dataset/ssp/dump/raw_tweet_dataset_0.parquet&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;data/dataset/ssp/dump/raw_tweet_dataset_0.parquet&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">)</span>
+
+        <span class="n">db</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset_0&quot;</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;fail&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.flask.api.app &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.flask.api.app</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.flask.api.app</h1><div class="highlight"><pre>
+<span></span><span class="c1">#https://www.javacodemonk.com/named-entity-recognition-spacy-flask-api-1678a5df</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">abort</span><span class="p">,</span> <span class="n">jsonify</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="kn">from</span> <span class="nn">ssp.utils.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
+<span class="c1"># from ssp.dl.classifier.naive_text_classifier import NaiveTextClassifier</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en_core_web_sm&#39;</span><span class="p">)</span>
+
+<span class="c1"># text_classifier = NaiveTextClassifier(hdfs_host=&quot;localhost&quot;, hdfs_port=9000, model_dir=f&quot;{os.path.expanduser(&#39;~&#39;)}/ssp/model/raw_tweet_dataset_0/&quot;)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api.html#ssp.flask.api.app.index">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Home page with list of links for upload and download</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;layouts/index.html&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_ner"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api.html#ssp.flask.api.app.get_ner">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/text/ner/spacy&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_ner</span><span class="p">():</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span> <span class="ow">or</span> <span class="ow">not</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">ent</span><span class="o">.</span><span class="n">label_</span><span class="p">]</span> <span class="o">=</span> <span class="n">ent</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;res&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)}),</span> <span class="mi">201</span></div>
+
+<span class="c1">#https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037</span>
+<div class="viewcode-block" id="text_clasification"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api.html#ssp.flask.api.app.text_clasification">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/text/classification/naive/&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">text_clasification</span><span class="p">():</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span> <span class="ow">or</span> <span class="ow">not</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+    <span class="n">res</span><span class="o">=</span><span class="n">text</span>
+    <span class="c1"># res = text_classifier.predict(text)</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;res&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)}),</span> <span class="mi">201</span></div>
+
+<div class="viewcode-block" id="create_app"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api.html#ssp.flask.api.app.create_app">[docs]</a><span class="k">def</span> <span class="nf">create_app</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="s2">&quot;config/config.ini&quot;</span><span class="p">)</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="s2">&quot;api&quot;</span><span class="p">,</span> <span class="s2">&quot;host&quot;</span><span class="p">)</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="s2">&quot;api&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">create_app</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

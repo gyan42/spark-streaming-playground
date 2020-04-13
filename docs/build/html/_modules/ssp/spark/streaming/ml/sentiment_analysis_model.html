@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.spark.streaming.ml.sentiment_analysis_model &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.spark.streaming.ml.sentiment_analysis_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.spark.streaming.ml.sentiment_analysis_model</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="kn">import</span> <span class="nn">gin</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">IDF</span><span class="p">,</span> <span class="n">Tokenizer</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">StringIndexer</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml</span> <span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineModel</span>
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_info</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.classification</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">NGram</span><span class="p">,</span> <span class="n">VectorAssembler</span>
+
+
+<span class="c1"># https://github.com/tthustla/setiment_analysis_pyspark/blob/master/Sentiment%20Analysis%20with%20PySpark.ipynb</span>
+<div class="viewcode-block" id="SentimentSparkModel"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">SentimentSparkModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">spark</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s2">&quot;hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/&quot;</span><span class="p">,</span>
+                 <span class="n">warehouse_location</span><span class="o">=</span><span class="s2">&quot;/opt/spark-warehouse/&quot;</span><span class="p">,</span>
+                 <span class="n">spark_master</span><span class="o">=</span><span class="s2">&quot;spark://IMCHLT276:7077&quot;</span><span class="p">,</span>
+                 <span class="n">ai_tweets_topicset_path</span><span class="o">=</span><span class="s2">&quot;data/dataset/sentiment140/&quot;</span><span class="p">,</span>
+                 <span class="n">model_dir</span><span class="o">=</span><span class="s2">&quot;~/ssp/data/model/sentiment/&quot;</span><span class="p">,</span>
+                 <span class="n">hdfs_host</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hdfs_port</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span> <span class="o">=</span> <span class="n">spark_master</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_dir</span> <span class="o">=</span> <span class="n">checkpoint_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span> <span class="o">=</span> <span class="n">warehouse_location</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_port</span> <span class="o">=</span> <span class="n">hdfs_host</span><span class="p">,</span> <span class="n">hdfs_port</span>
+
+        <span class="k">if</span> <span class="n">hdfs_host</span> <span class="ow">and</span> <span class="n">hdfs_port</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_fs</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">hdfs</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hdfs_host</span><span class="p">,</span> <span class="n">hdfs_port</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_local_dir</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pre_trained</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading model...</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">PipelineModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_local_dir</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">PipelineModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">spark</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span> <span class="o">=</span> <span class="n">spark</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span> \
+                <span class="n">appName</span><span class="p">(</span><span class="s2">&quot;twitter_stream&quot;</span><span class="p">)</span><span class="o">.</span> \
+                <span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.warehouse.dir&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span><span class="p">)</span><span class="o">.</span> \
+                <span class="n">master</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span><span class="p">)</span><span class="o">.</span> \
+                <span class="n">enableHiveSupport</span><span class="p">()</span><span class="o">.</span> \
+                <span class="n">getOrCreate</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_path</span> <span class="o">=</span> <span class="s2">&quot;file:///&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ai_tweets_topicset_path</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_schema</span> <span class="o">=</span> <span class="n">StructType</span><span class="p">([</span>
+            <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;flag&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_df</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="SentimentSparkModel.prepare_data"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_path</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_schema</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Train data count : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="o">.</span><span class="n">count</span><span class="p">()))</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Val data count : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_df</span><span class="o">.</span><span class="n">count</span><span class="p">()))</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Test data count : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_test_df</span><span class="o">.</span><span class="n">count</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="SentimentSparkModel.build_naive_pipeline"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel.build_naive_pipeline">[docs]</a>    <span class="k">def</span> <span class="nf">build_naive_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_col</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">):</span>
+        <span class="c1"># Tokenize the text</span>
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="n">input_col</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;words&quot;</span><span class="p">)</span>
+        <span class="c1"># Count each word and use the count as its weight</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">vocabSize</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">16</span><span class="p">,</span> <span class="n">inputCol</span><span class="o">=</span><span class="s2">&quot;words&quot;</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s1">&#39;tf&#39;</span><span class="p">)</span>
+        <span class="c1"># IDF</span>
+        <span class="n">idf</span> <span class="o">=</span> <span class="n">IDF</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <span class="n">minDocFreq</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># minDocFreq: remove sparse terms</span>
+        <span class="n">label_string_idx</span> <span class="o">=</span> <span class="n">StringIndexer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+        <span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="p">[</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">idf</span><span class="p">,</span> <span class="n">label_string_idx</span><span class="p">,</span> <span class="n">lr</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="SentimentSparkModel.build_ngrams_wocs"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel.build_ngrams_wocs">[docs]</a>    <span class="k">def</span> <span class="nf">build_ngrams_wocs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputcol</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">outputcol</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="p">[</span><span class="n">Tokenizer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="n">inputcol</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;words&quot;</span><span class="p">)]</span>
+        <span class="n">ngrams</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">NGram</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">inputCol</span><span class="o">=</span><span class="s2">&quot;words&quot;</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_grams&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">cv</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">vocabSize</span><span class="o">=</span><span class="mi">5460</span><span class="p">,</span> <span class="n">inputCol</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_grams&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+                            <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_tf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">idf</span> <span class="o">=</span> <span class="p">[</span><span class="n">IDF</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_tf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_tfidf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">minDocFreq</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+
+        <span class="n">assembler</span> <span class="o">=</span> <span class="p">[</span><span class="n">VectorAssembler</span><span class="p">(</span>
+            <span class="n">inputCols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_tfidf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span>
+            <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span>
+        <span class="p">)]</span>
+        <span class="n">label_stringIdx</span> <span class="o">=</span> <span class="p">[</span><span class="n">StringIndexer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="n">outputcol</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)]</span>
+        <span class="n">lr</span> <span class="o">=</span> <span class="p">[</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">tokenizer</span> <span class="o">+</span> <span class="n">ngrams</span> <span class="o">+</span> <span class="n">cv</span> <span class="o">+</span> <span class="n">idf</span> <span class="o">+</span> <span class="n">assembler</span> <span class="o">+</span> <span class="n">label_stringIdx</span> <span class="o">+</span> <span class="n">lr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SentimentSparkModel.train"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_ngrams_wocs</span><span class="p">()</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="o">.</span><span class="n">show</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">write</span><span class="p">()</span><span class="o">.</span><span class="n">overwrite</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span></div>
+
+<div class="viewcode-block" id="SentimentSparkModel.evaluate"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="c1"># evaluator = BinaryClassificationEvaluator(rawPredictionCol=&quot;rawPrediction&quot;)</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_df</span><span class="p">)</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">predictions</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">predictions</span><span class="o">.</span><span class="n">prediction</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Accuracy : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SentimentSparkModel.predict"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="n">predicted_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">predicted_df</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

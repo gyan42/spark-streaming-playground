@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.logger.pretty_print &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ssp/modules.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ssp.logger.pretty_print</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ssp.logger.pretty_print</h1><div class="highlight"><pre>
+<span></span><span class="n">CEND</span>      <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[0m&#39;</span>
+<span class="n">CBOLD</span>     <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[1m&#39;</span>
+<span class="n">CITALIC</span>   <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[3m&#39;</span>
+<span class="n">CURL</span>      <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[4m&#39;</span>
+<span class="n">CBLINK</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[5m&#39;</span>
+<span class="n">CBLINK2</span>   <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[6m&#39;</span>
+<span class="n">CSELECTED</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[7m&#39;</span>
+
+<span class="n">CBLACK</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[30m&#39;</span>
+
+<span class="n">CGREEN</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[32m&#39;</span>
+<span class="n">CYELLOW</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[33m&#39;</span>
+
+<span class="n">CVIOLET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[35m&#39;</span>
+<span class="n">CBEIGE</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[36m&#39;</span>
+<span class="n">CWHITE</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[37m&#39;</span>
+
+<span class="n">CBLACKBG</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[40m&#39;</span>
+<span class="n">CREDBG</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[41m&#39;</span>
+<span class="n">CGREENBG</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[42m&#39;</span>
+<span class="n">CYELLOWBG</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[43m&#39;</span>
+<span class="n">CBLUEBG</span>   <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[44m&#39;</span>
+<span class="n">CVIOLETBG</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[45m&#39;</span>
+<span class="n">CBEIGEBG</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[46m&#39;</span>
+<span class="n">CWHITEBG</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[47m&#39;</span>
+
+<span class="n">CGREY</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[90m&#39;</span>
+<span class="n">CRED2</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[91m&#39;</span>
+
+
+<span class="n">CBLUE2</span>   <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[94m&#39;</span>
+<span class="n">CVIOLET2</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[95m&#39;</span>
+<span class="n">CBEIGE2</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[96m&#39;</span>
+<span class="n">CWHITE2</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[97m&#39;</span>
+
+<span class="n">CGREYBG</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[100m&#39;</span>
+<span class="n">CREDBG2</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[101m&#39;</span>
+<span class="n">CGREENBG2</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[102m&#39;</span>
+<span class="n">CYELLOWBG2</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[103m&#39;</span>
+<span class="n">CBLUEBG2</span>   <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[104m&#39;</span>
+<span class="n">CVIOLETBG2</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[105m&#39;</span>
+<span class="n">CBEIGEBG2</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[106m&#39;</span>
+<span class="n">CWHITEBG2</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[107m&#39;</span>
+
+<span class="n">CBLUE</span>   <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[34m&#39;</span>
+<span class="n">CYELLOW2</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[93m&#39;</span>
+<span class="n">CRED</span>    <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[31m&#39;</span>
+<span class="n">CGREEN2</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\33</span><span class="s1">[92m&#39;</span>
+
+<div class="viewcode-block" id="print_info"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.pretty_print.print_info">[docs]</a><span class="k">def</span> <span class="nf">print_info</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the string in green color</span>
+<span class="sd">    :param args: user string information</span>
+<span class="sd">    :return: stdout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">CGREEN2</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="n">CEND</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="print_error"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.pretty_print.print_error">[docs]</a><span class="k">def</span> <span class="nf">print_error</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the string in red color</span>
+<span class="sd">    :param args: user string information</span>
+<span class="sd">    :return: stdout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">CRED</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="n">CEND</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="print_warn"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.pretty_print.print_warn">[docs]</a><span class="k">def</span> <span class="nf">print_warn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the string in yellow color</span>
+<span class="sd">    :param args: user string information</span>
+<span class="sd">    :return: stdout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">CYELLOW2</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="n">CEND</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="print_debug"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.pretty_print.print_debug">[docs]</a><span class="k">def</span> <span class="nf">print_debug</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the string in blue color</span>
+<span class="sd">    :param args: user string information</span>
+<span class="sd">    :return: stdout</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">CBLUE</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="n">CEND</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
