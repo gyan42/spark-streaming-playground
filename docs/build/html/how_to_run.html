@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How to Run? &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usecases" href="usecases/usecases.html" />
+    <link rel="prev" title="Localhost Port Number used" href="host_urls_n_ports.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Run?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#on-local-machine">On Local Machine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#start-services">Start Services</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Spark Streaming Playground API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>How to Run?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/how_to_run.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-run">
+<h1>How to Run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h1>
+<p>Most of the materials are presented as a reference materials based on local machine setup environment,
+based on your machine some steps may vary.</p>
+<p>Based on the available memory and core on your machine, you must adjust the Spark cores/RAM memory
+values on *.sh file located in <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/bin">bin</a></p>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>We use <a class="reference external" href="https://github.com/google/gin-config">Gin-config</a> and Python <code class="docutils literal notranslate"><span class="pre">configparser</span></code> to read the configs from *.ini file.</p>
+<ul class="simple">
+<li><p>Add your Twitter credentials &#64; <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/twitter_ssp_config.gin">twitter_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/master/config/default_ssp_config.gin">default_ssp_config.gin</a> is used for most of the use case examples.</p></li>
+</ul>
+<p>Make a note of the your machine name with command <code class="docutils literal notranslate"><span class="pre">hostname</span></code>, and update the <code class="docutils literal notranslate"><span class="pre">spark</span> <span class="pre">master</span> <span class="pre">url</span></code> with it in <code class="docutils literal notranslate"><span class="pre">default_ssp_config.gin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">eg:</span> <span class="pre">spark://IMCHLT276:7077</span></code>, <code class="docutils literal notranslate"><span class="pre">IMCHLT276</span></code> should be your machine name.</p>
+</div>
+<div class="section" id="on-local-machine">
+<h2>On Local Machine<a class="headerlink" href="#on-local-machine" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="start-services">
+<h3>Start Services<a class="headerlink" href="#start-services" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>swipe out previous run data, if needed!</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">topics</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">delete</span> <span class="o">--</span><span class="n">zookeeper</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">2181</span> <span class="o">--</span><span class="n">topic</span> <span class="n">ai_tweets_topic</span> 
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">topics</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">delete</span> <span class="o">--</span><span class="n">zookeeper</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">2181</span> <span class="o">--</span><span class="n">topic</span> <span class="n">mix_tweets_topic</span>
+<span class="n">sudo</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">logs</span> 
+<span class="n">sudo</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">zookeeper</span><span class="o">/</span>
+<span class="n">sudo</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">logs</span><span class="o">*</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">warehouse</span><span class="o">/</span>
+<span class="n">hdfs</span> <span class="n">dfs</span> <span class="o">-</span><span class="n">rm</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ssp</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">lake</span><span class="o">/</span><span class="n">checkpoint</span><span class="o">/</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Start the services mannually as a background processes (Lookout of errors int he jungle of service logs…)</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">hive</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">hiveserver2</span> <span class="o">&amp;</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">zookeeper</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">start</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">zookeeper</span><span class="o">.</span><span class="n">properties</span> <span class="o">&amp;</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">start</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">properties</span> <span class="o">&amp;</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">start</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">server1</span><span class="o">.</span><span class="n">properties</span> <span class="o">&amp;</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">start</span><span class="o">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">server2</span><span class="o">.</span><span class="n">properties</span> <span class="o">&amp;</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">topics</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">zookeeper</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">2181</span> <span class="o">--</span><span class="n">replication</span><span class="o">-</span><span class="n">factor</span> <span class="mi">1</span> <span class="o">--</span><span class="n">partitions</span> <span class="mi">10</span> <span class="o">--</span><span class="n">topic</span> <span class="n">ai_tweets_topic</span>
+<span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">topics</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">zookeeper</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">2181</span> <span class="o">--</span><span class="n">replication</span><span class="o">-</span><span class="n">factor</span> <span class="mi">1</span> <span class="o">--</span><span class="n">partitions</span> <span class="mi">10</span> <span class="o">--</span><span class="n">topic</span> <span class="n">mix_tweets_topic</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> to start all the services, check <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/master/docker/supervisor.conf">docker/supervisor.conf</a> for list of back ground services</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisord</span> <span class="o">-</span><span class="n">c</span> <span class="n">docker</span><span class="o">/</span><span class="n">supervisor</span><span class="o">.</span><span class="n">conf</span> <span class="c1"># restart if you see any error</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Start Spark and Hive services…</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># start hdfs
+$HADOOP_HOME/sbin/start-dfs.sh
+# start yarn
+$HADOOP_HOME/sbin/start-yarn.sh
+# Start Spark standalone cluster
+$SPARK_HOME/sbin/start-all.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you wanna stop playing…</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
+sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
+$HADOOP_HOME/sbin/stop-dfs.sh
+$HADOOP_HOME/sbin/stop-yarn.sh
+$SPARK_HOME/sbin/stop-all.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Activate <code class="docutils literal notranslate"><span class="pre">ssp</span></code> Python environment</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">activate</span> <span class="n">ssp</span>
+</pre></div>
+</div>
+<p>Since we stop and start Spark Streaming Kafka consumer, restart Kafka server, sometimes the offset can go for a toss.
+To solve the issue we need to clear the Kafka data and Spark warehouse data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">stop</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">sudo</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">kafka</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">zookeeper</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">stop</span><span class="o">.</span><span class="n">sh</span>
+
+<span class="n">sudo</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">kafka</span><span class="o">-</span><span class="n">logs</span><span class="o">*</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">warehouse</span><span class="o">/</span>
+<span class="n">hdfs</span> <span class="n">dfs</span> <span class="o">-</span><span class="n">rm</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ssp</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">lake</span><span class="o">/</span><span class="n">checkpoint</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>From here on you can try the use cases. (Use cases documents too repeat some of these steps for clarity!)</p>
+</div>
+</div>
+<div class="section" id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Start the container</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get the bash shell</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># to get bash shell from running instance
+docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d&#39; &#39; -f1) bash
+</pre></div>
+</div>
+<p>From here on you can try the use cases. (Use cases documents too repeat some of these steps for clarity!)
+witter App credentials and update it here <a class="reference external" href="config/twitter.ini">twitter.ini</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="usecases/usecases.html" class="btn btn-neutral float-right" title="Usecases" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="host_urls_n_ports.html" class="btn btn-neutral float-left" title="Localhost Port Number used" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

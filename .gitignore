@@ -1,5 +1,5 @@
+config/twitter_ssp_config.gin
 docs/build/*
-config/twitter.ini
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

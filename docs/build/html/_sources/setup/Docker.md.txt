@@ -1,30 +1,18 @@
 # Docker
 
 ## Setup
+
 - https://kubernetes.io/docs/tasks/tools/install-minikube/
 - https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+
 ```
 sudo apt  install docker.io
 ```
 
 
-**Docker Debug commands**
+Since docker gonna eat up lot of disk space, it is idel to use HDD instead of SSD in case if you happened to ahve one! 
+Below are the steps to update the `root folder` of Docker download path to store the files.
 
-When there is a change in the python code base, we obviously have to 
-rebuild the docker image, isn't?
-
-Use following steps to do so:
-```shell script
-docker container ls
-docker stop {id}
-docker rm {id}
-docker build ...
-# for multiple shells for same container
-docker exec -it <container> bash
-
-```
-
-Update the root folder of Docker download path to save root path, in case you are using SSD
 ```
 sudo systemctl stop docker
 
@@ -48,47 +36,13 @@ sudo ls /opt/binaries/docker
 
 ```
 
-```
-sudo service docker start
-or 
-systemctl start docker
-systemctl enable docker
-
-#build the image
-docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
-# run docker in interactive mode
-docker run -ti spacy-flask-ner-python /bin/bash
-# start the app
-docker run -d -p 5000:5000 spacy-flask-ner-python
-
-# Debug commands
-docker container ls -a
-#One liner to stop / remove all of Docker containers:
-
-docker rmi id#
-
-docker images -f dangling=true
-docker system prune
-
-docker images purge
-
-# stop all the services/containers
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-```
-**Mount Host Folder**
-- https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container
-
-```
-sudo apt-get install virtualbox-guest-x11
-sudo mount -t vboxsf /opt/vlab/spark-streaming-playground/ /mnt/dockerfolder
-```
 
 ## Build our images
 
 **NER Image**
+
 ```
-docker build --network host -f docker/Dockerfile -t spacy-flask-ner-python:latest .
+docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
 # start the app
 docker run -it spacy-flask-ner-python:latest /bin/bash
 docker run -d -p 5000:5000 spacy-flask-ner-python
@@ -97,20 +51,100 @@ curl -i -H "Content-Type: application/json" -X POST -d '{"text":"Ram read a book
 ```
 
 **Structured Streaming Image**
+
+- Build
 ```
-docker build --network host -f docker/Dockerfile -t sparkstructuredstreaming-pg:latest .
+docker build --network host -f docker/ssp/Dockerfile -t sparkstructuredstreaming-pg:latest .
+```
+
+- Run
+```
+docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+```
+
+- Login into bash shell:
+```
+# first time
 docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest /bin/bash
 
-docker ps
-docker exec -it 01b8fa18259c bash 
+# to get bash shell from running instance
+docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
+```
 
-or
+We are mounting current directory as a volume inside the container, so make sure you trigger from repo base directory,
+so that following steps works.
 
-docker exec -it $(docker ps | tail +2 | cut -d' ' -f1) bash
+## Misc 
+
+**Common commands**
+
+- start the services
+```
+sudo service docker start
+or 
+systemctl start docker
+systemctl enable docker
+```
+
+- build the image
+```
+docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
+```
+
+- run docker in interactive mode
+```
+docker run -ti spacy-flask-ner-python /bin/bash
+```
+
+- start the app
+```
+docker run -d -p 5000:5000 spacy-flask-ner-python
+```
+
+- list containers
+```
+docker container ls -a
+```
+
+- remove/delete Docker images
+```
+docker rmi id#
+docker images -f dangling=true
+docker system prune
+docker images purge
+```
+
+- stop all the services/containers
+```
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+```
+
+- When there is a change in the python code base, we obviously have to 
+rebuild the docker image, isn't? Use following steps to do so:
+```shell script
+docker container ls
+docker stop {id}
+docker rm {id}
+docker build ...
+# for multiple shells for same container
+docker exec -it <container> bash
+
+```
+
+**Mount Host Folder**
+- [https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container](https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container)
+
+```
+sudo apt-get install virtualbox-guest-x11
+sudo mount -t vboxsf /opt/vlab/spark-streaming-playground/ /mnt/dockerfolder
 ```
 
 
-#References
+
+
+**References**
+
 - https://blog.adriel.co.nz/2018/01/25/change-docker-data-directory-in-debian-jessie/
 - https://rominirani.com/docker-tutorial-series-part-7-data-volumes-93073a1b5b72
 - https://medium.com/rahasak/kafka-and-zookeeper-with-docker-65cff2c2c34f
