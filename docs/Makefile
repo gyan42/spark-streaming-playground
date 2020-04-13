@@ -1,10 +1,13 @@
 # Minimal makefile for Sphinx documentation
 #
 
+# https://github.com/deepcharles/ruptures/pull/26
+
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
+SPHINXOPTS    =
+SPHINXBUILD   = python3 -msphinx
+SPHINXPROJ    = ruptures
 SOURCEDIR     = source
 BUILDDIR      = build
 
