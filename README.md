@@ -14,12 +14,12 @@ pytest -rP #shows the captured output of passed tests.
 pytest -rx #shows the captured output of failed tests (default behaviour).
 ``` 
 
-- [Dump Tweet data into Data Lake](docs/usecases/1_dump_tweets.md)  
-- [Trending Twitter Hash Tags](docs/usecases/2_trending_tweets.md)  
-- [Scalable REST end point](docs/usecases/3_scalable_rest_api.md)  
-- [Streaming ML Classification with Static Spark Model](docs/usecases/4_spark_ml.md)
-- [Spark SQL Exploration with Stackoverflow dataset](docs/usecases/5_static_table_stackoverflow.md)
-- [Text Classification with Data Collection](docs/usecases/6_full_ml_model_cycle.md)  
+- [Dump Tweet data into Data Lake](docs/source/usecases/1_dump_tweets.md)  
+- [Trending Twitter Hash Tags](docs/source/usecases/2_trending_tweets.md)  
+- [Scalable REST end point](docs/source/usecases/3_scalable_rest_api.md)  
+- [Streaming ML Classification with Static Spark Model](docs/source/usecases/4_spark_ml.md)
+- [Spark SQL Exploration with Stackoverflow dataset](docs/source/usecases/5_static_table_stackoverflow.md)
+- [Text Classification with Data Collection](docs/source/usecases/6_full_ml_model_cycle.md)  
 
 
 
@@ -27,7 +27,7 @@ pytest -rx #shows the captured output of failed tests (default behaviour).
 
 ------------------------------------------------------------------------------------------------------------------------
 
-![](docs/drawio/big_data_zoo.png)
+![](docs/source/drawio/big_data_zoo.png)
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -44,17 +44,17 @@ Guake is a background running terminal application in short, preventing you from
 
 - **Local Machine Setup**
 
-    - [Linux Machine](docs/setup/Linux.md)
-    - [Anaconda](docs/setup/Anaconda.md)
-    - [SSH](docs/setup/ssh.md)
-    - [PostgreSQL](docs/setup/Postgres.md)
-    - [Apache Hadoop](docs/setup/ApacheHadoop.md)
-    - [Apache Hive](docs/setup/ApacheHive.md)
-    - [Apache Spark](docs/setup/ApacheSpark.md)
-    - [Apache Kafka](docs/setup/ApacheKafka.md)
+    - [Linux Machine](docs/source/setup/Linux.md)
+    - [Anaconda](docs/source/setup/Anaconda.md)
+    - [SSH](docs/source/setup/ssh.md)
+    - [PostgreSQL](docs/source/setup/Postgres.md)
+    - [Apache Hadoop](docs/source/setup/ApacheHadoop.md)
+    - [Apache Hive](docs/source/setup/ApacheHive.md)
+    - [Apache Spark](docs/source/setup/ApacheSpark.md)
+    - [Apache Kafka](docs/source/setup/ApacheKafka.md)
     - [Python libs](requirements.txt)
-    - [Docker](docs/setup/Docker.md)
-    - [Kubernets](docs/setup/Kubernetes.md)
+    - [Docker](docs/source/setup/Docker.md)
+    - [Kubernets](docs/source/setup/Kubernetes.md)
     - [Twitter API](https://www.toptal.com/apache/apache-spark-streaming-twitter) Read the link to get ur [API keys](https://developer.twitter.com/)
         - In the heart we depend on Twitter tweet stream.
         - Twitter API along with `Tweepy` package is used to pull the tweets from internet
@@ -146,28 +146,6 @@ Guake is a background running terminal application in short, preventing you from
     Based on the available memory and core on your machine, you must adjust the Spark cores/RAM memory
      values on *.sh file located in [bin](bin)
 
-- **Localhost Port Number used**
-
-    Here is the list of services and their port numbers...
-    
-    |Port Number| Service            | Url|
-    |------------|-------------------|-----|
-    |8080        |Spark UI           |http://localhost:8080|
-    |7077        |Spark Master       |spark://IMCHLT276:7077|
-    |10000       |Spark Thrift Server|hive2://localhost:10000|
-    |10001       |Hive Thrift Server |hive2://localhost:10001|
-    |9870        |HDFS UI            |http://localhost:9870|
-    |9000        |HDFS IPC           |http://localhost:9000|
-    |8088        |Yarn UI            |http://localhost:8088|
-    |5432        |PostgreSQL         |postgresql://localhost:5432|
-    |5000        |Flask-NER         |http://localhost:5000|
-    |5001        |Flask-Dashboard   |http://localhost:5001|
-    |5000        |Flask-Tagger      |http://localhost:5002|
-    |8888        |Jupyter Lab       |http://localhost:8888/lab|
-    |30123       |Kubernetes Load Balancer - NER|http://127.0.0.1:30123
-    
-    All the services when running could load your machine to the fullest.
-    Minimum configuration would be 8+Cores and 32GB, when services are running :)
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -201,45 +179,4 @@ Now head back to **Local Machine Setup** ans start kafka related services.
 
  
 ------------------------------------------------------------------------------------------------------------------------
-
-### Learning Materials
-
-Below are some Big Data frameworks and cool materials to begin with, 
-if you are an intermediate or experienced developer you can ignore it.
-
-**Big Data**  
-- [Gentle Intro Big Data Frameworks in 20 mins](https://www.youtube.com/watch?v=DCaiZq3aBSc)  
-- [Intro](https://towardsdatascience.com/a-brief-summary-of-apache-hadoop-a-solution-of-big-data-problem-and-hint-comes-from-google-95fd63b83623)  
-- [Apache Hadoop](https://hadoop.apache.org/)  
-    - [10mins Read](https://www.guru99.com/learn-hadoop-in-10-minutes.html)  
-    - [1 day Simplilearn Full Course](https://www.youtube.com/watch?v=5zJt9qAe01w)  
-    - [HDFS Explained](https://www.youtube.com/watch?v=GJYEsEEfjvk)  
-- [Apache Spark](https://spark.apache.org/docs/latest/)  
-    - [My own post on Spark Jargons](https://medium.com/@mageswaran1989/spark-jargon-for-starters-af1fd8117ada)  
-    - [RDD Basics](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html)
-    - [PySpark on Google Colab](https://towardsdatascience.com/a-neanderthals-guide-to-apache-spark-in-python-9ef1f156d427)  
-    - [DataFrame/Dataset Basics](https://medium.com/swlh/spark-dataset-apis-a-gentle-introduction-108cdeafdea5)  
-    - [Spark Streaming](https://spark.apache.org/docs/latest/streaming-programming-guide.html)  
-    - [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html)  
-    - [1 day Edureka Full Course](https://www.youtube.com/watch?v=F8pyaR4uQ2g)
-    - [Saark Internals](https://github.com/JerryLead/SparkInternals)  
-- [Apache Kafka](https://kafka.apache.org/)  
-    - [what you need to know?](https://intellipaat.com/blog/what-is-apache-kafka/)  
-    - [Kafka + Apache Spark](https://www.youtube.com/watch?v=65lHphtrfo0)  
-- [Apache Hive](https://hive.apache.org/)  
-    - [Simpilearn 2 hrs Course](https://www.youtube.com/watch?v=rr17cbPGWGA)  
-- [Postgresql](https://www.postgresql.org/)  
-    - [freecodecamp Full Course](https://www.youtube.com/watch?v=qw--VYLpxG4)  
-- [Python](https://www.python.org/)  
-    - [Anaconda](https://www.youtube.com/watch?v=beh7GE4FdnM)  
-    - [12 hrs course from Edureka](https://www.youtube.com/watch?v=beh7GE4FdnM)  
-- Machine Learning  
-    - [Edureka 12 hours Course](https://www.youtube.com/watch?v=GwIo3gDZCVQ)  
-    - [Simpilearn 6 hours Course](https://www.youtube.com/watch?v=9f-GarcDY58)  
-
-
-
-
-## Good Reads
-- [https://www.linkedin.com/pulse/blog-series-changing-landscape-data-platforms-ml-sandeep/](https://www.linkedin.com/pulse/blog-series-changing-landscape-data-platforms-ml-sandeep/)
 

@@ -30,4 +30,11 @@ dash==1.9.1
 pytest-spark==0.6.0
 pytest-flask==1.0.0
 coverage==5.0.4
+#documentation
+sphinx==1.0.3
+sphinx_rtd_theme==3.0.1
+sphinxcontrib-bibtex==1.0.1
+recommonmark==0.6.0
+m2r==0.2.1
+sphinx-copybutton==0.2.10
 

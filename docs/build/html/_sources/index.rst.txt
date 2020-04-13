@@ -7,14 +7,15 @@ Welcome to spark-streaming-playground's documentation!
 ======================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Kafka:
+   setup/setup.rst
+   tutorials.md
+   host_urls_n_ports.md
+   usecases/usecases.rst
+   api.rst
 
-   ssp/kafka/producer.rst
 
 Indices and tables
 ==================

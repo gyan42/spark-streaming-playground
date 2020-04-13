@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scalable REST end point a naive approach &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spark ML Model" href="4_spark_ml.html" />
+    <link rel="prev" title="Trending Twitter Hash Tags" href="2_trending_tweets.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_dump_tweets.html">Dump Tweet data into Data Lake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scalable REST end point a naive approach</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4_spark_ml.html">Spark ML Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_static_table_stackoverflow.html">Stackoverflow Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_full_ml_model_cycle.html">Streaming ML Classification with Active Learning Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Spark Streaming Playground API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="usecases.html">Usecases</a> &raquo;</li>
+        
+      <li>Scalable REST end point a naive approach</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/3_scalable_rest_api.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scalable-rest-end-point-a-naive-approach">
+<h1>Scalable REST end point a naive approach<a class="headerlink" href="#scalable-rest-end-point-a-naive-approach" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Build a naive approach for a scalable back end loading the spaCy model (12MB) and serve them over a REST end point with Kubernetes</p></li>
+<li><p>Perform NLP task called NER with spaCy</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Design Flask application with a end point to do spaCy NER</p></li>
+<li><p>Define Docker with flask application</p></li>
+<li><p>Define Kubernetes service and deployment file</p></li>
+<li><p>Run as Kubernetes application</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">Bronze</span> <span class="pre">Lake/Live</span> <span class="pre">Stream</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Parquet</span> <span class="pre">Source</span> <span class="pre">-&gt;</span> <span class="pre">Extract</span> <span class="pre">NER</span> <span class="pre">Tags</span> <span class="pre">from</span> <span class="pre">text</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Console</span> <span class="pre">Sink</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Extract</span> <span class="pre">NER</span> <span class="pre">Tags</span> <span class="pre">from</span> <span class="pre">text</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">:</span> <span class="pre">Raw</span> <span class="pre">Text</span> <span class="pre">-&gt;</span> <span class="pre">REST</span> <span class="pre">API</span> <span class="pre">end</span> <span class="pre">point</span> <span class="pre">-&gt;</span> <span class="pre">Kubernetes</span> <span class="pre">-&gt;</span> <span class="pre">Docker</span> <span class="pre">-&gt;</span> <span class="pre">Flask</span> <span class="pre">-&gt;</span> <span class="pre">spaCy</span> <span class="pre">-&gt;</span> <span class="pre">NER</span></code></p>
+<p><img alt="../_images/3_scalable_rest_api.png" src="../_images/3_scalable_rest_api.png" /></p>
+</div>
+<div class="section" id="how-to-run">
+<h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
+is the difference, once the terminal is launched, the steps are common.</p>
+<p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
+Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
+<p>This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
+Hence the first half details teh steps to test at 3 different levels and in the second part to start the
+Spark Streaming application</p>
+<ul>
+<li><p>API server
+There are three stages of testing the API REST end points, beofre useing them in Spark Streaming…</p>
+<ol>
+<li><p>As a standalone Flask server</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># [api]</span>
+    <span class="nb">bin</span><span class="o">/</span><span class="n">flask</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="n">sh</span>
+    <span class="c1"># test it to see everything working</span>
+    <span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5000</span><span class="o">/</span><span class="n">text</span><span class="o">/</span><span class="n">ner</span><span class="o">/</span><span class="n">spacy</span>
+    <span class="c1"># output</span>
+        <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">201</span> <span class="n">CREATED</span>
+        <span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
+        <span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">34</span>
+        <span class="n">Server</span><span class="p">:</span> <span class="n">Werkzeug</span><span class="o">/</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span> <span class="n">Python</span><span class="o">/</span><span class="mf">3.6</span><span class="o">.</span><span class="mi">9</span>
+        <span class="n">Date</span><span class="p">:</span> <span class="n">Thu</span><span class="p">,</span> <span class="mi">02</span> <span class="n">Apr</span> <span class="mi">2020</span> <span class="mi">18</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">28</span> <span class="n">GMT</span>
+
+        <span class="p">{</span>
+          <span class="s2">&quot;res&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;DATE&#39;: &#39;Friday&#39;}&quot;</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>As part of docker</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#[docker]
+
+    docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
+    docker run -d -p 5000:5000 spacy-flask-ner-python
+    # test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; http://127.0.0.1:5000/text/ner/spacy
+    # stop 
+    docker stop $(docker ps | grep spacy-flask-ner-python | cut -d&#39; &#39; -f1)
+    # use below command to stop all containers
+    # docker rm $(docker ps -a -q)
+</pre></div>
+</div>
+<ol>
+<li><p>As part of Kubernetes</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#[kubernetes]</span>
+
+    <span class="n">sudo</span> <span class="n">minikube</span> <span class="n">start</span> <span class="o">--</span><span class="n">vm</span><span class="o">-</span><span class="n">driver</span><span class="o">=</span><span class="n">none</span> 
+
+    <span class="c1"># note only first time below commands will add the docker file and run its as as service,</span>
+    <span class="c1"># there on, our service will be started by default when we start the Kubernetes!</span>
+    <span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">deployment</span><span class="o">.</span><span class="n">yaml</span> 
+    <span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">yaml</span>
+
+    <span class="c1"># on local machine, test it to see everything working</span>
+    <span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30123</span><span class="o">/</span><span class="n">text</span><span class="o">/</span><span class="n">ner</span><span class="o">/</span><span class="n">spacy</span>
+
+    <span class="c1"># on docker, test it to see everything working</span>
+    <span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="o">-</span><span class="n">sS</span> <span class="n">host</span><span class="o">.</span><span class="n">docker</span><span class="o">.</span><span class="n">internal</span><span class="p">:</span><span class="mi">30123</span><span class="o">/</span><span class="n">text</span><span class="o">/</span><span class="n">ner</span><span class="o">/</span><span class="n">spacy</span>
+
+    <span class="c1"># kubernetes restart</span>
+    <span class="n">kubectl</span> <span class="n">delete</span> <span class="n">service</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">service</span> <span class="n">deployment</span><span class="o">.</span><span class="n">apps</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">deployment</span>
+    <span class="c1"># and then create the services again</span>
+</pre></div>
+</div>
+</li>
+<li><p>Python App test</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+python3 src/ssp/spark/udf/spacy_ner_udf.py # test it to see everything working
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>Spark Streaming Application</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#[producer] Guake terminal name! </span>
+    <span class="nb">bin</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">start_kafka_producer</span><span class="o">.</span><span class="n">sh</span>
+
+<span class="c1">#[ner]</span>
+    <span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="c1"># Local machine</span>
+    <span class="n">cd</span> <span class="o">/</span><span class="n">host</span>  <span class="c1"># Docker</span>
+
+    <span class="n">sudo</span> <span class="n">netstat</span> <span class="o">-</span><span class="n">tulpen</span> <span class="o">|</span> <span class="n">grep</span> <span class="mi">30123</span> <span class="c1"># check the port is in use or not</span>
+    <span class="nb">bin</span><span class="o">/</span><span class="n">nlp</span><span class="o">/</span><span class="n">ner_extraction_using_spacy</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p><img alt="../_images/ner_out.png" src="../_images/ner_out.png" /></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="4_spark_ml.html" class="btn btn-neutral float-right" title="Spark ML Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="2_trending_tweets.html" class="btn btn-neutral float-left" title="Trending Twitter Hash Tags" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -108,6 +108,13 @@ class TwitterProducer(object):
         self._mode = mode
 
     def twitter_kafka_stream(self, kafka_topic, keywords, is_ai=False):
+        """
+
+        :param kafka_topic:
+        :param keywords:
+        :param is_ai:
+        :return:
+        """
         auth = OAuthHandler(self._twitter_consumer_key, self._twitter_consumer_secret)
         auth.set_access_token(self._twitter_access_token, self._twitter_access_secret)
 
@@ -121,6 +128,10 @@ class TwitterProducer(object):
         twitter_stream.filter(track=keywords, languages=["en"])
 
     def run(self):
+        """
+        Starts two Kafka producers
+        :return:
+        """
         if self._topic_2_filter_words is None:
             self._topic_2_filter_words = AIKeyWords.ALL.split("|")
 

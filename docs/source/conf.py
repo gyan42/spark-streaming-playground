@@ -12,7 +12,23 @@
 #
 import os
 import sys
+from recommonmark.parser import CommonMarkParser
+from unittest.mock import MagicMock
+from recommonmark.transform import AutoStructify
 sys.path.insert(0, os.path.abspath('../../src/'))
+
+
+# TODO: https://github.com/rtfd/recommonmark/issues/93
+# TODO https://github.com/rtfd/recommonmark/issues/120
+# This patch helps in linking markdown files within mardown files
+from recommonmark.states import DummyStateMachine
+# Monkey patch to fix recommonmark 0.4 doc reference issues.
+orig_run_role = DummyStateMachine.run_role
+def run_role(self, name, options=None, content=None):
+    if name == 'doc':
+        name = 'any'
+    return orig_run_role(self, name, options, content)
+DummyStateMachine.run_role = run_role
 
 
 # -- Project information -----------------------------------------------------
@@ -27,7 +43,9 @@ author = 'Mageswaran Dhandapani'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = ['recommonmark',
+              'sphinx.ext.autodoc',
+              'sphinx.ext.autosummary',
               'sphinx.ext.doctest',
               'sphinx.ext.intersphinx',
               'sphinx.ext.todo',
@@ -35,7 +53,14 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'sphinx.ext.ifconfig',
               'sphinx.ext.viewcode',
+              'sphinx_markdown_tables',
+              # 'm2r', # https://github.com/miyakogi/m2r/pull/55
               'sphinx.ext.githubpages']
+              # 'sphinxcontrib.bibtex',
+              # 'sphinx.ext.napoleon',
+              # 'nbsphinx', #https://nbsphinx.readthedocs.io/en/0.6.0/
+              # 'sphinx_issues', # https://github.com/sloria/sphinx-issues
+              # 'sphinx_copybutton']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -45,7 +70,30 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-source_suffix = ['.rst', '.md']
+
+# www.sphinx-doc.org/en/stable/markdown.html
+# https://github.com/sphinx-doc/sphinx/issues/7000
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
+}
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+
+# The short X.Y version.
+version = '0.0.1'
+# The full version, including alpha/beta/rc tags.
+release = '0.0.1'
+
+
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
+
+
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = True
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -54,7 +102,29 @@ source_suffix = ['.rst', '.md']
 #
 html_theme = 'sphinx_rtd_theme'
 
+# Output file base name for HTML help builder.
+htmlhelp_basename = 'sspdoc'
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_context = {
+    'css_files': [
+        'https://fonts.googleapis.com/css?family=Lato',
+        '_static/css/custom_theme.css'
+    ],
+}
+
+
+
+# At the bottom of conf.py
+# https://recommonmark.readthedocs.io/en/latest/auto_structify.html
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        'enable_auto_toc_tree' : True,
+        'enable_math': True,
+        'enable_inline_math': True,
+    }, True)
+    app.add_transform(AutoStructify)

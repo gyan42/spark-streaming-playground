@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Kubernetes &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Twitter" href="Twitter.html" />
+    <link rel="prev" title="Docker" href="Docker.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="setup.html">Spark Streaming Playground Environment Setup</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux Machine Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">SSH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Anaconda.html">Conda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Postgres.html">PostgreSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHadoop.html">Apache Hadoop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHive.html">Apache Hive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#test-with-our-code">Test with our code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheSpark.html">Apache Spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Kubernetes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setting-up-with-our-docker-image">Setting up with our docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#se">SE</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Twitter.html">Twitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">MISC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Spark Streaming Playground API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="setup.html">Spark Streaming Playground Environment Setup</a> &raquo;</li>
+        
+      <li>Kubernetes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/setup/Kubernetes.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="kubernetes">
+<h1>Kubernetes<a class="headerlink" href="#kubernetes" title="Permalink to this headline">¶</a></h1>
+<p>Some common commands that are handy while working with kubernetes.</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># starts the pods in yor machine
+sudo minikube start --vm-driver=none 
+sudo minikube stop
+
+# list down all the pods 
+kubectl get pods
+# list all 
+kubectl get all
+# delete services
+kubectl delete ${name from above list}
+# eg:
+kubectl delete deployment.apps/spacy-flask-ner-python
+
+ 
+</pre></div>
+</div>
+<div class="section" id="setting-up-with-our-docker-image">
+<h2>Setting up with our docker image<a class="headerlink" href="#setting-up-with-our-docker-image" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">minikube</span> <span class="n">start</span> <span class="o">--</span><span class="n">vm</span><span class="o">-</span><span class="n">driver</span><span class="o">=</span><span class="n">none</span> 
+
+<span class="c1"># note only first time below commands will add the docker file and run its as as service,</span>
+<span class="c1"># there on, our service will be started by default when we start the Kubernetes!</span>
+
+<span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">deployment</span><span class="o">.</span><span class="n">yaml</span> 
+<span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">yaml</span>
+<span class="c1"># on a seprate terminal</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30123</span><span class="o">/</span><span class="n">spacy</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">ner</span>
+
+<span class="c1"># kubernetes restart</span>
+<span class="n">kubectl</span> <span class="n">delete</span> <span class="n">service</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">service</span> <span class="n">deployment</span><span class="o">.</span><span class="n">apps</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">deployment</span>
+<span class="c1"># and then create the services again</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="se">
+<h2>SE<a class="headerlink" href="#se" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>https://medium.com/faun/how-to-restart-kubernetes-pod-7c702ca984c1</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Twitter.html" class="btn btn-neutral float-right" title="Twitter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Docker.html" class="btn btn-neutral float-left" title="Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

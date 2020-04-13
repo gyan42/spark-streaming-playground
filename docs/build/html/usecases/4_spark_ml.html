@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Spark ML Model &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Stackoverflow Exploration" href="5_static_table_stackoverflow.html" />
+    <link rel="prev" title="Scalable REST end point a naive approach" href="3_scalable_rest_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_dump_tweets.html">Dump Tweet data into Data Lake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_scalable_rest_api.html">Scalable REST end point a naive approach</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Spark ML Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5_static_table_stackoverflow.html">Stackoverflow Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_full_ml_model_cycle.html">Streaming ML Classification with Active Learning Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Spark Streaming Playground API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="usecases.html">Usecases</a> &raquo;</li>
+        
+      <li>Spark ML Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/4_spark_ml.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="spark-ml-model">
+<h1>Spark ML Model<a class="headerlink" href="#spark-ml-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Use a offline Tweet Dataset</p></li>
+<li><p>Build a sentiment classification model and use it on streams</p></li>
+</ul>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Get the twitter dataset from https://www.kaggle.com/kazanova/sentiment140</p></li>
+<li><p>Build a Spark ML pipeline</p></li>
+<li><p>Train a model and store it in HDFS</p></li>
+<li><p>Load the model and use them in streams for classification</p></li>
+</ul>
+</div>
+<div class="section" id="how-to-run">
+<h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
+is the difference, once the terminal is launched, the steps are common.</p>
+<p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
+Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
+<p>This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
+Hence the first half details teh steps to test at 3 different levels and in the second part to start the
+Spark Streaming application</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">sparkml</span><span class="p">]</span>
+    <span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="c1"># Local machine</span>
+    <span class="n">cd</span> <span class="o">/</span><span class="n">host</span>  <span class="c1"># Docker</span>
+    
+    <span class="n">unzip</span> <span class="n">data</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">sentiment</span><span class="o">/</span><span class="n">sentiment140</span><span class="o">.</span><span class="n">zip</span> <span class="o">-</span><span class="n">d</span> <span class="n">data</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">sentiment</span><span class="o">/</span><span class="n">sentiment140</span>
+    <span class="c1">#builds and stores the model in HDFS</span>
+    <span class="nb">bin</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">build_sentiment_spark_model_offline</span><span class="o">.</span><span class="n">sh</span>
+    <span class="c1"># Runs the model against live stream unless configured to HDFS path</span>
+    <span class="nb">bin</span><span class="o">/</span><span class="n">analytics</span><span class="o">/</span><span class="n">streaming_sentiment_tweet_analysis</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>https://github.com/tthustla/setiment_analysis_pyspark/blob/master/Sentiment%20Analysis%20with%20PySpark.ipynb</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="5_static_table_stackoverflow.html" class="btn btn-neutral float-right" title="Stackoverflow Exploration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="3_scalable_rest_api.html" class="btn btn-neutral float-left" title="Scalable REST end point a naive approach" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

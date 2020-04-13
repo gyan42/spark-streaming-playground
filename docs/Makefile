@@ -24,4 +24,4 @@ help:
 
 github:
 	@make html
-	git add -f build/  
+	git add -f build/
