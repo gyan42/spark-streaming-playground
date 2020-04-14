@@ -182,10 +182,10 @@
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Refer the following link for general architecture of our continuous integration ML pipeline<a class="reference external" href="https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7">theory on Architecting a Machine Learning Pipeline</a></p></li>
-<li><p>Create a pipeline imitating the following diagram…<br /><img alt="../_images/ml_pipeline.png" src="../_images/ml_pipeline.png" /></p></li>
-<li><p>Build ground up dataset for tweet classification from scratch with the live streaming data</p></li>
+<li><p>Create a pipeline with following diagram as reference…<br /><img alt="../_images/ml_pipeline.png" src="../_images/ml_pipeline.png" /></p></li>
+<li><p>Build ground up dataset for tweet classification (AI tweet or not) using the live streaming data</p></li>
 <li><p>Dump the raw tweet data into a table in Postgresql DB called <code class="docutils literal notranslate"><span class="pre">streamingdb</span></code></p></li>
-<li><p>Have configuration to prefix the name of raw tweet data and up on each data ingestion run the prefix should be used with incrementing suffix index</p></li>
+<li><p>Have configuration to prefix the name of the raw tweet data and version config to dump the tables into DB</p></li>
 <li><p>Use semi supervised methods to tag dataset, for example frameworks like [https://www.snorkel.org/](https://www.snorkel.org/</p></li>
 <li><p>Build a UI tool to annotate the semi supervised tagged data to create golden dataset for ML training</p></li>
 <li><p>Build a Naive Deep Learning/ Neural network model and evaluate it on golden/sem supervised dataset</p></li>
@@ -277,7 +277,8 @@ Tweets ---&gt; Twitter Stream ---&gt; Tweepy ---&gt; Kafka Producer ---&gt; Kafk
 <td>Model train dataset</td>
 </tr>
 </tbody>
-</table></div>
+</table><p><img alt="../_images/6_full_ml_model_cycle.png" src="../_images/6_full_ml_model_cycle.png" /></p>
+</div>
 <div class="section" id="how-to-run">
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal

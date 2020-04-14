@@ -3,11 +3,11 @@
 ## Requirements  
 
 - Refer the following link for general architecture of our continuous integration ML pipeline[theory on Architecting a Machine Learning Pipeline](https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7)   
-- Create a pipeline imitating the following diagram...   
+- Create a pipeline with following diagram as reference...   
     ![](../images/ml_pipeline.png)
-- Build ground up dataset for tweet classification from scratch with the live streaming data
+- Build ground up dataset for tweet classification (AI tweet or not) using the live streaming data
 - Dump the raw tweet data into a table in Postgresql DB called `streamingdb`
-- Have configuration to prefix the name of raw tweet data and up on each data ingestion run the prefix should be used with incrementing suffix index
+- Have configuration to prefix the name of the raw tweet data and version config to dump the tables into DB
 - Use semi supervised methods to tag dataset, for example frameworks like [https://www.snorkel.org/](https://www.snorkel.org/
 - Build a UI tool to annotate the semi supervised tagged data to create golden dataset for ML training
 - Build a Naive Deep Learning/ Neural network model and evaluate it on golden/sem supervised dataset
@@ -61,6 +61,8 @@ Dataset tables:
 |dev_dataset_0                     |500    |Dev dataset        |
 |snorkel_train_dataset_0           |10K    |Snorkel train dataset | 
 |train_dataset_0                   |~      |Model train dataset |
+
+![](../drawio/6_full_ml_model_cycle.png)
 
 ## How to run?
 
