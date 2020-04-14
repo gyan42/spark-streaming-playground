@@ -10,12 +10,6 @@ ssp.logger
 ----------
 
 
-.. automodule:: ssp.logger.SSPLogger
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
 .. automodule:: ssp.logger.pretty_print
    :members:
    :undoc-members:
@@ -29,6 +23,12 @@ ssp.logger
 
 
 .. automodule:: ssp.logger.spark_logger
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: ssp.logger.ssp_logger
    :members:
    :undoc-members:
    :show-inheritance:

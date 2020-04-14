@@ -966,7 +966,7 @@ Double = 0.95): PartialResult[BoundedDouble]<br>
       <br>
 
 Computes the approximate number of distinct values. For large RDDs
-which are spread across many nodes, this function may execute faster
+which are spread across many nodes, this function may query_to_df faster
 than other counting methods. The parameter <span style="font-style: italic;">relativeSD</span> controls the accuracy of
 the computation.<br>
 
@@ -1033,7 +1033,7 @@ Similar to <span style="font-style: italic;">countApproxDistinct</span>,
 but computes the approximate number of distinct values for each
 distinct key. Hence, the RDD must consist of two-component tuples. For
 large RDDs which are spread across many nodes, this function may
-execute faster than other counting methods. The parameter <span style="font-style: italic;">relativeSD</span> controls the accuracy of
+query_to_df faster than other counting methods. The parameter <span style="font-style: italic;">relativeSD</span> controls the accuracy of
 the computation.<br>
 
       <br>

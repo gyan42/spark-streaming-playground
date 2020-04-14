@@ -191,19 +191,15 @@
   <div class="section" id="module-ssp.flask.tagger">
 <span id="ssp-flask-tagger"></span><h1>ssp.flask.tagger<a class="headerlink" href="#module-ssp.flask.tagger" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
-<span class="target" id="module-ssp.flask.tagger.app"></span><dl class="py function">
+<span class="target" id="module-ssp.flask.tagger.app"></span><dl class="py class">
+<dt id="ssp.flask.tagger.app.LabelsInfo">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">LabelsInfo</code><span class="sig-paren">(</span><em class="sig-param">labels=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#LabelsInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.LabelsInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="ssp.flask.tagger.app.check_n_mk_dirs">
 <code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">check_n_mk_dirs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">is_remove</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#check_n_mk_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.check_n_mk_dirs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="ssp.flask.tagger.app.download">
-<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.download" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="ssp.flask.tagger.app.download_files_list">
-<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">download_files_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#download_files_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.download_files_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -231,29 +227,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="ssp.flask.tagger.app.tag_text">
-<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">tag_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#tag_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.tag_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates paginated pages, displaying text and corresponding lables
-:return:</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ssp.flask.tagger.app.upload_data">
-<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">upload_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#upload_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.upload_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload the user file into ‘STORE_PATH’/data/ after deleting any old files in the path.
-:return:</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ssp.flask.tagger.app.upload_labels">
-<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">upload_labels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#upload_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.upload_labels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload the user label file into ‘STORE_PATH’ after deleting any old files in the path.
-:return:</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ssp.flask.tagger.app.uploaded_files_list">
-<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">uploaded_files_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#uploaded_files_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.uploaded_files_list" title="Permalink to this definition">¶</a></dt>
+<dt id="ssp.flask.tagger.app.tagger">
+<code class="sig-prename descclassname">ssp.flask.tagger.app.</code><code class="sig-name descname">tagger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host</span></em>, <em class="sig-param"><span class="n">port</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/tagger/app.html#tagger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.tagger.app.tagger" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

@@ -1,0 +1,11 @@
+tagger.host = "0.0.0.0"
+tagger.port = "8766"
+
+LabelsInfo.labels = {"AI": 1, "OTHER" : 0, "ABSTAIN": -1}
+
+PostgresqlConnection.postgresql_host = "localhost"
+PostgresqlConnection.postgresql_port = "5432"
+PostgresqlConnection.postgresql_database = "sparkstreamingdb"
+PostgresqlConnection.postgresql_user = "sparkstreaming"
+PostgresqlConnection.postgresql_password = "sparkstreaming"
+

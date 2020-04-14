@@ -22,6 +22,10 @@ Hence the first half details teh steps to test at 3 different levels and in the 
 Spark Streaming application
 
 ```
+cd /path/to/spark-streaming-playground/ # Local machine
+cd /host  # Docker
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+
 [sparkml]
     cd /path/to/spark-streaming-playground/ # Local machine
     cd /host  # Docker

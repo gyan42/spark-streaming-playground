@@ -204,15 +204,19 @@ Note: We pull our container run id with <code class="docutils literal notranslat
 <p>This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
 Hence the first half details teh steps to test at 3 different levels and in the second part to start the
 Spark Streaming application</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">sparkml</span><span class="p">]</span>
-    <span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="c1"># Local machine</span>
-    <span class="n">cd</span> <span class="o">/</span><span class="n">host</span>  <span class="c1"># Docker</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/ # Local machine
+cd /host  # Docker
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+
+[sparkml]
+    cd /path/to/spark-streaming-playground/ # Local machine
+    cd /host  # Docker
     
-    <span class="n">unzip</span> <span class="n">data</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">sentiment</span><span class="o">/</span><span class="n">sentiment140</span><span class="o">.</span><span class="n">zip</span> <span class="o">-</span><span class="n">d</span> <span class="n">data</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">sentiment</span><span class="o">/</span><span class="n">sentiment140</span>
-    <span class="c1">#builds and stores the model in HDFS</span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">build_sentiment_spark_model_offline</span><span class="o">.</span><span class="n">sh</span>
-    <span class="c1"># Runs the model against live stream unless configured to HDFS path</span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">analytics</span><span class="o">/</span><span class="n">streaming_sentiment_tweet_analysis</span><span class="o">.</span><span class="n">sh</span>
+    unzip data/dataset/sentiment/sentiment140.zip -d data/dataset/sentiment/sentiment140
+    #builds and stores the model in HDFS
+    bin/models/build_sentiment_spark_model_offline.sh
+    # Runs the model against live stream unless configured to HDFS path
+    bin/analytics/streaming_sentiment_tweet_analysis.sh
 </pre></div>
 </div>
 </div>

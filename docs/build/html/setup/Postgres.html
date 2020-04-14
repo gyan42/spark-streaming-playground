@@ -356,6 +356,12 @@ which then can be shared with Spark.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">role</span> <span class="pre">__test__;</span></code>: Change role for current session to <code class="docutils literal notranslate"><span class="pre">__test__</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">grant</span> <span class="pre">__test2__</span> <span class="pre">to</span> <span class="pre">__test1__;</span></code>: Allow <code class="docutils literal notranslate"><span class="pre">__test1__</span></code> to set its role as <code class="docutils literal notranslate"><span class="pre">__test2__</span></code>.</p></li>
 </ul>
+<p>Drop all the tables in a database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">SCHEMA</span> <span class="n">public</span> <span class="n">CASCADE</span><span class="p">;</span>
+<span class="n">CREATE</span> <span class="n">SCHEMA</span> <span class="n">public</span> <span class="n">AUTHORIZATION</span> <span class="p">{</span><span class="n">USER</span><span class="p">};</span>
+<span class="n">GRANT</span> <span class="n">ALL</span> <span class="n">ON</span> <span class="n">schema</span> <span class="n">public</span> <span class="n">TO</span> <span class="p">{</span><span class="n">USER</span><span class="p">};</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
@@ -457,7 +463,7 @@ which then can be shared with Spark.</p>
 <p>Query analysis:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">EXPLAIN</span> <span class="pre">__query__</span></code>: see the query plan for the given query</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">EXPLAIN</span> <span class="pre">ANALYZE</span> <span class="pre">__query__</span></code>: see and execute the query plan for the given query</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXPLAIN</span> <span class="pre">ANALYZE</span> <span class="pre">__query__</span></code>: see and query_to_df the query plan for the given query</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ANALYZE</span> <span class="pre">[__table__]</span></code>: collect statistics</p></li>
 </ul>
 <p>Generating random data (<a class="reference external" href="https://www.citusdata.com/blog/2019/07/17/postgres-tips-for-average-and-power-user/">source</a>):</p>

@@ -222,17 +222,21 @@ Note: We pull our container run id with <code class="docutils literal notranslat
 </ul>
 </li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="c1"># Local machine</span>
-<span class="n">cd</span> <span class="o">/</span><span class="n">host</span>  <span class="c1"># Docker</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/ # Local machine
+cd /host  # Docker
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 
-<span class="c1">#[producer] Guake terminal name! </span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">start_kafka_producer</span><span class="o">.</span><span class="n">sh</span>
+#[producer] Guake terminal name! 
+    vim bin/data/start_kafka_producer.sh
+    bin/data/start_kafka_producer.sh
 
-<span class="c1">#[hashtag] Guake terminal name! </span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">analytics</span><span class="o">/</span><span class="n">trending_tweet_hashtags</span><span class="o">.</span><span class="n">sh</span>
+#[hashtag] Guake terminal name! 
+    vim bin/analytics/trending_tweet_hashtags.sh
+    bin/analytics/trending_tweet_hashtags.sh
 
-<span class="c1">#[dashboard] Guake terminal name! </span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">flask</span><span class="o">/</span><span class="n">trending_hashtags_dashboard</span><span class="o">.</span><span class="n">sh</span>
+#[dashboard] Guake terminal name! 
+    vim bin/flask/trending_hashtags_dashboard.sh
+    bin/flask/trending_hashtags_dashboard.sh
 </pre></div>
 </div>
 <p>Head to http://0.0.0.0:5001/ for live count on the trending #hashtags

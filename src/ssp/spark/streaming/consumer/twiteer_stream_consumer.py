@@ -167,8 +167,8 @@ class TwitterDataset(TwitterStreamerBase):
         # Load the data
         try:
             cur = conn.cursor()
-            # execute the INSERT statement
-            cur.execute(get_create_table_sql(table_name=table_name))
+            # query_to_df the INSERT statement
+            cur.query_to_df(get_create_table_sql(table_name=table_name))
             conn.commit()
             cur.close()
         except:

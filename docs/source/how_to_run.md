@@ -62,8 +62,8 @@ $SPARK_HOME/sbin/start-all.sh
 
 - If you wanna stop playing...
 ```
-sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
-sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
+/opt/binaries/kafka/bin/kafka-server-stop.sh
+/opt/binaries/kafka/bin/zookeeper-server-stop.sh
 $HADOOP_HOME/sbin/stop-dfs.sh
 $HADOOP_HOME/sbin/stop-yarn.sh
 $SPARK_HOME/sbin/stop-all.sh

@@ -95,7 +95,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Dump Tweet data into Data Lake</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation-steps">Implementation Steps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
 </ul>
@@ -182,29 +182,39 @@
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Come up with <a class="reference external" href="https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/">Data Lake</a></p></li>
-<li><p>Listen to Twitter streams, collect tweets that talk about <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Science/AI/Machine</span> <span class="pre">Learning/Big</span> <span class="pre">Data</span></code> and dump into bronze lake.</p></li>
-</ul>
-</div>
-<hr class="docutils" />
-<div class="section" id="implementation">
-<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Get API Credentials from Twitter Developement Site</p></li>
-<li><p>Setup Tweepy to read Twitter stream filtering tweets taht talks about <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Science/AI/Machine</span> <span class="pre">Learning/Big</span> <span class="pre">Data</span></code></p></li>
-<li><p>Create Kafka topic for twitter stream</p></li>
-<li><p>Dump the tweets from Tweepy into Kafka topic</p></li>
-<li><p>Use Spark Structured Streaming to read the Kafka topic and store as parquet in HDFS</p></li>
-<li><p>Use HDFS command line ot verify the data dump</p></li>
-</ul>
-<p>We have a data lake setup as follows on our HDFS, basically boils down to HDFS paths:</p>
-<ul class="simple">
+<li><p>Come up with a <a class="reference external" href="https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/">Data Lake</a> storage system.<br />Data lake setup should be as follows on our HDFS, basically boils down to HDFS paths:</p>
+<ul>
 <li><p>Bronze Lake : Raw data i.e tweets</p></li>
 <li><p>Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,</p></li>
 <li><p>Gold Lake   : Data Ready for web application / dash board to consume</p></li>
 </ul>
-<p>Below is the data flow path:</p>
-<p><code class="docutils literal notranslate"><span class="pre">Twitter</span> <span class="pre">API</span> <span class="pre">-&gt;</span> <span class="pre">Kafka</span> <span class="pre">Producer</span> <span class="pre">-&gt;</span> <span class="pre">Kafka</span> <span class="pre">Server</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">with</span> <span class="pre">Kafka</span> <span class="pre">Consumer</span> <span class="pre">-&gt;</span> <span class="pre">Parquet</span> <span class="pre">Sink</span> <span class="pre">-&gt;</span> <span class="pre">Bronze</span> <span class="pre">Lake</span></code></p>
+</li>
+<li><p>Have provision to collect tweets:</p>
+<ul>
+<li><p>Related to <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Science/AI/Machine</span> <span class="pre">Learning/Big</span> <span class="pre">Data</span></code> and dump into bronze lake</p></li>
+<li><p>More generic along side of above tweets</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation-steps">
+<h2>Implementation Steps<a class="headerlink" href="#implementation-steps" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Get API Credentials from Twitter Developement Site</p></li>
+<li><p>Setup <a class="reference external" href="https://www.tweepy.org/">Tweepy</a> to read Twitter stream filtering tweets
+that talks about <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Science/AI/Machine</span> <span class="pre">Learning/Big</span> <span class="pre">Data</span></code></p></li>
+<li><p>Create Kafka topics for twitter stream</p></li>
+<li><p>Dump the tweets from Tweepy into Kafka topics</p></li>
+<li><p>Use Spark Structured Streaming to read the Kafka topic(s) and store as parquet in HDFS</p></li>
+<li><p>Use HDFS command line ot verify the data dump</p></li>
+</ul>
+<p>Data flow path:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Twitter</span> <span class="n">API</span> <span class="o">-&gt;</span> <span class="n">Kafka</span> <span class="n">Producer</span> <span class="p">(</span><span class="n">two</span> <span class="n">topics</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Kafka</span> <span class="n">Server</span>  
+
+<span class="n">Spark</span> <span class="n">Structured</span> <span class="n">Streaming</span> <span class="k">with</span> <span class="n">Kafka</span> <span class="n">Consumer</span> <span class="o">-&gt;</span> <span class="n">Parquet</span> <span class="n">Sink</span> <span class="o">-&gt;</span> <span class="n">Bronze</span> <span class="n">Lake</span> <span class="p">(</span><span class="n">HDFS</span> <span class="n">location</span><span class="p">)</span>
+</pre></div>
+</div>
 <p><img alt="../_images/1_dump_raw_tweets.png" src="../_images/1_dump_raw_tweets.png" /></p>
 </div>
 <hr class="docutils" />
@@ -212,7 +222,7 @@
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common.</p>
-<p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
+<p>To get a new terminal for our docker instance run :<br /><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
 Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
 <p>This example needs three terminals:</p>
 <ul class="simple">
@@ -240,20 +250,28 @@ which is exported just before the spark-submit command in the shell script file.
 </ul>
 </li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="c1"># Local machine</span>
-<span class="n">cd</span> <span class="o">/</span><span class="n">host</span>  <span class="c1"># On Docker &#39;spark-streaming-playground&#39; is mountes as a volume at /host/</span>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># Local machine
+cd /path/to/spark-streaming-playground/ 
 
-<span class="c1">#[producer] Guake terminal name! </span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">start_kafka_producer</span><span class="o">.</span><span class="n">sh</span>
+# On Docker &#39;spark-streaming-playground&#39; is mountes as a volume at /host/
+cd /host  
 
-<span class="c1">#[visualize]</span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">visulaize_raw_text</span><span class="o">.</span><span class="n">sh</span>
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 
-<span class="c1">#[consumer]</span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dump_raw_data_into_bronze_lake</span><span class="o">.</span><span class="n">sh</span>
+#[producer] Guake terminal name! 
+    vim bin/data/start_kafka_producer.sh
+    bin/data/start_kafka_producer.sh
 
-<span class="c1">#[hdfs]</span>
-    <span class="n">hdfs</span> <span class="n">dfs</span> <span class="o">-</span><span class="n">ls</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ssp</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">lake</span><span class="o">/</span><span class="n">bronze</span><span class="o">/</span><span class="n">delta</span><span class="o">/</span>
+#[visualize]
+    vim bin/data/visulaize_raw_text.sh
+    bin/data/visulaize_raw_text.sh
+
+#[consumer]
+    vim bin/data/dump_raw_data_into_bronze_lake.sh
+    bin/data/dump_raw_data_into_bronze_lake.sh
+
+#[hdfs]
+    hdfs dfs -ls /tmp/ssp/data/lake/bronze/delta/
 </pre></div>
 </div>
 </div>

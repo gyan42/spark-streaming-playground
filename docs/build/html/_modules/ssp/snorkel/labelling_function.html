@@ -355,12 +355,11 @@
         <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;computer&quot;</span><span class="p">,</span> <span class="s2">&quot;vision&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SSPPostgresqlTweetLabelling"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
-<span class="k">class</span> <span class="nc">SSPPostgresqlTweetLabelling</span><span class="p">(</span><span class="n">PostgresqlDatasetBase</span><span class="p">):</span>
+<div class="viewcode-block" id="SSPLabelEvaluator"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPLabelEvaluator">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">SSPLabelEvaluator</span><span class="p">(</span><span class="n">PostgresqlDatasetBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">snorker_label_column</span><span class="o">=</span><span class="s2">&quot;snorkel_label&quot;</span><span class="p">,</span>
                  <span class="n">text_column</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-                 <span class="n">label_output_column</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">,</span>
+                 <span class="n">label_column</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span>
                  <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
@@ -370,7 +369,7 @@
 
         <span class="n">PostgresqlDatasetBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                        <span class="n">text_column</span><span class="o">=</span><span class="n">text_column</span><span class="p">,</span>
-                                       <span class="n">label_output_column</span><span class="o">=</span><span class="n">label_output_column</span><span class="p">,</span>
+                                       <span class="n">label_output_column</span><span class="o">=</span><span class="n">label_column</span><span class="p">,</span>
                                        <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="n">raw_tweet_table_name_prefix</span><span class="p">,</span>
                                        <span class="n">postgresql_host</span><span class="o">=</span><span class="n">postgresql_host</span><span class="p">,</span>
                                        <span class="n">postgresql_port</span><span class="o">=</span><span class="n">postgresql_port</span><span class="p">,</span>
@@ -379,32 +378,33 @@
                                        <span class="n">postgresql_password</span><span class="o">=</span><span class="n">postgresql_password</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span> <span class="o">=</span> <span class="n">SSPTweetLabeller</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_snorker_label_column</span> <span class="o">=</span> <span class="n">snorker_label_column</span>
 
-<div class="viewcode-block" id="SSPPostgresqlTweetLabelling.run_labeler"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPPostgresqlTweetLabelling.run_labeler">[docs]</a>    <span class="k">def</span> <span class="nf">run_labeler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SSPLabelEvaluator.run_labeler"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPLabelEvaluator.run_labeler">[docs]</a>    <span class="k">def</span> <span class="nf">run_labeler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_processed_datasets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">snorkel_train_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span><span class="p">])</span></div></div>
+
 
         <span class="c1"># snorkel_train_df[&quot;label&quot;] = snorkel_train_df[&quot;text&quot;].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))</span>
         <span class="c1"># print_info(snorkel_train_df[&quot;label&quot;].value_counts())</span>
         <span class="c1"># print_error(snorkel_train_df[snorkel_train_df[&quot;label&quot;]==0][&quot;text&quot;].tolist()[:10])</span>
 
         <span class="c1"># print_info(snorkel_train_df[snorkel_train_df[&quot;label&quot;]==1][&quot;text&quot;].tolist()[:10])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">snorkel_train_df</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span><span class="p">])</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span><span class="p">])</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
-        <span class="n">print_error</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">print_info</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-        <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;snorkel_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span>
-        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">train_df</span><span class="p">[[</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;snorkel_label&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;snorkel_label&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-                <span class="n">print_info</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">group</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="c1"># print_info(&quot;\n&quot;.join(group[&quot;text&quot;].tolist()[:10]))</span>
-                <span class="n">group</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">is_ai_tweet</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-                <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[:</span><span class="mi">100</span><span class="p">]))</span></div></div>
+
+        <span class="c1"># res = self._snorkel_labeler.predict(train_df[self._text_column])</span>
+        <span class="c1"># res = res[:, 1]</span>
+        <span class="c1"># res = [1 if r &gt;= 0.5 else 0 for r in res]</span>
+        <span class="c1"># print_error(train_df.shape[0])</span>
+        <span class="c1"># print_info(sum(res))</span>
+        <span class="c1"># train_df[&quot;snorkel_label&quot;] = res</span>
+        <span class="c1"># for label, group in train_df[[&quot;text&quot;, &quot;snorkel_label&quot;]].groupby(&quot;snorkel_label&quot;):</span>
+        <span class="c1">#     if label == 1:</span>
+        <span class="c1">#         print(label)</span>
+        <span class="c1">#         print_info(group.shape[0])</span>
+        <span class="c1">#         group.reset_index(inplace=True)</span>
+        <span class="c1">#         # print_info(&quot;\n&quot;.join(group[&quot;text&quot;].tolist()[:10]))</span>
+        <span class="c1">#         group[&quot;label&quot;] = group[&quot;text&quot;].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))</span>
+        <span class="c1">#         print_info(&quot;\n&quot;.join(group[group[&quot;label&quot;]==1][&quot;text&quot;].tolist()[:100]))</span>
 
 
 </pre></div>

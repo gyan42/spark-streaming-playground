@@ -188,6 +188,13 @@ User Related:
 - `set role __test__;`: Change role for current session to `__test__`.
 - `grant __test2__ to __test1__;`: Allow `__test1__` to set its role as `__test2__`.
 
+Drop all the tables in a database:
+```
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public AUTHORIZATION {USER};
+GRANT ALL ON schema public TO {USER};
+```
+
 ## Configuration
 
 - Changing verbosity & querying Postgres log:
@@ -270,7 +277,7 @@ Casting:
 
 Query analysis:
 - `EXPLAIN __query__`: see the query plan for the given query
-- `EXPLAIN ANALYZE __query__`: see and execute the query plan for the given query
+- `EXPLAIN ANALYZE __query__`: see and query_to_df the query plan for the given query
 - `ANALYZE [__table__]`: collect statistics  
 
 Generating random data ([source](https://www.citusdata.com/blog/2019/07/17/postgres-tips-for-average-and-power-user/)):

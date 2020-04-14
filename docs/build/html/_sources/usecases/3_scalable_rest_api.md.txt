@@ -96,7 +96,12 @@ Spark Streaming application
 - Spark Streaming Application
 
 ```   
+cd /path/to/spark-streaming-playground/ # Local machine
+cd /host  # Docker
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+
 #[producer] Guake terminal name! 
+    vim bin/data/start_kafka_producer.sh
     bin/data/start_kafka_producer.sh
 
 #[ner]
@@ -104,6 +109,7 @@ Spark Streaming application
     cd /host  # Docker
 
     sudo netstat -tulpen | grep 30123 # check the port is in use or not
+    vim bin/nlp/ner_extraction_using_spacy.sh
     bin/nlp/ner_extraction_using_spacy.sh
 ```  
 

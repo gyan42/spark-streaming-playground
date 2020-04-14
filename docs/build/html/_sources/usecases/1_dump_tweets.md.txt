@@ -3,30 +3,34 @@
 
 ## Requirements  
 
-- Come up with [Data Lake](https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/)  
-- Listen to Twitter streams, collect tweets that talk about `Data Science/AI/Machine Learning/Big Data` and dump into bronze lake.
+- Come up with a [Data Lake](https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/) storage system.  
+    Data lake setup should be as follows on our HDFS, basically boils down to HDFS paths:  
+    - Bronze Lake : Raw data i.e tweets  
+    - Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,  
+    - Gold Lake   : Data Ready for web application / dash board to consume    
+
+- Have provision to collect tweets:
+    - Related to `Data Science/AI/Machine Learning/Big Data` and dump into bronze lake
+    - More generic along side of above tweets
 
 ------------------------------------------------------------------------------------------------------------------------
 
-## Implementation
+## Implementation Steps
   
 - Get API Credentials from Twitter Developement Site  
-- Setup Tweepy to read Twitter stream filtering tweets taht talks about `Data Science/AI/Machine Learning/Big Data`  
-- Create Kafka topic for twitter stream  
-- Dump the tweets from Tweepy into Kafka topic  
-- Use Spark Structured Streaming to read the Kafka topic and store as parquet in HDFS  
+- Setup [Tweepy](https://www.tweepy.org/) to read Twitter stream filtering tweets 
+  that talks about `Data Science/AI/Machine Learning/Big Data`  
+- Create Kafka topics for twitter stream  
+- Dump the tweets from Tweepy into Kafka topics  
+- Use Spark Structured Streaming to read the Kafka topic(s) and store as parquet in HDFS  
 - Use HDFS command line ot verify the data dump  
 
-We have a data lake setup as follows on our HDFS, basically boils down to HDFS paths:  
-- Bronze Lake : Raw data i.e tweets  
-- Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,  
-- Gold Lake   : Data Ready for web application / dash board to consume    
+Data flow path:
+ ```
+Twitter API -> Kafka Producer (two topics) -> Kafka Server  
 
-
-Below is the data flow path:
-
- 
-`Twitter API -> Kafka Producer -> Kafka Server -> Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake`
+Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake (HDFS location)
+```
 
 ![](../drawio/1_dump_raw_tweets.png)
 
@@ -37,7 +41,8 @@ Below is the data flow path:
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common. 
 
-To get a new terminal for our docker instance run : `docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash`
+To get a new terminal for our docker instance run :   
+`docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash`
 Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`
 
 This example needs three terminals:
@@ -57,17 +62,25 @@ This example needs three terminals:
 - HDFS 
     - Command line tool to test the parquet file storage
     
-```
-cd /path/to/spark-streaming-playground/ # Local machine
-cd /host  # On Docker 'spark-streaming-playground' is mountes as a volume at /host/
+```shell script
+# Local machine
+cd /path/to/spark-streaming-playground/ 
+
+# On Docker 'spark-streaming-playground' is mountes as a volume at /host/
+cd /host  
+
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 
 #[producer] Guake terminal name! 
+    vim bin/data/start_kafka_producer.sh
     bin/data/start_kafka_producer.sh
 
 #[visualize]
+    vim bin/data/visulaize_raw_text.sh
     bin/data/visulaize_raw_text.sh
 
 #[consumer]
+    vim bin/data/dump_raw_data_into_bronze_lake.sh
     bin/data/dump_raw_data_into_bronze_lake.sh
 
 #[hdfs]
@@ -77,6 +90,7 @@ cd /host  # On Docker 'spark-streaming-playground' is mountes as a volume at /ho
 ------------------------------------------------------------------------------------------------------------------------
 
 ## Take Aways / Learning's 
+
 - Understand how to get an Twitter API
 - Learn to use Python library Tweepy to listen to Twitter stream
     - http://docs.tweepy.org/en/latest/streaming_how_to.html

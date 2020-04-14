@@ -1,7 +1,8 @@
+# Adjust EXEC_MEM, NUM_CORES, CORES_MAX as per your machine capacity
 printf "Make sure you have Apache Spark server is running and appropriate Spark master url is used in the config! \n\n"
 printf "You Spark Home is : ${SPARK_HOME}"
 printf "\t\tEg: ${SPARK_HOME}sbin/start-all.sh\n\n"
-read -p "Press any key to continue... " -n1 -s
+#read -p "Press any key to continue... " -n1 -s
 export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 make build
 export EXEC_MEM=3g

@@ -1,4 +1,4 @@
-printf "Make sure you are running \"dump_raw_data.sh\" \n\n\t\tEg: bin/dump_raw_data.sh \n\n"
+printf "Make sure you are running \"dump_raw_data.sh\" \n\n\t\tEg: bin/dump_raw_data_into_bronze_lake.sh or live stream is enabled in the config\n\n"
 printf "Make sure you have Apache Spark server is running and appropriate Spark master url is used in the config! \n\n"
 printf "You Spark Home is : ${SPARK_HOME}"
 printf "\t\tEg: ${SPARK_HOME}sbin/start-all.sh\n\n"

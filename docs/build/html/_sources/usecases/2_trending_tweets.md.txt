@@ -44,14 +44,19 @@ This example needs two terminals:
 ```
 cd /path/to/spark-streaming-playground/ # Local machine
 cd /host  # Docker
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+
 
 #[producer] Guake terminal name! 
+    vim bin/data/start_kafka_producer.sh
     bin/data/start_kafka_producer.sh
 
 #[hashtag] Guake terminal name! 
+    vim bin/analytics/trending_tweet_hashtags.sh
     bin/analytics/trending_tweet_hashtags.sh
 
 #[dashboard] Guake terminal name! 
+    vim bin/flask/trending_hashtags_dashboard.sh
     bin/flask/trending_hashtags_dashboard.sh
 ```
  

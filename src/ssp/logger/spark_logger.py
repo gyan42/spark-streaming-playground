@@ -1,4 +1,4 @@
-from logger.pretty_print import *
+from ssp.logger.pretty_print import *
 from ssp.utils.singleton_metaclass import Singleton
 
 

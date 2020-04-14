@@ -10,7 +10,24 @@ from ssp.ml.transformer import SSPTextLabeler
 from ssp.posgress.dataset_base import PostgresqlDatasetBase
 from ssp.snorkel.labelling_function import SSPTweetLabeller
 from ssp.utils.misc import check_n_mk_dirs
-from ssp.logger.pretty_print import print_info, print_error
+from ssp.logger.pretty_print import print_info, print_error, print_warn
+
+
+def insert_id_n_label_col(df):
+    """
+    Inserts `text_id` column considering the number of rows and a label column.
+    `label` column copies the values of `slabel` column, if exists or inserts `-1` as value
+    :param df: Pandas DataFrame
+    :return: Pandas DataFrame
+    """
+    df["text_id"] = list(range(1, df.shape[0]+1))
+    if "slabel" in df.columns:
+        df["label"] = df["slabel"]
+    else:
+        print_warn("No Snorkell labels found!")
+        df["label"] = -1
+    return df
+
 
 @gin.configurable
 class SSPMLDataset(PostgresqlDatasetBase):
@@ -38,6 +55,7 @@ class SSPMLDataset(PostgresqlDatasetBase):
         self._labeler = SSPTweetLabeller(input_col="text", output_col=label_output_column)
 
     def store(self, version=0):
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.split_dataset_table(version=version)
 
         self._labeler = self._labeler.fit(snorkel_train_df)
@@ -45,8 +63,11 @@ class SSPMLDataset(PostgresqlDatasetBase):
         dev_df = self._labeler.transform(dev_df)
         train_df = self._labeler.transform(train_df)
 
-
-        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
+        raw_tweet_dataset_df_deduplicated, \
+        test_df, dev_df, snorkel_train_df, train_df = insert_id_n_label_col(raw_tweet_dataset_df_deduplicated), \
+                                                      insert_id_n_label_col(test_df), insert_id_n_label_col(dev_df), \
+                                                      insert_id_n_label_col(snorkel_train_df), \
+                                                      insert_id_n_label_col(train_df)
 
         check_n_mk_dirs(f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}")
 
@@ -56,12 +77,13 @@ class SSPMLDataset(PostgresqlDatasetBase):
             if_exists = "fail"
 
         # Store the deduplicated tweets collected with respective to AI keywords
-        self.to_posgresql_table(df=raw_tweet_dataset_df_deduplicated,
+        self.to_posgresql_table(df=insert_id_n_label_col(raw_tweet_dataset_df_deduplicated),
                                 table_name=f"deduplicated_{raw_tweet_dataset_table_name}",
                                 if_exists=if_exists)
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         self.store_df_as_parquet(df=test_df,
+                                 overwrite=self._overwrite,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/test.parquet")
         self.to_posgresql_table(df=test_df,
                                 table_name=f"test_dataset_{version}",
@@ -69,6 +91,7 @@ class SSPMLDataset(PostgresqlDatasetBase):
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         self.store_df_as_parquet(df=dev_df,
+                                 overwrite=self._overwrite,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/dev.parquet")
         self.to_posgresql_table(df=dev_df,
                                 table_name=f"dev_dataset_{version}",
@@ -76,6 +99,7 @@ class SSPMLDataset(PostgresqlDatasetBase):
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         self.store_df_as_parquet(df=snorkel_train_df,
+                                 overwrite=self._overwrite,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/snorkel_train_df.parquet")
         self.to_posgresql_table(df=snorkel_train_df,
                                 table_name=f"snorkel_train_dataset_{version}",
@@ -83,6 +107,7 @@ class SSPMLDataset(PostgresqlDatasetBase):
 
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         self.store_df_as_parquet(train_df,
+                                 overwrite=self._overwrite,
                                  path=f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}/train.parquet")
         self.to_posgresql_table(df=train_df,
                                 table_name=f"train_dataset_{version}",

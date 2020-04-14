@@ -246,6 +246,79 @@
 <code class="sig-prename descclassname">ssp.logger.python_logger.</code><code class="sig-name descname">str_to_level</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_level</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#str_to_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.str_to_level" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<span class="target" id="module-ssp.logger.spark_logger"></span><dl class="py class">
+<dt id="ssp.logger.spark_logger.SparkLogger">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.logger.spark_logger.</code><code class="sig-name descname">SparkLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">sparksession</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.warn">
+<code class="sig-name descname">warn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.warn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ssp.logger.ssp_logger"></span><dl class="py class">
+<dt id="ssp.logger.ssp_logger.SSPLogger">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.logger.ssp_logger.</code><code class="sig-name descname">SSPLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">parsed_args</span></em>, <em class="sig-param"><span class="n">pipeline_name</span><span class="o">=</span><span class="default_value">'Default'</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">'info'</span></em>, <em class="sig-param"><span class="n">sparksession</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that wraps all logging functionality.
+It supports following:
+- Spark logging, if sparksession is provided or it ognores it
+- Python way of logging into a file “log.txt”
+- Sends the email based on the user flag</p>
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.add_script_details">
+<em class="property">static </em><code class="sig-name descname">add_script_details</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.add_script_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.add_script_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.email">
+<code class="sig-name descname">email</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subject</span></em>, <em class="sig-param"><span class="n">contents</span></em>, <em class="sig-param"><span class="n">config_dir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.lineno">
+<code class="sig-name descname">lineno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.lineno"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.lineno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current line number in your code</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.warning">
+<code class="sig-name descname">warning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.warning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.warning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <span class="target" id="module-ssp.logger.yagmail"></span><dl class="py class">
 <dt id="ssp.logger.yagmail.YagMail">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.logger.yagmail.</code><code class="sig-name descname">YagMail</code><a class="reference internal" href="../_modules/ssp/logger/yagmail.html#YagMail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.yagmail.YagMail" title="Permalink to this definition">¶</a></dt>

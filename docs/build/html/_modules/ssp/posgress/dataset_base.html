@@ -165,50 +165,82 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">psycopg2</span>
 <span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">text</span>
 <span class="kn">import</span> <span class="nn">swifter</span>
-
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span><span class="p">,</span> <span class="n">print_info</span>
-
 <span class="kn">from</span> <span class="nn">absl</span> <span class="kn">import</span> <span class="n">flags</span>
 <span class="kn">from</span> <span class="nn">absl</span> <span class="kn">import</span> <span class="n">app</span>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
-<span class="k">class</span> <span class="nc">PostgresqlDatasetBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">PostgresqlConnection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">text_column</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-                 <span class="n">label_output_column</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">,</span>
-                 <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_database</span><span class="o">=</span><span class="s2">&quot;sparkstreamingdb&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_user</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="sd">        :param postgresql_host: Postgresql Host address</span>
+<span class="sd">        :param postgresql_port: Postgresql port number</span>
+<span class="sd">        :param postgresql_database: Postgresql database name</span>
+<span class="sd">        :param postgresql_user: Postgresql user name</span>
+<span class="sd">        :param postgresql_password: Postgresql password</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span> <span class="o">=</span> <span class="n">postgresql_host</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span> <span class="o">=</span> <span class="n">postgresql_port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span> <span class="o">=</span> <span class="n">postgresql_database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span> <span class="o">=</span> <span class="n">postgresql_user</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span> <span class="o">=</span> <span class="n">postgresql_password</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span> <span class="o">=</span> <span class="n">raw_tweet_table_name_prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_url</span> <span class="o">=</span> <span class="s2">&quot;postgresql+psycopg2://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span><span class="p">,</span>
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span><span class="p">,</span>
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span><span class="p">,</span>
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span><span class="p">,</span>
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_session</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_connection</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span> <span class="o">=</span> <span class="n">label_output_column</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span> <span class="o">=</span> <span class="n">text_column</span>
+<div class="viewcode-block" id="PostgresqlConnection.get_sqlalchemy_session"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_session">[docs]</a>    <span class="k">def</span> <span class="nf">get_sqlalchemy_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_session</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_session</span>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.get_sqlalchemy_connection"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_sqlalchemy_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_sqlalchemy_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;postgresql+psycopg2://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">@</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span><span class="p">,</span>
-                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span><span class="p">,</span>
-                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span><span class="p">,</span>
-                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span><span class="p">,</span>
-                                                            <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_url</span><span class="p">,</span> <span class="n">pool_recycle</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+        <span class="n">session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_session</span> <span class="o">=</span> <span class="n">session</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_session</span></div>
+
+<div class="viewcode-block" id="PostgresqlConnection.get_sqlalchemy_connection"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_sqlalchemy_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Returns postgresql sqlalchemy connection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_connection</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_connection</span>
+
         <span class="c1"># Connect to database (Note: The package psychopg2 is required for Postgres to work with SQLAlchemy)</span>
-        <span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">con</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">con</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_url</span><span class="p">,</span> <span class="n">pool_recycle</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.store_df_as_parquet"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.store_df_as_parquet">[docs]</a>    <span class="k">def</span> <span class="nf">store_df_as_parquet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_connection</span></div>
+
+<div class="viewcode-block" id="PostgresqlConnection.store_df_as_parquet"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.store_df_as_parquet">[docs]</a>    <span class="k">def</span> <span class="nf">store_df_as_parquet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the DataFrame as parquet</span>
+<span class="sd">        :param df: Pandas DataFrame</span>
+<span class="sd">        :param path: Local machine path</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> records will be written to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="n">print_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File path </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> exists!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -216,17 +248,35 @@
         <span class="n">df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.to_posgresql_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.to_posgresql_table">[docs]</a>    <span class="k">def</span> <span class="nf">to_posgresql_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;fail&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PostgresqlConnection.to_posgresql_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.to_posgresql_table">[docs]</a>    <span class="k">def</span> <span class="nf">to_posgresql_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;fail&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the DataFrame as Postgresql table</span>
+<span class="sd">        :param df: Pandas Dataframe</span>
+<span class="sd">        :param table_name: Name of the table</span>
+<span class="sd">        :param if_exists: {&#39;fail&#39;, &#39;replace&#39;, &#39;append&#39;}, default &#39;fail&#39;</span>
+<span class="sd">            How to behave if the table already exists.</span>
+
+<span class="sd">            * fail: Raise a ValueError.</span>
+<span class="sd">            * replace: Drop the table before inserting new values.</span>
+<span class="sd">            * append: Insert new values to the existing table.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
                       <span class="n">con</span><span class="o">=</span><span class="n">conn</span><span class="p">,</span>
                       <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span>
-                      <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                      <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">print_error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.get_tables_list"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_tables_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_tables_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection.get_tables_list"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_tables_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_tables_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_schema</span><span class="o">=</span><span class="s2">&quot;public&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param table_schema: Postgresql schema. Default is `public`</span>
+<span class="sd">        :return: List of tables on given table schema</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
 
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -236,7 +286,11 @@
 <span class="s2">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)[</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.get_raw_dump_tables_list"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_raw_dump_tables_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_dump_tables_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection.get_raw_dump_tables_list"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_raw_dump_tables_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_dump_tables_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns list of raw data tables datasets dumped by the Spark streaming application</span>
+<span class="sd">        :return: List of string Eg: [raw_tweet_dataset_0,raw_tweet_dataset_1]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tables_list</span><span class="p">()</span>
         <span class="n">tables</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
             <span class="p">[</span><span class="n">table</span> <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span> <span class="k">if</span> <span class="n">table</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span><span class="p">)],</span>
@@ -247,25 +301,38 @@
             <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="s2">&quot;No data found in Postgresql DB&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tables</span></div>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.get_latest_raw_dataset_name_n_version"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_latest_raw_dataset_name_n_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection.get_latest_raw_dataset_name_n_version"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_latest_raw_dataset_name_n_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param version:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_raw_dump_tables_list</span><span class="p">()</span>
         <span class="n">table_name</span> <span class="o">=</span> <span class="n">tables</span><span class="p">[</span><span class="n">version</span><span class="p">]</span>
         <span class="k">assert</span> <span class="n">version</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">table_name</span></div>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.get_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection.get_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use to get the Postgresql table as Pandas dataframe</span>
+<span class="sd">        :param table_name:</span>
+<span class="sd">        :return: Pandas DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select * from </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PostgresqlDatasetBase.execute"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection.run_query"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.run_query">[docs]</a>    <span class="k">def</span> <span class="nf">run_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runing query : </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sqlalchemy_engine</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="PostgresqlConnection.query_to_df"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.query_to_df">[docs]</a>    <span class="k">def</span> <span class="nf">query_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runing query : </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="PostgresqlDatasetBase.store_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.store_table">[docs]</a>    <span class="k">def</span> <span class="nf">store_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="k">pass</span></div>
-
-<div class="viewcode-block" id="PostgresqlDatasetBase.get_processed_datasets"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_processed_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">get_processed_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="PostgresqlConnection.get_processed_datasets"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_processed_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">get_processed_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
 
         <span class="n">raw_tweet_dataset_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
@@ -286,7 +353,48 @@
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select * from </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="p">))</span>
 
         <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="n">res</span>
-        <span class="k">return</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span></div>
+        <span class="k">return</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span></div></div>
+
+
+<div class="viewcode-block" id="PostgresqlDatasetBase"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">PostgresqlDatasetBase</span><span class="p">(</span><span class="n">PostgresqlConnection</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">text_column</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                 <span class="n">label_output_column</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">,</span>
+                 <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_database</span><span class="o">=</span><span class="s2">&quot;sparkstreamingdb&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_user</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
+                 <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Base interface to interact with Dataset tables stored in Postgresql Database</span>
+<span class="sd">        :param text_column: Name of the text column</span>
+<span class="sd">        :param label_output_column: Label column to be used while running labeller function</span>
+<span class="sd">        :param raw_tweet_table_name_prefix: String prefix of the raw table dumpped by Spark streaming prefixed with index</span>
+<span class="sd">        :param postgresql_host: Postgresql Host address</span>
+<span class="sd">        :param postgresql_port: Postgresql port number</span>
+<span class="sd">        :param postgresql_database: Postgresql database name</span>
+<span class="sd">        :param postgresql_user: Postgresql user name</span>
+<span class="sd">        :param postgresql_password: Postgresql password</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">PostgresqlConnection</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                      <span class="n">postgresql_host</span><span class="o">=</span><span class="n">postgresql_host</span><span class="p">,</span>
+                                      <span class="n">postgresql_port</span><span class="o">=</span><span class="n">postgresql_port</span><span class="p">,</span>
+                                      <span class="n">postgresql_database</span><span class="o">=</span><span class="n">postgresql_database</span><span class="p">,</span>
+                                      <span class="n">postgresql_user</span><span class="o">=</span><span class="n">postgresql_user</span><span class="p">,</span>
+                                      <span class="n">postgresql_password</span><span class="o">=</span><span class="n">postgresql_password</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span> <span class="o">=</span> <span class="n">postgresql_host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_port</span> <span class="o">=</span> <span class="n">postgresql_port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span> <span class="o">=</span> <span class="n">postgresql_database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span> <span class="o">=</span> <span class="n">postgresql_user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span> <span class="o">=</span> <span class="n">postgresql_password</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span> <span class="o">=</span> <span class="n">raw_tweet_table_name_prefix</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span> <span class="o">=</span> <span class="n">label_output_column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text_column</span> <span class="o">=</span> <span class="n">text_column</span>
+
 
 <div class="viewcode-block" id="PostgresqlDatasetBase.split_dataset_table"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase.split_dataset_table">[docs]</a>    <span class="k">def</span> <span class="nf">split_dataset_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sqlalchemy_connection</span><span class="p">()</span>
@@ -302,34 +410,29 @@
 
         <span class="n">raw_tweet_dataset_df_deduplicated</span> <span class="o">=</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># remove new lines and carriage returns</span>
-
         <span class="n">df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span>
                                        <span class="n">test_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
                                        <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-        <span class="c1"># stratify=raw_tweet_dataset_df_deduplicated[self._label_output_column])</span>
 
         <span class="n">df</span><span class="p">,</span> <span class="n">dev_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
                                       <span class="n">test_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
                                       <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-        <span class="c1"># stratify=df[self._label_output_column])</span>
 
         <span class="n">train_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
                                                       <span class="n">test_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
                                                       <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-        <span class="c1"># stratify=df[self._label_output_column])</span>
 
         <span class="k">return</span> <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span></div></div>
 
 
-<span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_string</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;download/upload tables&quot;</span><span class="p">)</span>
+<span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_string</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;[download/upload] tables&quot;</span><span class="p">)</span>
 <span class="n">FLAGS</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">FLAGS</span>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../ssp/ssp.posgress.html#ssp.posgress.dataset_base.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="p">):</span>
     <span class="n">db</span> <span class="o">=</span> <span class="n">PostgresqlDatasetBase</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;download&quot;</span><span class="p">:</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s2">&quot;raw_tweet_dataset_2&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s2">&quot;raw_tweet_dataset_0&quot;</span><span class="p">)</span>
         <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;data/dataset/ssp/dump/raw_tweet_dataset_0.parquet&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;data/dataset/ssp/dump/raw_tweet_dataset_0.parquet&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;fastparquet&quot;</span><span class="p">)</span>

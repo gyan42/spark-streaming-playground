@@ -144,3 +144,17 @@ SreamingTextClassifier.tokenizer_path = "~/ssp/model/raw_tweet_dataset_0/naive_t
 SreamingTextClassifier.is_live_stream = True
 SreamingTextClassifier.is_docker = False
 SreamingTextClassifier.processing_time = '5 seconds'
+
+
+#######################################################################################################################
+#                                             Snorkel                                                                 #
+#######################################################################################################################
+
+SSPLabelEvaluator.text_column="text"
+SSPLabelEvaluator.label_column="slabel"
+SSPLabelEvaluator.raw_tweet_table_name_prefix="raw_tweet_dataset"
+SSPLabelEvaluator.postgresql_host="localhost"
+SSPLabelEvaluator.postgresql_port="5432"
+SSPLabelEvaluator.postgresql_database="sparkstreamingdb"
+SSPLabelEvaluator.postgresql_user="sparkstreaming"
+SSPLabelEvaluator.postgresql_password="sparkstreaming"

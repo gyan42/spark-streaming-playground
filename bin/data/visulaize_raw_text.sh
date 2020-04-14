@@ -1,5 +1,6 @@
+# Adjust EXEC_MEM, NUM_CORES, CORES_MAX as per your machine capacity
 printf "Make sure you are running \"start_kafka_producer.sh\" \n\n Eg: bin/start_kafka_producer.sh \n\n"
-read -p "Press any key to continue... " -n1 -s
+#read -p "Press any key to continue... " -n1 -s
 export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 make build
 export EXEC_MEM=3g

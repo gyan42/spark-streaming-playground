@@ -327,8 +327,8 @@
         <span class="c1"># Load the data</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-            <span class="c1"># execute the INSERT statement</span>
-            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">get_create_table_sql</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">))</span>
+            <span class="c1"># query_to_df the INSERT statement</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">query_to_df</span><span class="p">(</span><span class="n">get_create_table_sql</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">))</span>
             <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
             <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>

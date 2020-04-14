@@ -276,15 +276,21 @@ python3 src/ssp/spark/udf/spacy_ner_udf.py # test it to see everything working
 </li>
 <li><p>Spark Streaming Application</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#[producer] Guake terminal name! </span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">start_kafka_producer</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/ # Local machine
+cd /host  # Docker
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 
-<span class="c1">#[ner]</span>
-    <span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="c1"># Local machine</span>
-    <span class="n">cd</span> <span class="o">/</span><span class="n">host</span>  <span class="c1"># Docker</span>
+#[producer] Guake terminal name! 
+    vim bin/data/start_kafka_producer.sh
+    bin/data/start_kafka_producer.sh
 
-    <span class="n">sudo</span> <span class="n">netstat</span> <span class="o">-</span><span class="n">tulpen</span> <span class="o">|</span> <span class="n">grep</span> <span class="mi">30123</span> <span class="c1"># check the port is in use or not</span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">nlp</span><span class="o">/</span><span class="n">ner_extraction_using_spacy</span><span class="o">.</span><span class="n">sh</span>
+#[ner]
+    cd /path/to/spark-streaming-playground/ # Local machine
+    cd /host  # Docker
+
+    sudo netstat -tulpen | grep 30123 # check the port is in use or not
+    vim bin/nlp/ner_extraction_using_spacy.sh
+    bin/nlp/ner_extraction_using_spacy.sh
 </pre></div>
 </div>
 <p><img alt="../_images/ner_out.png" src="../_images/ner_out.png" /></p>

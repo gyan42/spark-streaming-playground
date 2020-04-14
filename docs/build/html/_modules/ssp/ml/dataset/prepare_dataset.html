@@ -170,7 +170,24 @@
 <span class="kn">from</span> <span class="nn">ssp.posgress.dataset_base</span> <span class="kn">import</span> <span class="n">PostgresqlDatasetBase</span>
 <span class="kn">from</span> <span class="nn">ssp.snorkel.labelling_function</span> <span class="kn">import</span> <span class="n">SSPTweetLabeller</span>
 <span class="kn">from</span> <span class="nn">ssp.utils.misc</span> <span class="kn">import</span> <span class="n">check_n_mk_dirs</span>
-<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_info</span><span class="p">,</span> <span class="n">print_error</span>
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_info</span><span class="p">,</span> <span class="n">print_error</span><span class="p">,</span> <span class="n">print_warn</span>
+
+
+<div class="viewcode-block" id="insert_id_n_label_col"><a class="viewcode-back" href="../../../../ssp/ssp.ml.dataset.html#ssp.ml.dataset.prepare_dataset.insert_id_n_label_col">[docs]</a><span class="k">def</span> <span class="nf">insert_id_n_label_col</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inserts `text_id` column considering the number of rows and a label column.</span>
+<span class="sd">    `label` column copies the values of `slabel` column, if exists or inserts `-1` as value</span>
+<span class="sd">    :param df: Pandas DataFrame</span>
+<span class="sd">    :return: Pandas DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;text_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;slabel&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;slabel&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">print_warn</span><span class="p">(</span><span class="s2">&quot;No Snorkell labels found!&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
 
 <div class="viewcode-block" id="SSPMLDataset"><a class="viewcode-back" href="../../../../ssp/ssp.ml.dataset.html#ssp.ml.dataset.prepare_dataset.SSPMLDataset">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">SSPMLDataset</span><span class="p">(</span><span class="n">PostgresqlDatasetBase</span><span class="p">):</span>
@@ -198,6 +215,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_labeler</span> <span class="o">=</span> <span class="n">SSPTweetLabeller</span><span class="p">(</span><span class="n">input_col</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">output_col</span><span class="o">=</span><span class="n">label_output_column</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SSPMLDataset.store"><a class="viewcode-back" href="../../../../ssp/ssp.ml.dataset.html#ssp.ml.dataset.prepare_dataset.SSPMLDataset.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">raw_tweet_dataset_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
         <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_dataset_table</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_labeler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labeler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">snorkel_train_df</span><span class="p">)</span>
@@ -205,8 +223,11 @@
         <span class="n">dev_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labeler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dev_df</span><span class="p">)</span>
         <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labeler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
 
-
-        <span class="n">raw_tweet_dataset_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_latest_raw_dataset_name_n_version</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> \
+        <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="n">insert_id_n_label_col</span><span class="p">(</span><span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">),</span> \
+                                                      <span class="n">insert_id_n_label_col</span><span class="p">(</span><span class="n">test_df</span><span class="p">),</span> <span class="n">insert_id_n_label_col</span><span class="p">(</span><span class="n">dev_df</span><span class="p">),</span> \
+                                                      <span class="n">insert_id_n_label_col</span><span class="p">(</span><span class="n">snorkel_train_df</span><span class="p">),</span> \
+                                                      <span class="n">insert_id_n_label_col</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
 
         <span class="n">check_n_mk_dirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/ssp/data/dump/</span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -216,12 +237,13 @@
             <span class="n">if_exists</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span>
 
         <span class="c1"># Store the deduplicated tweets collected with respective to AI keywords</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">insert_id_n_label_col</span><span class="p">(</span><span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">),</span>
                                 <span class="n">table_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;deduplicated_</span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                                 <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">)</span>
         <span class="c1"># &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">store_df_as_parquet</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">test_df</span><span class="p">,</span>
+                                 <span class="n">overwrite</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_overwrite</span><span class="p">,</span>
                                  <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/ssp/data/dump/</span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">/test.parquet&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">test_df</span><span class="p">,</span>
                                 <span class="n">table_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;test_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -229,6 +251,7 @@
         <span class="c1"># &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">store_df_as_parquet</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dev_df</span><span class="p">,</span>
+                                 <span class="n">overwrite</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_overwrite</span><span class="p">,</span>
                                  <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/ssp/data/dump/</span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">/dev.parquet&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dev_df</span><span class="p">,</span>
                                 <span class="n">table_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;dev_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -236,6 +259,7 @@
         <span class="c1"># &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">store_df_as_parquet</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">snorkel_train_df</span><span class="p">,</span>
+                                 <span class="n">overwrite</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_overwrite</span><span class="p">,</span>
                                  <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/ssp/data/dump/</span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">/snorkel_train_df.parquet&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">snorkel_train_df</span><span class="p">,</span>
                                 <span class="n">table_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;snorkel_train_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -243,6 +267,7 @@
 
         <span class="c1"># &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_df_as_parquet</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span>
+                                 <span class="n">overwrite</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_overwrite</span><span class="p">,</span>
                                  <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/ssp/data/dump/</span><span class="si">{</span><span class="n">raw_tweet_dataset_table_name</span><span class="si">}</span><span class="s2">/train.parquet&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_posgresql_table</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">train_df</span><span class="p">,</span>
                                 <span class="n">table_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;train_dataset_</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>

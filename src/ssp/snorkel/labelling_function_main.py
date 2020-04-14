@@ -1,6 +1,6 @@
 import argparse
 import gin
-from ssp.snorkel.labelling_function import SSPPostgresqlTweetLabelling
+from ssp.snorkel.labelling_function import SSPLabelEvaluator
 
 if __name__ == "__main__":
     optparse = argparse.ArgumentParser("Twitter Spark Text Processor pipeline:")
@@ -13,5 +13,5 @@ if __name__ == "__main__":
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
-    dataset = SSPPostgresqlTweetLabelling()
+    dataset = SSPLabelEvaluator()
     dataset.run_labeler()

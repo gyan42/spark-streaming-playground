@@ -39,3 +39,6 @@ kubectl delete service/spacy-flask-ner-python-service deployment.apps/spacy-flas
 ## SE
 ### References
 - https://medium.com/faun/how-to-restart-kubernetes-pod-7c702ca984c1
+- [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
+- [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+- [https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)

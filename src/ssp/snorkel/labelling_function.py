@@ -196,11 +196,10 @@ class SSPTweetLabeller(BaseEstimator, TransformerMixin):
 
 
 @gin.configurable
-class SSPPostgresqlTweetLabelling(PostgresqlDatasetBase):
+class SSPLabelEvaluator(PostgresqlDatasetBase):
     def __init__(self,
-                 snorker_label_column="snorkel_label",
                  text_column="text",
-                 label_output_column="slabel",
+                 label_column="label",
                  raw_tweet_table_name_prefix="raw_tweet_dataset",
                  postgresql_host="localhost",
                  postgresql_port="5432",
@@ -210,7 +209,7 @@ class SSPPostgresqlTweetLabelling(PostgresqlDatasetBase):
 
         PostgresqlDatasetBase.__init__(self,
                                        text_column=text_column,
-                                       label_output_column=label_output_column,
+                                       label_output_column=label_column,
                                        raw_tweet_table_name_prefix=raw_tweet_table_name_prefix,
                                        postgresql_host=postgresql_host,
                                        postgresql_port=postgresql_port,
@@ -219,31 +218,32 @@ class SSPPostgresqlTweetLabelling(PostgresqlDatasetBase):
                                        postgresql_password=postgresql_password)
 
         self._snorkel_labeler = SSPTweetLabeller()
-        self._snorker_label_column = snorker_label_column
 
     def run_labeler(self):
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.get_processed_datasets()
+        self._snorkel_labeler.fit(snorkel_train_df)
+        self._snorkel_labeler.evaluate(test_df, test_df[self._label_output_column])
+
 
         # snorkel_train_df["label"] = snorkel_train_df["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
         # print_info(snorkel_train_df["label"].value_counts())
         # print_error(snorkel_train_df[snorkel_train_df["label"]==0]["text"].tolist()[:10])
 
         # print_info(snorkel_train_df[snorkel_train_df["label"]==1]["text"].tolist()[:10])
-        self._snorkel_labeler.fit(snorkel_train_df)
-        self._snorkel_labeler.evaluate(test_df, test_df[self._label_output_column])
-        res = self._snorkel_labeler.predict(train_df[self._text_column])
-        res = res[:, 1]
-        res = [1 if r >= 0.5 else 0 for r in res]
-        print_error(train_df.shape[0])
-        print_info(sum(res))
-        train_df["snorkel_label"] = res
-        for label, group in train_df[["text", "snorkel_label"]].groupby("snorkel_label"):
-            if label == 1:
-                print(label)
-                print_info(group.shape[0])
-                group.reset_index(inplace=True)
-                # print_info("\n".join(group["text"].tolist()[:10]))
-                group["label"] = group["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
-                print_info("\n".join(group[group["label"]==1]["text"].tolist()[:100]))
+
+        # res = self._snorkel_labeler.predict(train_df[self._text_column])
+        # res = res[:, 1]
+        # res = [1 if r >= 0.5 else 0 for r in res]
+        # print_error(train_df.shape[0])
+        # print_info(sum(res))
+        # train_df["snorkel_label"] = res
+        # for label, group in train_df[["text", "snorkel_label"]].groupby("snorkel_label"):
+        #     if label == 1:
+        #         print(label)
+        #         print_info(group.shape[0])
+        #         group.reset_index(inplace=True)
+        #         # print_info("\n".join(group["text"].tolist()[:10]))
+        #         group["label"] = group["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
+        #         print_info("\n".join(group[group["label"]==1]["text"].tolist()[:100]))
 
 
