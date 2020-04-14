@@ -31,15 +31,6 @@
                      -> SSPLabeler(Snorkel Labeler) ---> Labelled Train/Test/Dev dataset stored in Postgresql & Disk
    Labelled Train/Test/Dev dataset on Posgresql---> Mannual UI Tagger --->  Train/Test/Dev dataset with golden label column on Posgresql
    ```
-   
-    |Table Name                        |Records|Info               |
-    |----------------------------------|-------|-------------------|
-    |raw_tweet_dataset_0               | 50K+  |Full Raw Dataset   |
-    |deduplicated_raw_tweet_dataset_0  | ~     |Depulicated on text column|
-    |test_dataset_0                    |1000   |Test dataset       |
-    |dev_dataset_0                     |500    |Dev dataset        |
-    |snorkel_train_dataset_0           |10K    |Snorkel train dataset | 
-    |train_dataset_0                   |~      |Model train dataset |
 
 4. Model Training and Evaluation
     ```shell script
@@ -58,6 +49,18 @@
    ```
    Postgresql ---> Flask API ---> Dashboard
    ```
+
+Dataset tables:
+- Tables are suffixed with `run/version id` starting from `0`, refer respective bin/*.sh files for version configurations
+
+|Table Name                        |Records|Info               |
+|----------------------------------|-------|-------------------|
+|raw_tweet_dataset_0               | 50K+  |Full Raw Dataset   |
+|deduplicated_raw_tweet_dataset_0  | ~     |Depulicated on text column|
+|test_dataset_0                    |1000   |Test dataset       |
+|dev_dataset_0                     |500    |Dev dataset        |
+|snorkel_train_dataset_0           |10K    |Snorkel train dataset | 
+|train_dataset_0                   |~      |Model train dataset |
 
 ## How to run?
 
@@ -125,6 +128,7 @@ This example needs multiple terminals:
   ``` 
 
 - Mannual tagger
+    ![](../images/text_tagger.png)
     ```shell script
     #[tagger]
         bin/flask/tagger.sh

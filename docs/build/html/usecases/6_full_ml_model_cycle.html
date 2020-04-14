@@ -213,14 +213,6 @@
 Labelled Train/Test/Dev dataset on Posgresql---&gt; Mannual UI Tagger ---&gt;  Train/Test/Dev dataset with golden label column on Posgresql
 </pre></div>
 </div>
-<p>|Table Name                        |Records|Info               |
-|———————————-|——-|——————-|
-|raw_tweet_dataset_0               | 50K+  |Full Raw Dataset   |
-|deduplicated_raw_tweet_dataset_0  | ~     |Depulicated on text column|
-|test_dataset_0                    |1000   |Test dataset       |
-|dev_dataset_0                     |500    |Dev dataset        |
-|snorkel_train_dataset_0           |10K    |Snorkel train dataset |
-|train_dataset_0                   |~      |Model train dataset |</p>
 </li>
 <li><p>Model Training and Evaluation</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>Labelled Train/Test/Dev dataset ---&gt; DL Model ---&gt; Model Store
@@ -241,7 +233,51 @@ Tweets ---&gt; Twitter Stream ---&gt; Tweepy ---&gt; Kafka Producer ---&gt; Kafk
 </div>
 </li>
 </ol>
-</div>
+<p>Dataset tables:</p>
+<ul class="simple">
+<li><p>Tables are suffixed with <code class="docutils literal notranslate"><span class="pre">run/version</span> <span class="pre">id</span></code> starting from <code class="docutils literal notranslate"><span class="pre">0</span></code>, refer respective bin/*.sh files for version configurations</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Table Name</th>
+<th>Records</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>raw_tweet_dataset_0</td>
+<td>50K+</td>
+<td>Full Raw Dataset</td>
+</tr>
+<tr>
+<td>deduplicated_raw_tweet_dataset_0</td>
+<td>~</td>
+<td>Depulicated on text column</td>
+</tr>
+<tr>
+<td>test_dataset_0</td>
+<td>1000</td>
+<td>Test dataset</td>
+</tr>
+<tr>
+<td>dev_dataset_0</td>
+<td>500</td>
+<td>Dev dataset</td>
+</tr>
+<tr>
+<td>snorkel_train_dataset_0</td>
+<td>10K</td>
+<td>Snorkel train dataset</td>
+</tr>
+<tr>
+<td>train_dataset_0</td>
+<td>~</td>
+<td>Model train dataset</td>
+</tr>
+</tbody>
+</table></div>
 <div class="section" id="how-to-run">
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
@@ -308,7 +344,8 @@ GRANT ALL ON schema public TO sparkstreaming;
 </pre></div>
 </div>
 </li>
-<li><p>Mannual tagger</p>
+<li><p>Mannual tagger
+<img alt="../_images/text_tagger.png" src="../_images/text_tagger.png" /></p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[tagger]
     bin/flask/tagger.sh
 </pre></div>
