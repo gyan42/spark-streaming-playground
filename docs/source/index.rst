@@ -11,6 +11,8 @@ where pipelines can be build and tested based on Twitter stream. Which involves 
 store the data in data lake, play around with the Spark Structured SQLs for processing, create dataset from live
 stream for Machine Learning and do interactive visualization from the data lake.
 
+Code base can be found @ `https://github.com/gyan42/spark-streaming-playground <https://github.com/gyan42/spark-streaming-playground/>`_.
+
 .. image:: drawio/big_data_zoo.png
     :align: center
     :alt: alternate text
