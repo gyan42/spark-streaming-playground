@@ -30,7 +30,7 @@ RUN apt-get install -y iputils-ping
 RUN apt-get install -y iproute2
 RUN apt-get install -y curl
 RUN apt-get install -y libsnappy-dev
-RUN rm -rf /var/lib/apt/lists/*
+#RUN rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME "/usr/lib/jvm/java-1.8.0-openjdk-amd64/"
 
@@ -59,11 +59,11 @@ ENV YARN_HOME ${HADOOP_HOME}
 RUN apt-get install -y vim
 
 # Hadoop configs for single node machine
-ADD docs/conf/hadoop/etc/hadoop/core-site.xml /opt/binaries/hadoop/etc/hadoop/core-site.xml
-ADD docs/conf/hadoop/etc/hadoop/hadoop-env.sh /opt/binaries/hadoop/etc/hadoop/hadoop-env.sh
-ADD docs/conf/hadoop/etc/hadoop/hdfs-site.xml /opt/binaries/hadoop/etc/hadoop/hdfs-site.xml
-ADD docs/conf/hadoop/etc/hadoop/mapred-site.xml /opt/binaries/hadoop/etc/hadoop/mapred-site.xml
-ADD docs/conf/hadoop/etc/hadoop/yarn-site.xml /opt/binaries/hadoop/etc/hadoop/yarn-site.xml
+ADD config/conf/hadoop/etc/hadoop/core-site.xml /opt/binaries/hadoop/etc/hadoop/core-site.xml
+ADD config/conf/hadoop/etc/hadoop/hadoop-env.sh /opt/binaries/hadoop/etc/hadoop/hadoop-env.sh
+ADD config/conf/hadoop/etc/hadoop/hdfs-site.xml /opt/binaries/hadoop/etc/hadoop/hdfs-site.xml
+ADD config/conf/hadoop/etc/hadoop/mapred-site.xml /opt/binaries/hadoop/etc/hadoop/mapred-site.xml
+ADD config/conf/hadoop/etc/hadoop/yarn-site.xml /opt/binaries/hadoop/etc/hadoop/yarn-site.xml
 
 
 EXPOSE 9870
@@ -92,7 +92,7 @@ ENV HIVE_HOME "/opt/binaries/hive"
 ENV PATH $PATH:$HIVE_HOME/bin
 
 # Hive configs for single node machine
-ADD docs/conf/hive/conf/hive-site.xml /opt/binaries/hive/conf/hive-site.xml
+ADD config/conf/hive/conf/hive-site.xml /opt/binaries/hive/conf/hive-site.xml
 EXPOSE 10001
 
 ##-----------------------------------------------------------------------------------------------------------------------
@@ -101,17 +101,21 @@ ENV SPARK_HOME "/opt/binaries/spark"
 ENV PATH $PATH:$SPARK_HOME/bin
 
 # Spark configs for single node machine
-ADD docs/conf/spark/conf/hive-site.xml /opt/binaries/spark/conf/hive-site.xml
-ADD docs/conf/spark/conf/spark-defaults.conf /opt/binaries/spark/conf/spark-defaults.conf
+ADD config/conf/spark/conf/hive-site.xml /opt/binaries/spark/conf/hive-site.xml
+ADD config/conf/spark/conf/spark-defaults.conf /opt/binaries/spark/conf/spark-defaults.conf
 EXPOSE 8080
 EXPOSE 7077
 EXPOSE 10000
 
 #-----------------------------------------------------------------------------------------------------------------------
+ADD config/conf/kafka/server.properties /opt/binaries/kafka/config/server.properties
+ADD config/conf/kafka/server1.properties /opt/binaries/kafka/config/server1.properties
+ADD config/conf/kafka/server2.properties /opt/binaries/kafka/config/server2.properties
 
 ENV KAFKA_HOME "/opt/binaries/kafka/"
 ENV PATH "$PATH:${KAFKA_HOME}/bin"
 RUN ln -s ${KAFKA_HOME}/config/server.properties /etc/kafka.properties
+
 # configuration of supervisord
 EXPOSE 9092 2181 50070 8020 50075
 
