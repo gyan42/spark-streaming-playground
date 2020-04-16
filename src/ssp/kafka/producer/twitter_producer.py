@@ -17,6 +17,7 @@ from ssp.logger.pretty_print import print_error, print_info
 # we create this class that inherits from the StreamListener in tweepy StreamListener
 from ssp.utils.eda import get_stop_words
 
+
 def pick_text(text, rtext, etext):
     ret = ""
     if etext:
@@ -30,7 +31,9 @@ def pick_text(text, rtext, etext):
 
     return re.sub("\n|\r", "", ret).strip()
 
+
 class TweetsListener(StreamListener):
+
     def __init__(self,
                  kafka_addr='localhost:9092',
                  topic='ai_tweets_topic',
@@ -77,6 +80,7 @@ class TweetsListener(StreamListener):
         print(status)
         return True
 
+
 @gin.configurable
 class TwitterProducer(object):
     """
@@ -84,6 +88,7 @@ class TwitterProducer(object):
     - Gets the twitter stream data and dumps the data into Kafka topic
     - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS
     """
+
     def __init__(self,
                  twitter_consumer_key=None,
                  twitter_consumer_secret=None,
@@ -121,11 +126,17 @@ class TwitterProducer(object):
         print_info("\n\n---------------------------------------------------------------------------------\n\n")
         print_info(f"Kafka topic : {kafka_topic} Twitter Keywords : {keywords}")
         print_info("\n\n---------------------------------------------------------------------------------\n\n")
-
-        twitter_stream = Stream(auth, TweetsListener(kafka_addr=self._kafka_addr, topic=kafka_topic, is_ai=is_ai))
-        # https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
-        # https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
-        twitter_stream.filter(track=keywords, languages=["en"])
+        
+        while True:
+            try:
+                twitter_stream = Stream(auth, TweetsListener(kafka_addr=self._kafka_addr, topic=kafka_topic, is_ai=is_ai))
+                # https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
+                # https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+                twitter_stream.filter(track=keywords, languages=["en"])
+            except Exception as e:
+                print("Error: Restarting the twitter stream")
+                print(e.__doc__)
+                print(e.message)
 
     def run(self):
         """
@@ -135,7 +146,7 @@ class TwitterProducer(object):
         if self._topic_2_filter_words is None:
             self._topic_2_filter_words = AIKeyWords.ALL.split("|")
 
-        ai_stream = threading.Thread(target=self.twitter_kafka_stream, args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True, ))
+        ai_stream = threading.Thread(target=self.twitter_kafka_stream, args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True,))
         non_ai_stream = threading.Thread(target=self.twitter_kafka_stream, args=(self._kafka_topic_2, self._topic_2_filter_words,))
 
         ai_stream.setDaemon(True)
