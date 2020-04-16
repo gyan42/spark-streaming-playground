@@ -10,7 +10,7 @@ __email__ = "mageswaran1989@gmail.com"
 __status__ = "Education Purpose"
 
 #https://www.javacodemonk.com/named-entity-recognition-spacy-flask-api-1678a5df
-import os
+import gin
 from flask import Flask, render_template, request, url_for, request, abort, jsonify
 import spacy
 
@@ -55,11 +55,12 @@ def text_clasification():
     # res = text_classifier.predict(text)
     return jsonify({"res": str(res)}), 201
 
-def create_app():
-    config = ConfigManager(config_path="config/config.ini")
-    host = config.get_item("api", "host")
-    port = config.get_item("api", "port")
+
+@gin.configurable
+def api_endpoint(host,
+                 port):
     app.run(debug=True, host=host, port=port)
 
 if __name__ == '__main__':
-    create_app()
+    gin.parse_config_file(config_file="config/api_endpoint.gin")
+    api_endpoint()

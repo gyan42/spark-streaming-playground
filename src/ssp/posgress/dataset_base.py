@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import gin
 import argparse
 import os
@@ -16,20 +27,21 @@ from absl import app
 
 @gin.configurable
 class PostgresqlConnection(object):
+    """
+    Postgresql utility class to read,write tables and execute query
+    :param postgresql_host: Postgresql Host address
+    :param postgresql_port: Postgresql port number
+    :param postgresql_database: Postgresql database name
+    :param postgresql_user: Postgresql user name
+    :param postgresql_password: Postgresql password
+    """
     def __init__(self,
                  postgresql_host="localhost",
                  postgresql_port="5432",
                  postgresql_database="sparkstreamingdb",
                  postgresql_user="sparkstreaming",
                  postgresql_password="sparkstreaming"):
-        """
 
-        :param postgresql_host: Postgresql Host address
-        :param postgresql_port: Postgresql port number
-        :param postgresql_database: Postgresql database name
-        :param postgresql_user: Postgresql user name
-        :param postgresql_password: Postgresql password
-        """
         self._postgresql_host = postgresql_host
         self._postgresql_port = postgresql_port
         self._postgresql_database = postgresql_database

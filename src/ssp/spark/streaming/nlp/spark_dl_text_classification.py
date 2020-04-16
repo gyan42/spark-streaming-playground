@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import gin
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import explode, col
@@ -60,7 +71,7 @@ class SreamingTextClassifier(TwitterStreamerBase):
         self._is_docker = is_docker
 
     def online_process(self):
-        tweet_stream = self.get_source_stream()
+        tweet_stream = self._get_source_stream()
         return tweet_stream
 
     def hdfs_process(self):

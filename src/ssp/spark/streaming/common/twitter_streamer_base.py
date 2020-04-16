@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 from pyspark.sql import SparkSession
 
 import re
@@ -25,18 +36,18 @@ def pick_text(text, rtext, etext):
 
 pick_text_udf = udf(pick_text, StringType())
 
-"""
-When it comes to describing the semantics of a delivery mechanism, there are three basic categories:
 
-    at-most-once delivery means that for each message handed to the mechanism, that message is delivered once or not at all; in more casual terms it means that messages may be lost.
-    at-least-once delivery means that for each message handed to the mechanism potentially multiple attempts are made at delivering it, such that at least one succeeds; again, in more casual terms this means that messages may be duplicated but not lost.
-    exactly-once delivery means that for each message handed to the mechanism exactly one delivery is made to the recipient; the message can neither be lost nor duplicated.
-
-The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.
-
-"""
 
 class TwitterStreamerBase(StreamerBase):
+    """
+
+    :param spark_master:
+    :param checkpoint_dir:
+    :param warehouse_location:
+    :param kafka_bootstrap_servers:
+    :param kafka_topic:
+    :param processing_time:
+    """
     def __init__(self,
                  spark_master,
                  checkpoint_dir,
@@ -52,8 +63,9 @@ class TwitterStreamerBase(StreamerBase):
                               kafka_topic=kafka_topic,
                               processing_time=processing_time)
 
+
     @staticmethod
-    def get_schema():
+    def _get_schema():
         # define the schema to extract the data we are interested
         # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
         urls = ArrayType(StructType(). \
@@ -81,7 +93,7 @@ class TwitterStreamerBase(StreamerBase):
 
         return schema
 
-    def get_source_stream(self, kafka_topic="mix_tweets_topic"):
+    def _get_source_stream(self, kafka_topic="mix_tweets_topic"):
 
         print_info("\n\n------------------------------------------------------------------------------------------\n\n")
         print_info(f"\t\t\t Kafka topis is {kafka_topic}")
@@ -112,7 +124,7 @@ class TwitterStreamerBase(StreamerBase):
         # processing time : how often to emt update, generally handled at writestream side
         tweet_df = tweet_stream. \
             selectExpr("cast (value as STRING)"). \
-            select(from_json("value", TwitterStreamerBase.get_schema()).
+            select(from_json("value", TwitterStreamerBase._get_schema()).
                    alias("tweet")). \
             select(col("tweet.id_str"),
                    col("tweet.created_at"),

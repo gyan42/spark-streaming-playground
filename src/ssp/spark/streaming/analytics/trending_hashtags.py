@@ -1,19 +1,25 @@
-import argparse
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import gin
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, col, explode
 from pyspark.sql.types import ArrayType, StringType
-
 from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
-from ssp.utils.config_manager import ConfigManager
-from ssp.utils.configuration import StreamingConfigs
 
 
 def extract_hashtag(text):
     """
     Extracts the twitter #hashtag from the text
-    :param text: Twitter text
-    :return: List of hashtags
+    :param text: (str) Twitter text
+    :return: (list) List of hashtags
     """
     if text is not None:
         text = text.replace('\n', ' ').replace('\r', '')
@@ -29,6 +35,24 @@ extract_hashtag_udf = udf(extract_hashtag, ArrayType(StringType()))
 
 @gin.configurable
 class TrendingHashTags(TwitterStreamerBase):
+    """
+    Extracts hash tags and counts the individual occurrence of tags.
+    And then dumps the data into a Postgresql Database table
+    :param kafka_bootstrap_servers: (str) host_url:port
+    :param kafka_topic: (str) Live stream Kafka topic
+    :param checkpoint_dir: (str) Spark Streaming checkpoint directory
+    :param bronze_parquet_dir: (str) Input stream directory path. For local paths prefix it with "file///"
+    :param warehouse_location: (str) Spark warehouse location
+    :param spark_master: (str) Spark master url
+    :param postgresql_host: (str) Postgresql host url
+    :param postgresql_port: (str) Postgres port
+    :param postgresql_database: (str) Database name
+    :param postgresql_user: (str) Postgresql user name
+    :param postgresql_password: (str) Postgresql user password
+    :param processing_time: (str) Spark Streaming process interval
+    :param is_live_stream: (bool) Use live stream or to use streamed directory as input
+    """
+
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
                  kafka_topic="ai_tweets_topic",
@@ -43,6 +67,7 @@ class TrendingHashTags(TwitterStreamerBase):
                  postgresql_password="sparkstreaming",
                  processing_time='5 seconds',
                  is_live_stream=True):
+
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
@@ -63,12 +88,11 @@ class TrendingHashTags(TwitterStreamerBase):
 
         self._is_live_stream = is_live_stream
 
-
-    def online_process(self):
-        tweet_stream = self.get_source_stream()
+    def _online_process(self):
+        tweet_stream = self._get_source_stream()
         return tweet_stream
 
-    def hdfs_process(self):
+    def _hdfs_process(self):
         userSchema = self.spark.read.parquet(self._bronze_parquet_dir).schema
         tweet_stream = self.spark.readStream. \
             schema(userSchema).\
@@ -81,9 +105,9 @@ class TrendingHashTags(TwitterStreamerBase):
 
     def process(self):
         if self._is_live_stream:
-            tweet_stream = self.online_process()
+            tweet_stream = self._online_process()
         else:
-            tweet_stream = self.hdfs_process()
+            tweet_stream = self._hdfs_process()
 
         tweet_stream.printSchema()
 

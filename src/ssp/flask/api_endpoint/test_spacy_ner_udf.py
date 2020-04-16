@@ -1,6 +1,6 @@
 import pytest
 import json
-from ssp.flask.api.app import app as api_app
+from ssp.flask.api_endpoint.app import app as api_app
 
 
 @pytest.fixture

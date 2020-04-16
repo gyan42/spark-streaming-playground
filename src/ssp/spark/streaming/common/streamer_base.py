@@ -1,7 +1,30 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 from pyspark.sql import SparkSession
 
-# Must read : https://www.slideshare.net/databricks/deep-dive-into-stateful-stream-processing-in-structured-streaming-with-tathagata-das
+
 class StreamerBase(object):
+    """
+    Good read on Spark Streaming: https://www.slideshare.net/databricks/deep-dive-into-stateful-stream-processing-in-structured-streaming-with-tathagata-das
+
+    When it comes to describing the semantics of a delivery mechanism, there are three basic categories:
+
+    at-most-once delivery means that for each message handed to the mechanism, that message is delivered once or not at all; in more casual terms it means that messages may be lost.
+    at-least-once delivery means that for each message handed to the mechanism potentially multiple attempts are made at delivering it, such that at least one succeeds; again, in more casual terms this means that messages may be duplicated but not lost.
+    exactly-once delivery means that for each message handed to the mechanism exactly one delivery is made to the recipient; the message can neither be lost nor duplicated.
+
+    The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.
+
+    """
     def __init__(self,
                  spark_master,
                  checkpoint_dir,
@@ -33,11 +56,11 @@ class StreamerBase(object):
 
         return spark
 
-    def get_source_stream(self, kafka_topic):
+    def _get_source_stream(self, kafka_topic):
         raise NotImplementedError
 
     @staticmethod
-    def get_schema():
+    def _get_schema():
         raise NotImplementedError
 
     def visualize(self):
@@ -46,7 +69,7 @@ class StreamerBase(object):
         :return:
         """
 
-        sdf = self.get_source_stream()
+        sdf = self._get_source_stream(self._kafka_topic)
 
         def foreach_batch_function(df, epoch_id):
             # Transform and write batchDF
@@ -56,7 +79,7 @@ class StreamerBase(object):
 
     def structured_streaming_dump(self, path, termination_time=None):
         # dump the data into bronze lake path
-        sdf = self.get_source_stream()
+        sdf = self._get_source_stream(self._kafka_topic)
 
         storeDF = sdf.writeStream. \
             format("parquet"). \

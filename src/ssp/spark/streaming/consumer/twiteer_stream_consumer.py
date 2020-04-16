@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-SSP modules that handles all data at ingestion level frm Twitter stream
+SSP modules that handles all data at ingestion level from Twitter stream
 """
 
 __author__ = "Mageswaran Dhandapani"
@@ -197,7 +197,7 @@ class TwitterDataset(TwitterStreamerBase):
 
     def dump_into_postgresql_internal(self, run_id, kafka_topic, num_records=25000):
 
-        tweet_stream = self.get_source_stream(kafka_topic)
+        tweet_stream = self._get_source_stream(kafka_topic)
         raw_tweet_table_name = self._raw_tweet_table_name_prefix + "_{}".format(run_id)
 
 
