@@ -1,6 +1,6 @@
 from flask import Flask, render_template
-
 import json
+from flask import jsonify
 import plotly
 from ssp.utils.config_manager import ConfigManager
 from ssp.utils.postgresql import postgressql_connection, create_pandas_table
@@ -24,32 +24,35 @@ def trending_tags():
     postgresql_password = config.get_item("postgresql", "password")
 
     conn = postgressql_connection(postgresql_host, postgresql_port, postgresql_database, postgresql_user, postgresql_password)
-    df = create_pandas_table("select * from trending_hashtags", database_connection=conn)
+    try:
+        df = create_pandas_table("select * from trending_hashtags", database_connection=conn)
 
-    df = df.sort_values(["count"], ascending=0)
-    df = df[df["hashtag"] != "no tags"]
-    df = df.iloc[:20]
+        df = df.sort_values(["count"], ascending=0)
+        df = df[df["hashtag"] != "no tags"]
+        df = df.iloc[:20]
 
-    data = [
-        #go.Bar(x=df["hashtag"], y=df["count"], name='TrendingTags')
-        dict(
-            data=[
-                dict(
-                    x=df["hashtag"],
-                    y=df["count"],
-                    type='bar'
-                ),
-            ]
-        )
-    ]
+        data = [
+            #go.Bar(x=df["hashtag"], y=df["count"], name='TrendingTags')
+            dict(
+                data=[
+                    dict(
+                        x=df["hashtag"],
+                        y=df["count"],
+                        type='bar'
+                    ),
+                ]
+            )
+        ]
 
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+        graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
 
-    ids = ["Trending Tweets"]
-    conn.close()
-    return render_template('layouts/graph_display.html',
-                           ids=ids,
-                           graphJSON=graphJSON)
+        ids = ["Trending Tweets"]
+        conn.close()
+        return render_template('layouts/graph_display.html',
+                               ids=ids,
+                               graphJSON=graphJSON)
+    except Exception as e:
+        return jsonify("{Table `trending_hashtags` is not yet created}")
 
 
 if __name__ == '__main__':

@@ -14,24 +14,15 @@ We use [Gin-config](https://github.com/google/gin-config) and Python `configpars
 - Add your Twitter credentials @ [twitter_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/tree/master/config/twitter_ssp_config.gin)
 - [default_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/blob/master/config/default_ssp_config.gin) is used for most of the use case examples.
 
-Make a note of the your machine name with command `hostname`, and update the `spark master url` with the new value in `default_ssp_config.gin`,
-`eg: spark://IMCHLT276:7077`, `IMCHLT276` should be your machine name.
+Update the `spark master url` with the new value in `default_ssp_config.gin`, if you have a different setup than mentioned here.
+Spark master url is configured to read the machine `hostname` and construct local Spark master url.
+`eg: spark://IMCHLT276:7077`, in the place of `IMCHLT276` you see your machine name.
 
 
 ## On Local Machine
   
 ### Start Services
 
-- swipe out previous run data, if needed!
-```
-/opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic ai_tweets_topic 
-/opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic mix_tweets_topic
-sudo rm -rf /tmp/kafka-logs 
-sudo rm -rf /var/lib/zookeeper/
-sudo rm -rf /tmp/kafka-logs*
-rm -rf /opt/spark-warehouse/
-hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
-```
 
 - Start the services manually as a background processes (Lookout of errors int he jungle of service logs...)
 ```
@@ -46,7 +37,7 @@ hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 
 - Or you could use [supervisor](http://supervisord.org/) to start all the services, check [docker/supervisor.conf](https://github.com/gyan42/spark-streaming-playground/blob/master/docker/supervisor.conf) for list of back ground services
 ```
-sudo /usr/bin/supervisord -c docker/supervisor.conf # restart if you see any error
+/usr/bin/supervisord -c docker/supervisor.conf # restart if you see any error
 ```
 
 - Start Spark and Hive services...
@@ -59,6 +50,28 @@ $HADOOP_HOME/sbin/start-yarn.sh
 # Start Spark standalone cluster
 $SPARK_HOME/sbin/start-all.sh
 ```
+
+To make sure all the services are up and running, execute the command `jps`, you should see the following list:
+
+```
+13601 Jps
+11923 NameNode
+12109 DataNode
+12431 SecondaryNameNode
+12699 ResourceManager
+12919 NodeManager
+9292 Kafka
+9294 Kafka
+10358 Kafka
+3475 Main
+13338 Master
+13484 Worker
+```
+
+`HDFS`   : NameNode, DataNode, SecondaryNameNode
+`Hadoop` : ResourceManager, NodeManager
+`Kafka`  : Kafka, Kafka, Kafka
+`Spark`  : Main, Master, Worker
 
 - If you wanna stop playing...
 ```
@@ -77,10 +90,13 @@ Since we stop and start Spark Streaming Kafka consumer, restart Kafka server, so
 To solve the issue we need to clear the Kafka data and Spark warehouse data.
  
 ```
-sudo /opt/binaries/kafka/bin/kafka-server-stop.sh
-sudo /opt/binaries/kafka/bin/zookeeper-server-stop.sh
+/opt/binaries/kafka/bin/kafka-server-stop.sh
+/opt/binaries/kafka/bin/zookeeper-server-stop.sh
 
-sudo rm -rf /tmp/kafka-logs*
+/opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic ai_tweets_topic 
+/opt/binaries/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic mix_tweets_topic
+rm -rf /var/lib/zookeeper/
+rm -rf /tmp/kafka-logs*
 rm -rf /opt/spark-warehouse/
 hdfs dfs -rm -r /tmp/ssp/data/lake/checkpoint/
 ```

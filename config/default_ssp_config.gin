@@ -15,7 +15,7 @@ import ssp.spark.streaming.nlp
 kafka_address = 'localhost:9092'
 kafka_topic_1 = 'ai_tweets_topic'
 kafka_topic_2 = 'mix_tweets_topic'
-spark_master = "spark://IMCHLT276:7077"
+spark_master = @consumer/get_local_spark_master()
 
 #######################################################################################################################
 #                                               DATA                                                                  #
