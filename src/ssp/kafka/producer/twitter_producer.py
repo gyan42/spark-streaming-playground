@@ -26,6 +26,7 @@ from ssp.logger.pretty_print import print_error, print_info
 
 from ssp.utils.eda import get_stop_words
 
+
 def pick_text(text, rtext, etext):
     """
     Twitter Json data has three level of text. This function picks what is available in the order etext > rtext > text
@@ -45,6 +46,7 @@ def pick_text(text, rtext, etext):
         ret = ""
 
     return re.sub("\n|\r", "", ret).strip()
+
 
 class TweetsListener(StreamListener):
     """
@@ -75,10 +77,12 @@ class TweetsListener(StreamListener):
             text = data_dict["text"]
         else:
             text = None
+
         if "extended_tweet" in data_dict.keys():
             etext = data_dict["extended_tweet"]["full_text"]
         else:
             etext = None
+
         if "retweeted_status" in data_dict.keys():
             if "extended_tweet" in data_dict["retweeted_status"].keys():
                 rtext = data_dict["retweeted_status"]["extended_tweet"]["full_text"]
@@ -86,7 +90,9 @@ class TweetsListener(StreamListener):
                 rtext = None
         else:
             rtext = None
+
         text = pick_text(text=text, rtext=rtext, etext=etext)
+
         if self._is_ai:
             print_info(text)
         else:
@@ -102,6 +108,7 @@ class TweetsListener(StreamListener):
         print(status)
         return True
 
+
 @gin.configurable
 class TwitterProducer(object):
     """
@@ -116,6 +123,7 @@ class TwitterProducer(object):
     :param kafka_topic_2: (str) Tweet stream Kafka topic
     :param topic_2_filter_words: (list) Filter words to be used for second stream
     """
+
     def __init__(self,
                  twitter_consumer_key=None,
                  twitter_consumer_secret=None,
@@ -152,11 +160,17 @@ class TwitterProducer(object):
         print_info(f"Kafka topic : {kafka_topic}")
         print_info(f"Twitter Keywords : {keywords}")
         print_info("\n\n---------------------------------------------------------------------------------\n\n")
-
-        twitter_stream = Stream(auth, TweetsListener(kafka_addr=self._kafka_addr, topic=kafka_topic, is_ai=is_ai))
-        # https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
-        # https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
-        twitter_stream.filter(track=keywords, languages=["en"])
+        
+        while True:
+            try:
+                twitter_stream = Stream(auth, TweetsListener(kafka_addr=self._kafka_addr, topic=kafka_topic, is_ai=is_ai))
+                # https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
+                # https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+                twitter_stream.filter(track=keywords, languages=["en"])
+            except Exception as e:
+                print("Error: Restarting the twitter stream")
+                print(e.__doc__)
+                print(e.message)
 
     def run(self):
         """

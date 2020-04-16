@@ -59,7 +59,7 @@ class TrendingHashTags(TwitterStreamerBase):
                  checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
                  bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/data/lake/bronze/",
                  warehouse_location="/opt/spark-warehouse/",
-                 spark_master="spark://IMCHLT276:7077",
+                 spark_master="spark://IMCHLT304:7077",
                  postgresql_host="localhost",
                  postgresql_port="5432",
                  postgresql_database="sparkstreamingdb",

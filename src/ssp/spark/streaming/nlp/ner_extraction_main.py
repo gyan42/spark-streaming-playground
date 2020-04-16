@@ -23,9 +23,6 @@ if __name__ == "__main__":
                           help="File path of config.ini")
 
     parsed_args = optparse.parse_args()
-
+    gin.parse_config_file(parsed_args.config_file)    
     nlp_processing = NerExtraction()
-
-    gin.parse_config_file(parsed_args.config_file)
-
     nlp_processing.process()

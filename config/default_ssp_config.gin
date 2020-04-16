@@ -158,3 +158,4 @@ SSPLabelEvaluator.postgresql_port="5432"
 SSPLabelEvaluator.postgresql_database="sparkstreamingdb"
 SSPLabelEvaluator.postgresql_user="sparkstreaming"
 SSPLabelEvaluator.postgresql_password="sparkstreaming"
+

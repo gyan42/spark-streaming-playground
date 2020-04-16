@@ -11,7 +11,6 @@ __status__ = "Education Purpose"
 
 import argparse
 import gin
-from ssp.spark.streaming.ml.sentiment_analysis_model import SentimentSparkModel
 
 if __name__ == "__main__":
     optparse = argparse.ArgumentParser("Twitter Spark Text Processor pipeline:")
@@ -24,9 +23,11 @@ if __name__ == "__main__":
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
-
+    from ssp.spark.streaming.ml.sentiment_analysis_model import SentimentSparkModel
     model = SentimentSparkModel()
     spark_model = model.train()
     model.evaluate(model=spark_model)
+
+
 
 
