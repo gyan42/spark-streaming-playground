@@ -28,20 +28,27 @@ from pyspark.ml.feature import NGram, VectorAssembler
 # https://github.com/tthustla/setiment_analysis_pyspark/blob/master/Sentiment%20Analysis%20with%20PySpark.ipynb
 @gin.configurable
 class SentimentSparkModel(object):
+    """
+    Build text classification model for tweet sentiment classification
+    If HDFS details are given, model will be stored in HDFS
+
+    :param spark: Sparksession
+    :param spark_master: Spark master URL
+    :param sentiment_dataset_path: Tweeter Kaggle sentiment dataset path
+    :param model_dir: Model sava directory
+    :param hdfs_host: HDFS host url
+    :param hdfs_port: HDFS port
+    """
     def __init__(self,
                  spark=None,
-                 checkpoint_dir="hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/",
-                 warehouse_location="/opt/spark-warehouse/",
                  spark_master="spark://IMCHLT276:7077",
-                 ai_tweets_topicset_path="data/dataset/sentiment140/",
+                 sentiment_dataset_path="data/dataset/sentiment140/",
                  model_dir="~/ssp/data/model/sentiment/",
                  hdfs_host=None,
                  hdfs_port=None):
 
         self._spark_master = spark_master
 
-        self._checkpoint_dir = checkpoint_dir
-        self._warehouse_location = warehouse_location
         self._model_dir = os.path.expanduser(model_dir)
 
         self._hdfs_host, self._hdfs_port = hdfs_host, hdfs_port
@@ -68,7 +75,6 @@ class SentimentSparkModel(object):
         else:
             self._spark = SparkSession.builder. \
                 appName("twitter_stream"). \
-                config("spark.sql.warehouse.dir", self._warehouse_location). \
                 master(self._spark_master). \
                 enableHiveSupport(). \
                 getOrCreate()
@@ -76,7 +82,7 @@ class SentimentSparkModel(object):
         self._spark.sparkContext.setLogLevel("error")
         self._pipeline = None
 
-        self._ai_tweets_topicset_path = "file:///" + os.path.abspath(ai_tweets_topicset_path)
+        self._ai_tweets_topicset_path = "file:///" + os.path.abspath(sentiment_dataset_path)
 
         self._ai_tweets_topicset_schema = StructType([
             StructField("target", StringType(), False),
@@ -134,6 +140,7 @@ class SentimentSparkModel(object):
         pipeline = self.build_ngrams_wocs()
         print_info(self._train_df.show())
         self._model = pipeline.fit(self._train_df)
+        # TODO
         self._model.write().overwrite().save(self._model_dir)
         return self._model
 

@@ -22,6 +22,7 @@ from ssp.spark.udf.spacy_ner_udf import get_ner_udf
 class NerExtraction(TwitterStreamerBase):
     """
     Uses external REST endpoint to get NER tags
+
     :param kafka_bootstrap_servers: (str) host_url:port
     :param kafka_topic: (str) Live stream Kafka topic
     :param checkpoint_dir: (str) Spark Streaming checkpoint directory
@@ -35,7 +36,7 @@ class NerExtraction(TwitterStreamerBase):
     :param postgresql_password: (str) Postgresql user password
     :param processing_time: (str) Spark Streaming process interval
     :param is_live_stream: (bool) Use live stream or to use streamed directory as input
-    :param is_docker:
+    :param is_docker: (bool) Run environment local machine or docker, to use appropriate host name in REST endpoints
     """
 
     def __init__(self,

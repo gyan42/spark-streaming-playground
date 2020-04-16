@@ -182,12 +182,18 @@
 <dt id="ssp.posgress.dataset_base.PostgresqlConnection">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.posgress.dataset_base.</code><code class="sig-name descname">PostgresqlConnection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Postgresql utility class to read,write tables and execute query
-:param postgresql_host: Postgresql Host address
-:param postgresql_port: Postgresql port number
-:param postgresql_database: Postgresql database name
-:param postgresql_user: Postgresql user name
-:param postgresql_password: Postgresql password</p>
+<p>Postgresql utility class to read,write tables and execute query</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>postgresql_host</strong> – Postgresql Host address</p></li>
+<li><p><strong>postgresql_port</strong> – Postgresql port number</p></li>
+<li><p><strong>postgresql_database</strong> – Postgresql database name</p></li>
+<li><p><strong>postgresql_user</strong> – Postgresql user name</p></li>
+<li><p><strong>postgresql_password</strong> – Postgresql password</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="ssp.posgress.dataset_base.PostgresqlConnection.get_latest_raw_dataset_name_n_version">
 <code class="sig-name descname">get_latest_raw_dataset_name_n_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.get_latest_raw_dataset_name_n_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.get_latest_raw_dataset_name_n_version" title="Permalink to this definition">¶</a></dt>

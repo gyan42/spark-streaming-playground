@@ -13,5 +13,5 @@ from ssp.logger.pretty_print import print_error
 from ssp.spark.streaming.analytics import TrendingHashTags
 
 def test_trending_hash_tags_members():
-    for item in ['_get_schema', '_get_source_stream', 'get_spark', '_hdfs_process', '_online_process', 'process', 'structured_streaming_dump', 'visualize']:
+    for item in ['_get_schema', '_get_source_stream', '_get_spark', '_hdfs_process', '_online_process', 'process', 'structured_streaming_dump', 'visualize']:
         assert item in dir(TrendingHashTags)

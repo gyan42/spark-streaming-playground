@@ -100,10 +100,8 @@ SSPMLDataset.overwrite = True
 
 
 
-SentimentSparkModel.checkpoint_dir = "hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/"
-SentimentSparkModel.warehouse_location = "/opt/spark-warehouse/"
 SentimentSparkModel.spark_master = %spark_master
-SentimentSparkModel.ai_tweets_topicset_path = "data/dataset/sentiment/sentiment140/"
+SentimentSparkModel.sentiment_dataset_path = "data/dataset/sentiment/sentiment140/"
 SentimentSparkModel.model_dir = "~/ssp/data/model/sentiment/"
 SentimentSparkModel.hdfs_host = "localhost"
 SentimentSparkModel.hdfs_port = 9000

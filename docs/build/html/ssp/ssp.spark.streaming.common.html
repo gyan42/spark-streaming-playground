@@ -204,12 +204,6 @@ at-least-once delivery means that for each message handed to the mechanism poten
 exactly-once delivery means that for each message handed to the mechanism exactly one delivery is made to the recipient; the message can neither be lost nor duplicated.</p>
 <p>The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.</p>
 <dl class="py method">
-<dt id="ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark">
-<code class="sig-name descname">get_spark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/streamer_base.html#StreamerBase.get_spark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark" title="Permalink to this definition">¶</a></dt>
-<dd><p>:return:Spark Session</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="ssp.spark.streaming.common.streamer_base.StreamerBase.structured_streaming_dump">
 <code class="sig-name descname">structured_streaming_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">termination_time</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/streamer_base.html#StreamerBase.structured_streaming_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.streamer_base.StreamerBase.structured_streaming_dump" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>

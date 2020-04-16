@@ -101,7 +101,9 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Streaming ML Classification with Active Learning Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
 </ul>
 </li>
 </ul>
@@ -193,6 +195,7 @@
 <li><p>Extract the web links from tweets and store the urls</p></li>
 </ul>
 </div>
+<hr class="docutils" />
 <div class="section" id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <ol>
@@ -279,6 +282,21 @@ Tweets ---&gt; Twitter Stream ---&gt; Tweepy ---&gt; Kafka Producer ---&gt; Kafk
 </tbody>
 </table><p><img alt="../_images/6_full_ml_model_cycle.png" src="../_images/6_full_ml_model_cycle.png" /></p>
 </div>
+<hr class="docutils" />
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords">Tweets Keywords Used</a></p></li>
+<li><p>Config file used : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin">default_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html">TwitterProducer</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.consumer.html?highlight=twitterdataset#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset">TwitterDataset</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.ml.dataset.html?highlight=sspmldataset#ssp.ml.dataset.prepare_dataset.SSPMLDataset">SSPMLDataset</a></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/tagger.gin">tagger.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.dl.tf.classifier.html?highlight=naivetextclassifier#ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier">NaiveTextClassifier</a></p></li>
+<li></li>
+</ul>
+</div>
+<hr class="docutils" />
 <div class="section" id="how-to-run">
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
@@ -341,7 +359,6 @@ GRANT ALL ON schema public TO sparkstreaming;
   not_nlp             5      [0]    0.0132    0.0120     0.0004
   not_ai              6      [0]    0.0084    0.0067     0.0059
   not_cv              7      [0]    0.0081    0.0068     0.0016
-  Training LabelModel
 </pre></div>
 </div>
 </li>
@@ -384,6 +401,14 @@ GRANT ALL ON schema public TO sparkstreaming;
 </div>
 </li>
 </ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="take-aways-learning-s">
+<h2>Take Aways / Learning’s<a class="headerlink" href="#take-aways-learning-s" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>TODOs</p></li>
+</ul>
+<hr class="docutils" />
 <p><strong>References</strong></p>
 <ul class="simple">
 <li><p>https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65</p></li>

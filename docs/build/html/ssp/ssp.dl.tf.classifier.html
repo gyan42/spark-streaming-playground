@@ -193,6 +193,27 @@
 <dt id="ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.dl.tf.classifier.naive_text_classifier.</code><code class="sig-name descname">NaiveTextClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_df_or_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">test_df_or_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dev_df_or_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_root_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_version</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">wipe_old_data</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">text_column</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">label_column</span><span class="o">=</span><span class="default_value">'label'</span></em>, <em class="sig-param"><span class="n">num_words</span><span class="o">=</span><span class="default_value">8000</span></em>, <em class="sig-param"><span class="n">seq_len</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">embedding_size</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">64</span></em>, <em class="sig-param"><span class="n">hdfs_host</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hdfs_port</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/dl/tf/classifier/naive_text_classifier.html#NaiveTextClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Trains simple DL model with embedding and feed forward network
+HDFS will be considered for storage if HDFS host and port are given</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_df_or_path</strong> – Train data pandas dataframe or path</p></li>
+<li><p><strong>test_df_or_path</strong> – Test data pandas dataframe or path</p></li>
+<li><p><strong>dev_df_or_path</strong> – Dev data pandas dataframe or path</p></li>
+<li><p><strong>model_root_dir</strong> – Local directory path or HDFS path</p></li>
+<li><p><strong>wipe_old_data</strong> – Clean old model data</p></li>
+<li><p><strong>text_column</strong> – Name of the text column</p></li>
+<li><p><strong>label_column</strong> – Name of the label colum</p></li>
+<li><p><strong>num_words</strong> – Vocab size</p></li>
+<li><p><strong>seq_len</strong> – Max length of the sequence</p></li>
+<li><p><strong>embedding_size</strong> – Embedding size</p></li>
+<li><p><strong>batch_size</strong> – Train batch size</p></li>
+<li><p><strong>hdfs_host</strong> – HDFS host</p></li>
+<li><p><strong>hdfs_port</strong> – HDFS port</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier.define_model">
 <code class="sig-name descname">define_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/dl/tf/classifier/naive_text_classifier.html#NaiveTextClassifier.define_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier.define_model" title="Permalink to this definition">¶</a></dt>

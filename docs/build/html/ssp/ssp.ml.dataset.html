@@ -189,6 +189,34 @@
 <dt id="ssp.ml.dataset.prepare_dataset.SSPMLDataset">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.ml.dataset.prepare_dataset.</code><code class="sig-name descname">SSPMLDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_column</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">label_output_column</span><span class="o">=</span><span class="default_value">'slabel'</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="default_value">'raw_tweet_dataset'</span></em>, <em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/ml/dataset/prepare_dataset.html#SSPMLDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.ml.dataset.prepare_dataset.SSPMLDataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase" title="ssp.posgress.dataset_base.PostgresqlDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.posgress.dataset_base.PostgresqlDatasetBase</span></code></a></p>
+<p>Reads the raw tweet data dump from Postgresql, splits the data and annotates the text with Snorkel.</p>
+<p>Dumps the data into postgresql for annotation and conitnuous improvement purpose</p>
+<p>Dumps the data into given path as train/dev/test/snorkell train data for model building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text_column</strong> – Name of the text column</p></li>
+<li><p><strong>label_output_column</strong> – Name of the label column to be created using the snorkel labeler</p></li>
+<li><p><strong>raw_tweet_table_name_prefix</strong> – Raw tweet table dump name prefix</p></li>
+<li><p><strong>postgresql_host</strong> – Postgresql host</p></li>
+<li><p><strong>postgresql_port</strong> – Postgresql port</p></li>
+<li><p><strong>postgresql_database</strong> – Postgresql Database</p></li>
+<li><p><strong>postgresql_user</strong> – Postgresql user name</p></li>
+<li><p><strong>postgresql_password</strong> – Postgresql user password</p></li>
+<li><p><strong>overwrite</strong> – Overwrite the table and disk data</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">|</span><span class="n">Table</span> <span class="n">Name</span>                        <span class="o">|</span><span class="n">Records</span><span class="o">|</span><span class="n">Info</span>                       <span class="o">|</span>
+<span class="o">|----------------------------------|-------|---------------------------|</span>
+<span class="o">|</span><span class="n">raw_tweet_dataset_0</span>               <span class="o">|</span> <span class="mi">50</span><span class="n">K</span><span class="o">+</span>  <span class="o">|</span><span class="n">Full</span> <span class="n">Raw</span> <span class="n">Dataset</span>           <span class="o">|</span>
+<span class="o">|</span><span class="n">deduplicated_raw_tweet_dataset_0</span>  <span class="o">|</span> <span class="o">~</span>     <span class="o">|</span><span class="n">Depulicated</span> <span class="n">on</span> <span class="n">text</span> <span class="n">column</span> <span class="o">|</span>
+<span class="o">|</span><span class="n">test_dataset_0</span>                    <span class="o">|</span><span class="mi">1000</span>   <span class="o">|</span><span class="n">Test</span> <span class="n">dataset</span>               <span class="o">|</span>
+<span class="o">|</span><span class="n">dev_dataset_0</span>                     <span class="o">|</span><span class="mi">500</span>    <span class="o">|</span><span class="n">Dev</span> <span class="n">dataset</span>                <span class="o">|</span>
+<span class="o">|</span><span class="n">snorkel_train_dataset_0</span>           <span class="o">|</span><span class="mi">10</span><span class="n">K</span>    <span class="o">|</span><span class="n">Snorkel</span> <span class="n">train</span> <span class="n">dataset</span>      <span class="o">|</span>
+<span class="o">|</span><span class="n">train_dataset_0</span>                   <span class="o">|~</span>      <span class="o">|</span><span class="n">Model</span> <span class="n">train</span> <span class="n">dataset</span>        <span class="o">|</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt id="ssp.ml.dataset.prepare_dataset.SSPMLDataset.store">
 <code class="sig-name descname">store</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/ml/dataset/prepare_dataset.html#SSPMLDataset.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.ml.dataset.prepare_dataset.SSPMLDataset.store" title="Permalink to this definition">¶</a></dt>

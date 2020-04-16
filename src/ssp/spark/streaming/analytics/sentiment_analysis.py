@@ -19,6 +19,19 @@ from ssp.spark.streaming.ml import SentimentSparkModel
 
 @gin.configurable
 class SentimentAnalysis(TwitterStreamerBase):
+    """
+    Uses the :ssp.spark.streaming.ml.SentimentSparkModel to classify the stream text
+
+    :param kafka_bootstrap_servers:
+    :param kafka_topic: Kafka topic to listen for
+    :param checkpoint_dir: Spark Streaming checkpoint directory
+    :param parquet_dir: Parquet directory to read the streamed data
+    :param warehouse_location: Spark warehouse location
+    :param spark_master: Spark Master URL
+    :param is_live_stream: (bool) Use live stream or parquet diretory
+    :param processing_time: (bool) Spark Streaming processing trigger time delay
+    """
+
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
                  kafka_topic="ai_tweets_topic",
@@ -28,7 +41,6 @@ class SentimentAnalysis(TwitterStreamerBase):
                  spark_master="spark://IMCHLT276:7077",
                  is_live_stream=True,
                  processing_time='5 seconds'):
-
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
@@ -42,16 +54,7 @@ class SentimentAnalysis(TwitterStreamerBase):
         self._parquet_dir = parquet_dir
         self._warehouse_location = warehouse_location
 
-        self.spark = SparkSession.builder. \
-            appName("twitter_stream"). \
-            master(self._spark_master). \
-            config("spark.sql.warehouse.dir", self._warehouse_location). \
-            config("spark.sql.streaming.checkpointLocation", self._checkpoint_dir). \
-            enableHiveSupport(). \
-            getOrCreate()
-
-        self.spark.sparkContext.setLogLevel("error")
-
+        self.spark = self._get_spark()
         self._model = SentimentSparkModel(spark=self.spark)
 
         self._is_live_stream = is_live_stream

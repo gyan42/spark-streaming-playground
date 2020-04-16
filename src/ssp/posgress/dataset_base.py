@@ -29,6 +29,7 @@ from absl import app
 class PostgresqlConnection(object):
     """
     Postgresql utility class to read,write tables and execute query
+
     :param postgresql_host: Postgresql Host address
     :param postgresql_port: Postgresql port number
     :param postgresql_database: Postgresql database name

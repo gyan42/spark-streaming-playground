@@ -38,6 +38,7 @@ class TrendingHashTags(TwitterStreamerBase):
     """
     Extracts hash tags and counts the individual occurrence of tags.
     And then dumps the data into a Postgresql Database table
+
     :param kafka_bootstrap_servers: (str) host_url:port
     :param kafka_topic: (str) Live stream Kafka topic
     :param checkpoint_dir: (str) Spark Streaming checkpoint directory
@@ -77,7 +78,7 @@ class TrendingHashTags(TwitterStreamerBase):
                                      processing_time=processing_time)
 
         self._bronze_parquet_dir = bronze_parquet_dir
-        self.spark = self.get_spark()
+        self.spark = self._get_spark()
         self.spark.sparkContext.setLogLevel("DEBUG")
 
         self._postgresql_host = postgresql_host

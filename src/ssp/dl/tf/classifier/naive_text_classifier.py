@@ -34,6 +34,25 @@ from ssp.utils.misc import check_n_mk_dirs
 # https://www.bmc.com/blogs/keras-neural-network-classification/
 @gin.configurable
 class NaiveTextClassifier(object):
+    """
+    Trains simple DL model with embedding and feed forward network
+    HDFS will be considered for storage if HDFS host and port are given
+
+    :param train_df_or_path: Train data pandas dataframe or path
+    :param test_df_or_path: Test data pandas dataframe or path
+    :param dev_df_or_path: Dev data pandas dataframe or path
+    :param model_root_dir: Local directory path or HDFS path
+    :param wipe_old_data: Clean old model data
+    :param text_column: Name of the text column
+    :param label_column: Name of the label colum
+    :param num_words: Vocab size
+    :param seq_len: Max length of the sequence
+    :param embedding_size: Embedding size
+    :param batch_size: Train batch size
+    :param hdfs_host: HDFS host
+    :param hdfs_port: HDFS port
+    """
+
     def __init__(self,
                  train_df_or_path=None,
                  test_df_or_path=None,
@@ -49,23 +68,7 @@ class NaiveTextClassifier(object):
                  batch_size=64,
                  hdfs_host=None,
                  hdfs_port=None):
-        """
 
-        HDFS will be considered for storage if HDFS host and port are given
-        :param train_df_or_path: Train data dandas dataframe or path
-        :param test_df_or_path:
-        :param dev_df_or_path:
-        :param model_root_dir: Local directory path or HDFS path
-        :param wipe_old_data:
-        :param text_column:
-        :param label_column:
-        :param num_words:
-        :param seq_len:
-        :param embedding_size:
-        :param batch_size:
-        :param hdfs_host:
-        :param hdfs_port:
-        """
         self._pre_trained = False
         self._text_column = text_column
         self._label_column = label_column

@@ -199,7 +199,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span> <span class="o">=</span> <span class="n">kafka_topic</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_processing_time</span> <span class="o">=</span> <span class="n">processing_time</span>
 
-<div class="viewcode-block" id="StreamerBase.get_spark"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark">[docs]</a>    <span class="k">def</span> <span class="nf">get_spark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_spark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :return:Spark Session</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -214,7 +214,7 @@
         <span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
         <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.metricsEnabled&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">spark</span></div>
+        <span class="k">return</span> <span class="n">spark</span>
 
     <span class="k">def</span> <span class="nf">_get_source_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>

@@ -99,7 +99,7 @@ class TwitterStreamerBase(StreamerBase):
         print_info(f"\t\t\t Kafka topis is {kafka_topic}")
         print_info("\n\n------------------------------------------------------------------------------------------\n\n")
 
-        spark = self.get_spark()
+        spark = self._get_spark()
 
         # read the tweets from kafka topic
         tweet_stream = spark \

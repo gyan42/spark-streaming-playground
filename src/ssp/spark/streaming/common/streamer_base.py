@@ -39,7 +39,7 @@ class StreamerBase(object):
         self._kafka_topic = kafka_topic
         self._processing_time = processing_time
 
-    def get_spark(self):
+    def _get_spark(self):
         """
         :return:Spark Session
         """

@@ -182,6 +182,7 @@
 <span class="k">class</span> <span class="nc">NerExtraction</span><span class="p">(</span><span class="n">TwitterStreamerBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Uses external REST endpoint to get NER tags</span>
+
 <span class="sd">    :param kafka_bootstrap_servers: (str) host_url:port</span>
 <span class="sd">    :param kafka_topic: (str) Live stream Kafka topic</span>
 <span class="sd">    :param checkpoint_dir: (str) Spark Streaming checkpoint directory</span>
@@ -195,7 +196,7 @@
 <span class="sd">    :param postgresql_password: (str) Postgresql user password</span>
 <span class="sd">    :param processing_time: (str) Spark Streaming process interval</span>
 <span class="sd">    :param is_live_stream: (bool) Use live stream or to use streamed directory as input</span>
-<span class="sd">    :param is_docker:</span>
+<span class="sd">    :param is_docker: (bool) Run environment local machine or docker, to use appropriate host name in REST endpoints</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

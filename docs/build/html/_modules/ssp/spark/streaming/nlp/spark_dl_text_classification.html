@@ -180,6 +180,25 @@
 
 <div class="viewcode-block" id="SreamingTextClassifier"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.nlp.html#ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">SreamingTextClassifier</span><span class="p">(</span><span class="n">TwitterStreamerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Classifies the incoming tweet text using the DL model build using Tensorflow serving</span>
+<span class="sd">    </span>
+<span class="sd">    :param kafka_bootstrap_servers: (str) host_url:port</span>
+<span class="sd">    :param kafka_topic: (str) Live stream Kafka topic</span>
+<span class="sd">    :param checkpoint_dir: (str) Spark Streaming checkpoint directory</span>
+<span class="sd">    :param bronze_parquet_dir: (str) Input stream directory path. For local paths prefix it with &quot;file///&quot;</span>
+<span class="sd">    :param warehouse_location: (str) Spark warehouse location</span>
+<span class="sd">    :param spark_master: (str) Spark master url</span>
+<span class="sd">    :param postgresql_host: (str) Postgresql host url</span>
+<span class="sd">    :param postgresql_port: (str) Postgres port</span>
+<span class="sd">    :param postgresql_database: (str) Database name</span>
+<span class="sd">    :param postgresql_user: (str) Postgresql user name</span>
+<span class="sd">    :param postgresql_password: (str) Postgresql user password</span>
+<span class="sd">    :param processing_time: (str) Spark Streaming process interval</span>
+<span class="sd">    :param is_live_stream: (bool) Use live stream or to use streamed directory as input</span>
+<span class="sd">    :param is_docker: (bool) Run environment local machine or docker, to use appropriate host name in REST endpoints</span>
+<span class="sd">    :param tokenizer_path: Keras tokenizer store / saved path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">,</span>
                  <span class="n">kafka_topic</span><span class="o">=</span><span class="s2">&quot;ai_tweets_topic&quot;</span><span class="p">,</span>
@@ -196,6 +215,7 @@
                  <span class="n">tokenizer_path</span><span class="o">=</span><span class="n">gin</span><span class="o">.</span><span class="n">REQUIRED</span><span class="p">,</span>
                  <span class="n">is_live_stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">is_docker</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
 
         <span class="n">TwitterStreamerBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                      <span class="n">spark_master</span><span class="o">=</span><span class="n">spark_master</span><span class="p">,</span>
