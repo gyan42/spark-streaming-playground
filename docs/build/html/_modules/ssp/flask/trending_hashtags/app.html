@@ -159,8 +159,8 @@
             
   <h1>Source code for ssp.flask.trending_hashtags.app</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span>
-
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">jsonify</span>
 <span class="kn">import</span> <span class="nn">plotly</span>
 <span class="kn">from</span> <span class="nn">ssp.utils.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
 <span class="kn">from</span> <span class="nn">ssp.utils.postgresql</span> <span class="kn">import</span> <span class="n">postgressql_connection</span><span class="p">,</span> <span class="n">create_pandas_table</span>
@@ -184,32 +184,35 @@
     <span class="n">postgresql_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="s2">&quot;postgresql&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
 
     <span class="n">conn</span> <span class="o">=</span> <span class="n">postgressql_connection</span><span class="p">(</span><span class="n">postgresql_host</span><span class="p">,</span> <span class="n">postgresql_port</span><span class="p">,</span> <span class="n">postgresql_database</span><span class="p">,</span> <span class="n">postgresql_user</span><span class="p">,</span> <span class="n">postgresql_password</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">create_pandas_table</span><span class="p">(</span><span class="s2">&quot;select * from trending_hashtags&quot;</span><span class="p">,</span> <span class="n">database_connection</span><span class="o">=</span><span class="n">conn</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">create_pandas_table</span><span class="p">(</span><span class="s2">&quot;select * from trending_hashtags&quot;</span><span class="p">,</span> <span class="n">database_connection</span><span class="o">=</span><span class="n">conn</span><span class="p">)</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;count&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hashtag&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;no tags&quot;</span><span class="p">]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;count&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hashtag&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;no tags&quot;</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="c1">#go.Bar(x=df[&quot;hashtag&quot;], y=df[&quot;count&quot;], name=&#39;TrendingTags&#39;)</span>
-        <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="p">[</span>
-                <span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hashtag&quot;</span><span class="p">],</span>
-                    <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">],</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span>
-                <span class="p">),</span>
-            <span class="p">]</span>
-        <span class="p">)</span>
-    <span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1">#go.Bar(x=df[&quot;hashtag&quot;], y=df[&quot;count&quot;], name=&#39;TrendingTags&#39;)</span>
+            <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+                    <span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hashtag&quot;</span><span class="p">],</span>
+                        <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">],</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
 
-    <span class="n">graphJSON</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">PlotlyJSONEncoder</span><span class="p">)</span>
+        <span class="n">graphJSON</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">PlotlyJSONEncoder</span><span class="p">)</span>
 
-    <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Trending Tweets&quot;</span><span class="p">]</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;layouts/graph_display.html&#39;</span><span class="p">,</span>
-                           <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span>
-                           <span class="n">graphJSON</span><span class="o">=</span><span class="n">graphJSON</span><span class="p">)</span></div>
+        <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Trending Tweets&quot;</span><span class="p">]</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;layouts/graph_display.html&#39;</span><span class="p">,</span>
+                               <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span>
+                               <span class="n">graphJSON</span><span class="o">=</span><span class="n">graphJSON</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="s2">&quot;{Table `trending_hashtags` is not yet created}&quot;</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

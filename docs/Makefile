@@ -7,7 +7,7 @@
 # from the environment for the first two.
 SPHINXOPTS    =
 SPHINXBUILD   = python3 -msphinx
-SPHINXPROJ    = ruptures
+SPHINXPROJ    = ssp
 SOURCEDIR     = source
 BUILDDIR      = build
 
