@@ -76,7 +76,8 @@ Dataset tables:
 - [SSPMLDataset](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.ml.dataset.html?highlight=sspmldataset#ssp.ml.dataset.prepare_dataset.SSPMLDataset)
 - [tagger.gin](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/tagger.gin)
 - [NaiveTextClassifier](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.dl.tf.classifier.html?highlight=naivetextclassifier#ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier)
-- 
+- [SreamingTextClassifier](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.nlp.html?highlight=sreamingtextclassifier#ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier)
+
 ------------------------------------------------------------------------------------------------------------------------
 
 ## How to run?
