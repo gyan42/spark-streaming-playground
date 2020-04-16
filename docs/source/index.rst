@@ -32,7 +32,7 @@ Code base can be found @ `https://github.com/gyan42/spark-streaming-playground <
    :maxdepth: 1
    :caption: API:
 
-   ssp/modules.rst
+   ssp/ssp.rst
 
 Indices and tables
 ==================

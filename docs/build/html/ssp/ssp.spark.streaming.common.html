@@ -96,24 +96,28 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ssp</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="ssp.spark.html">ssp.spark</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="ssp.spark.streaming.html">ssp.spark.streaming</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ssp.spark.udf.html">ssp.spark.udf</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ssp.spark.html">ssp.spark</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="ssp.spark.streaming.html">ssp.spark.streaming</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.analytics.html">ssp.spark.streaming.analytics</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ssp.spark.streaming.common</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.consumer.html">ssp.spark.streaming.consumer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.ml.html">ssp.spark.streaming.ml</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.nlp.html">ssp.spark.streaming.nlp</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.spark.udf.html">ssp.spark.udf</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
 </ul>
 </li>
 </ul>
@@ -161,8 +165,6 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="modules.html">ssp</a> &raquo;</li>
-        
           <li><a href="ssp.html">ssp</a> &raquo;</li>
         
           <li><a href="ssp.spark.html">ssp.spark</a> &raquo;</li>
@@ -195,16 +197,12 @@
 <dt id="ssp.spark.streaming.common.streamer_base.StreamerBase">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.spark.streaming.common.streamer_base.</code><code class="sig-name descname">StreamerBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spark_master</span></em>, <em class="sig-param"><span class="n">checkpoint_dir</span></em>, <em class="sig-param"><span class="n">warehouse_location</span></em>, <em class="sig-param"><span class="n">kafka_bootstrap_servers</span></em>, <em class="sig-param"><span class="n">kafka_topic</span></em>, <em class="sig-param"><span class="n">processing_time</span><span class="o">=</span><span class="default_value">'5 seconds'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/streamer_base.html#StreamerBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.streamer_base.StreamerBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="ssp.spark.streaming.common.streamer_base.StreamerBase.get_schema">
-<em class="property">static </em><code class="sig-name descname">get_schema</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/streamer_base.html#StreamerBase.get_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.streamer_base.StreamerBase.get_schema" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="ssp.spark.streaming.common.streamer_base.StreamerBase.get_source_stream">
-<code class="sig-name descname">get_source_stream</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kafka_topic</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/streamer_base.html#StreamerBase.get_source_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.streamer_base.StreamerBase.get_source_stream" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>Good read on Spark Streaming: <a class="reference external" href="https://www.slideshare.net/databricks/deep-dive-into-stateful-stream-processing-in-structured-streaming-with-tathagata-das">https://www.slideshare.net/databricks/deep-dive-into-stateful-stream-processing-in-structured-streaming-with-tathagata-das</a></p>
+<p>When it comes to describing the semantics of a delivery mechanism, there are three basic categories:</p>
+<p>at-most-once delivery means that for each message handed to the mechanism, that message is delivered once or not at all; in more casual terms it means that messages may be lost.
+at-least-once delivery means that for each message handed to the mechanism potentially multiple attempts are made at delivering it, such that at least one succeeds; again, in more casual terms this means that messages may be duplicated but not lost.
+exactly-once delivery means that for each message handed to the mechanism exactly one delivery is made to the recipient; the message can neither be lost nor duplicated.</p>
+<p>The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.</p>
 <dl class="py method">
 <dt id="ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark">
 <code class="sig-name descname">get_spark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/streamer_base.html#StreamerBase.get_spark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark" title="Permalink to this definition">¶</a></dt>
@@ -229,16 +227,18 @@
 <dt id="ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.spark.streaming.common.twitter_streamer_base.</code><code class="sig-name descname">TwitterStreamerBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spark_master</span></em>, <em class="sig-param"><span class="n">checkpoint_dir</span></em>, <em class="sig-param"><span class="n">warehouse_location</span></em>, <em class="sig-param"><span class="n">kafka_bootstrap_servers</span></em>, <em class="sig-param"><span class="n">kafka_topic</span></em>, <em class="sig-param"><span class="n">processing_time</span><span class="o">=</span><span class="default_value">'5 seconds'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/twitter_streamer_base.html#TwitterStreamerBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#ssp.spark.streaming.common.streamer_base.StreamerBase" title="ssp.spark.streaming.common.streamer_base.StreamerBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.spark.streaming.common.streamer_base.StreamerBase</span></code></a></p>
-<dl class="py method">
-<dt id="ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase.get_schema">
-<em class="property">static </em><code class="sig-name descname">get_schema</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/twitter_streamer_base.html#TwitterStreamerBase.get_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase.get_schema" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase.get_source_stream">
-<code class="sig-name descname">get_source_stream</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kafka_topic</span><span class="o">=</span><span class="default_value">'mix_tweets_topic'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/common/twitter_streamer_base.html#TwitterStreamerBase.get_source_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase.get_source_stream" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spark_master</strong> – </p></li>
+<li><p><strong>checkpoint_dir</strong> – </p></li>
+<li><p><strong>warehouse_location</strong> – </p></li>
+<li><p><strong>kafka_bootstrap_servers</strong> – </p></li>
+<li><p><strong>kafka_topic</strong> – </p></li>
+<li><p><strong>processing_time</strong> – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -249,14 +249,7 @@
 <dl class="py function">
 <dt id="ssp.spark.streaming.common.twitter_streamer_base.pick_text_udf">
 <code class="sig-prename descclassname">ssp.spark.streaming.common.twitter_streamer_base.</code><code class="sig-name descname">pick_text_udf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">rtext</span></em>, <em class="sig-param"><span class="n">etext</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ssp.spark.streaming.common.twitter_streamer_base.pick_text_udf" title="Permalink to this definition">¶</a></dt>
-<dd><p>When it comes to describing the semantics of a delivery mechanism, there are three basic categories:</p>
-<blockquote>
-<div><p>at-most-once delivery means that for each message handed to the mechanism, that message is delivered once or not at all; in more casual terms it means that messages may be lost.
-at-least-once delivery means that for each message handed to the mechanism potentially multiple attempts are made at delivering it, such that at least one succeeds; again, in more casual terms this means that messages may be duplicated but not lost.
-exactly-once delivery means that for each message handed to the mechanism exactly one delivery is made to the recipient; the message can neither be lost nor duplicated.</p>
-</div></blockquote>
-<p>The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.</p>
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 

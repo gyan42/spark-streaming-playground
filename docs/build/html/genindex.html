@@ -95,7 +95,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -208,7 +208,9 @@
 </li>
       <li><a href="ssp/ssp.spark.udf.html#ssp.spark.udf.textblob_sentiment_udf.analyze_sentiment">analyze_sentiment() (in module ssp.spark.udf.textblob_sentiment_udf)</a>
 </li>
-      <li><a href="ssp/ssp.flask.api.html#ssp.flask.api.test_spacy_ner_udf.app">app() (in module ssp.flask.api.test_spacy_ner_udf)</a>
+      <li><a href="ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.app.api_endpoint">api_endpoint() (in module ssp.flask.api_endpoint.app)</a>
+</li>
+      <li><a href="ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.test_spacy_ner_udf.app">app() (in module ssp.flask.api_endpoint.test_spacy_ner_udf)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -242,17 +244,15 @@
       </ul></li>
       <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.check_n_stop_streaming">check_n_stop_streaming() (ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset method)</a>
 </li>
-      <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.check_table_exists">check_table_exists() (in module ssp.spark.streaming.consumer.twiteer_stream_consumer)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.check_table_exists">check_table_exists() (in module ssp.spark.streaming.consumer.twiteer_stream_consumer)</a>
+</li>
       <li><a href="ssp/ssp.ml.html#ssp.ml.metrics.classification_report">classification_report() (in module ssp.ml.metrics)</a>
 </li>
       <li><a href="ssp/ssp.utils.html#ssp.utils.postgresql.close_connection">close_connection() (in module ssp.utils.postgresql)</a>
 </li>
       <li><a href="ssp/ssp.utils.html#ssp.utils.config_manager.ConfigManager">ConfigManager (class in ssp.utils.config_manager)</a>
-</li>
-      <li><a href="ssp/ssp.flask.api.html#ssp.flask.api.app.create_app">create_app() (in module ssp.flask.api.app)</a>
 </li>
       <li><a href="ssp/ssp.utils.html#ssp.utils.postgresql.create_pandas_table">create_pandas_table() (in module ssp.utils.postgresql)</a>
 </li>
@@ -376,7 +376,7 @@
 </li>
       <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.get_local_spark_master">get_local_spark_master() (in module ssp.spark.streaming.consumer)</a>
 </li>
-      <li><a href="ssp/ssp.flask.api.html#ssp.flask.api.app.get_ner">get_ner() (in module ssp.flask.api.app)</a>
+      <li><a href="ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.app.get_ner">get_ner() (in module ssp.flask.api_endpoint.app)</a>
 
       <ul>
         <li><a href="ssp/ssp.spark.udf.html#ssp.spark.udf.spacy_ner_udf.get_ner">(in module ssp.spark.udf.spacy_ner_udf)</a>
@@ -386,30 +386,18 @@
 </li>
       <li><a href="ssp/ssp.utils.html#ssp.utils.get_positive_keywords">get_positive_keywords() (in module ssp.utils)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.get_postgresql_connection">get_postgresql_connection() (ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset method)</a>
 </li>
       <li><a href="ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_processed_datasets">get_processed_datasets() (ssp.posgress.dataset_base.PostgresqlConnection method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.get_raw_dataset">get_raw_dataset() (in module ssp.spark.streaming.consumer.twiteer_stream_consumer)</a>
 </li>
       <li><a href="ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_raw_dump_tables_list">get_raw_dump_tables_list() (ssp.posgress.dataset_base.PostgresqlConnection method)</a>
 </li>
-      <li><a href="ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_schema">get_schema() (ssp.spark.streaming.common.streamer_base.StreamerBase static method)</a>
-
-      <ul>
-        <li><a href="ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase.get_schema">(ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase static method)</a>
-</li>
-      </ul></li>
       <li><a href="ssp/ssp.utils.html#ssp.utils.config_manager.ConfigManager.get_sections">get_sections() (ssp.utils.config_manager.ConfigManager method)</a>
 </li>
-      <li><a href="ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_source_stream">get_source_stream() (ssp.spark.streaming.common.streamer_base.StreamerBase method)</a>
-
-      <ul>
-        <li><a href="ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase.get_source_stream">(ssp.spark.streaming.common.twitter_streamer_base.TwitterStreamerBase method)</a>
-</li>
-      </ul></li>
       <li><a href="ssp/ssp.spark.streaming.common.html#ssp.spark.streaming.common.streamer_base.StreamerBase.get_spark">get_spark() (ssp.spark.streaming.common.streamer_base.StreamerBase method)</a>
 </li>
       <li><a href="ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_connection">get_sqlalchemy_connection() (ssp.posgress.dataset_base.PostgresqlConnection method)</a>
@@ -437,8 +425,6 @@
       <li><a href="ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.sentiment_analysis.SentimentAnalysis.hdfs_process">hdfs_process() (ssp.spark.streaming.analytics.sentiment_analysis.SentimentAnalysis method)</a>
 
       <ul>
-        <li><a href="ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags.hdfs_process">(ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags method)</a>
-</li>
         <li><a href="ssp/ssp.spark.streaming.nlp.html#ssp.spark.streaming.nlp.ner_extraction.NerExtraction.hdfs_process">(ssp.spark.streaming.nlp.ner_extraction.NerExtraction method)</a>
 </li>
         <li><a href="ssp/ssp.spark.streaming.nlp.html#ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier.hdfs_process">(ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier method)</a>
@@ -455,7 +441,7 @@
       <li><a href="ssp/ssp.flask.ai_tweets_dashboard.html#ssp.flask.ai_tweets_dashboard.app.index">index() (in module ssp.flask.ai_tweets_dashboard.app)</a>
 
       <ul>
-        <li><a href="ssp/ssp.flask.api.html#ssp.flask.api.app.index">(in module ssp.flask.api.app)</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.app.index">(in module ssp.flask.api_endpoint.app)</a>
 </li>
         <li><a href="ssp/ssp.flask.tagger.html#ssp.flask.tagger.app.index">(in module ssp.flask.tagger.app)</a>
 </li>
@@ -544,11 +530,11 @@
 </li>
         <li><a href="ssp/ssp.flask.ai_tweets_dashboard.html#module-ssp.flask.ai_tweets_dashboard.app">ssp.flask.ai_tweets_dashboard.app</a>
 </li>
-        <li><a href="ssp/ssp.flask.api.html#module-ssp.flask.api">ssp.flask.api</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#module-ssp.flask.api_endpoint">ssp.flask.api_endpoint</a>
 </li>
-        <li><a href="ssp/ssp.flask.api.html#module-ssp.flask.api.app">ssp.flask.api.app</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#module-ssp.flask.api_endpoint.app">ssp.flask.api_endpoint.app</a>
 </li>
-        <li><a href="ssp/ssp.flask.api.html#module-ssp.flask.api.test_spacy_ner_udf">ssp.flask.api.test_spacy_ner_udf</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#module-ssp.flask.api_endpoint.test_spacy_ner_udf">ssp.flask.api_endpoint.test_spacy_ner_udf</a>
 </li>
         <li><a href="ssp/ssp.flask.tagger.html#module-ssp.flask.tagger">ssp.flask.tagger</a>
 </li>
@@ -744,8 +730,6 @@
       <li><a href="ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.sentiment_analysis.SentimentAnalysis.online_process">online_process() (ssp.spark.streaming.analytics.sentiment_analysis.SentimentAnalysis method)</a>
 
       <ul>
-        <li><a href="ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags.online_process">(ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags method)</a>
-</li>
         <li><a href="ssp/ssp.spark.streaming.nlp.html#ssp.spark.streaming.nlp.ner_extraction.NerExtraction.online_process">(ssp.spark.streaming.nlp.ner_extraction.NerExtraction method)</a>
 </li>
         <li><a href="ssp/ssp.spark.streaming.nlp.html#ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier.online_process">(ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier method)</a>
@@ -953,24 +937,24 @@
 </li>
       </ul></li>
       <li>
-    ssp.flask.api
+    ssp.flask.api_endpoint
 
       <ul>
-        <li><a href="ssp/ssp.flask.api.html#module-ssp.flask.api">module</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#module-ssp.flask.api_endpoint">module</a>
 </li>
       </ul></li>
       <li>
-    ssp.flask.api.app
+    ssp.flask.api_endpoint.app
 
       <ul>
-        <li><a href="ssp/ssp.flask.api.html#module-ssp.flask.api.app">module</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#module-ssp.flask.api_endpoint.app">module</a>
 </li>
       </ul></li>
       <li>
-    ssp.flask.api.test_spacy_ner_udf
+    ssp.flask.api_endpoint.test_spacy_ner_udf
 
       <ul>
-        <li><a href="ssp/ssp.flask.api.html#module-ssp.flask.api.test_spacy_ner_udf">module</a>
+        <li><a href="ssp/ssp.flask.api_endpoint.html#module-ssp.flask.api_endpoint.test_spacy_ner_udf">module</a>
 </li>
       </ul></li>
       <li>
@@ -1534,7 +1518,7 @@
 </li>
       <li><a href="ssp/ssp.flask.tagger.html#ssp.flask.tagger.app.tagger">tagger() (in module ssp.flask.tagger.app)</a>
 </li>
-      <li><a href="ssp/ssp.flask.api.html#ssp.flask.api.test_spacy_ner_udf.test_get_ner">test_get_ner() (in module ssp.flask.api.test_spacy_ner_udf)</a>
+      <li><a href="ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.test_spacy_ner_udf.test_get_ner">test_get_ner() (in module ssp.flask.api_endpoint.test_spacy_ner_udf)</a>
 </li>
       <li><a href="ssp/ssp.ml.transformer.html#ssp.ml.transformer.test_text_preprocessor.test_preprocess">test_preprocess() (in module ssp.ml.transformer.test_text_preprocessor)</a>
 </li>
@@ -1550,7 +1534,7 @@
 </li>
       <li><a href="ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags_test.test_trending_hash_tags_members">test_trending_hash_tags_members() (in module ssp.spark.streaming.analytics.trending_hashtags_test)</a>
 </li>
-      <li><a href="ssp/ssp.flask.api.html#ssp.flask.api.app.text_clasification">text_clasification() (in module ssp.flask.api.app)</a>
+      <li><a href="ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.app.text_clasification">text_clasification() (in module ssp.flask.api_endpoint.app)</a>
 </li>
       <li><a href="ssp/ssp.spark.udf.html#ssp.spark.udf.textblob_sentiment_udf.textblob_sentiment_analysis_udf">textblob_sentiment_analysis_udf() (in module ssp.spark.udf.textblob_sentiment_udf)</a>
 </li>
@@ -1580,6 +1564,8 @@
         <li><a href="ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.transform">(ssp.snorkel.labelling_function.SSPTweetLabeller method)</a>
 </li>
       </ul></li>
+      <li><a href="ssp/ssp.flask.trending_hashtags.html#ssp.flask.trending_hashtags.app.trending_hashtags">trending_hashtags() (in module ssp.flask.trending_hashtags.app)</a>
+</li>
       <li><a href="ssp/ssp.flask.trending_hashtags.html#ssp.flask.trending_hashtags.app.trending_tags">trending_tags() (in module ssp.flask.trending_hashtags.app)</a>
 </li>
       <li><a href="ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags">TrendingHashTags (class in ssp.spark.streaming.analytics.trending_hashtags)</a>
@@ -1587,8 +1573,6 @@
       <li><a href="ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords.TWEET_HASH_TAGS">TWEET_HASH_TAGS (ssp.utils.ai_key_words.AIKeyWords attribute)</a>
 </li>
       <li><a href="ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TweetsListener">TweetsListener (class in ssp.kafka.producer.twitter_producer)</a>
-</li>
-      <li><a href="ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.twitter_kafka_stream">twitter_kafka_stream() (ssp.kafka.producer.twitter_producer.TwitterProducer method)</a>
 </li>
       <li><a href="ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset">TwitterDataset (class in ssp.spark.streaming.consumer.twiteer_stream_consumer)</a>
 </li>

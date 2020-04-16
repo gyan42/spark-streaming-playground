@@ -98,9 +98,9 @@
 <li class="toctree-l2"><a class="reference internal" href="3_scalable_rest_api.html">Scalable REST end point a naive approach</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Spark ML Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="5_static_table_stackoverflow.html">Stackoverflow Exploration</a></li>
@@ -110,7 +110,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -186,6 +186,16 @@
 <li><p>Build a sentiment classification model and use it on streams</p></li>
 </ul>
 </div>
+<hr class="docutils" />
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords">Tweets Keywords Used</a></p></li>
+<li><p>Config file used : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin">default_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html">TwitterProducer</a></p></li>
+</ul>
+</div>
+<hr class="docutils" />
 <div class="section" id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -195,15 +205,14 @@
 <li><p>Load the model and use them in streams for classification</p></li>
 </ul>
 </div>
+<hr class="docutils" />
 <div class="section" id="how-to-run">
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common.</p>
-<p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
+<p>To get a new terminal for our docker instance run :<br /><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
 Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
-<p>This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
-Hence the first half details teh steps to test at 3 different levels and in the second part to start the
-Spark Streaming application</p>
+<p>This example needs multiple terminals:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/ # Local machine
 cd /host  # Docker
 export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
@@ -212,16 +221,14 @@ export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
     cd /path/to/spark-streaming-playground/ # Local machine
     cd /host  # Docker
     
-    unzip data/dataset/sentiment/sentiment140.zip -d data/dataset/sentiment/sentiment140
     #builds and stores the model in HDFS
     bin/models/build_sentiment_spark_model_offline.sh
     # Runs the model against live stream unless configured to HDFS path
     bin/analytics/streaming_sentiment_tweet_analysis.sh
 </pre></div>
 </div>
-</div>
-<div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<p>** References **</p>
 <ul class="simple">
 <li><p>https://github.com/tthustla/setiment_analysis_pyspark/blob/master/Sentiment%20Analysis%20with%20PySpark.ipynb</p></li>
 </ul>

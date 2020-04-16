@@ -98,7 +98,9 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Scalable REST end point a naive approach</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="4_spark_ml.html">Spark ML Model</a></li>
@@ -109,7 +111,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -198,6 +200,20 @@
 <p><code class="docutils literal notranslate"><span class="pre">Extract</span> <span class="pre">NER</span> <span class="pre">Tags</span> <span class="pre">from</span> <span class="pre">text</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">:</span> <span class="pre">Raw</span> <span class="pre">Text</span> <span class="pre">-&gt;</span> <span class="pre">REST</span> <span class="pre">API</span> <span class="pre">end</span> <span class="pre">point</span> <span class="pre">-&gt;</span> <span class="pre">Kubernetes</span> <span class="pre">-&gt;</span> <span class="pre">Docker</span> <span class="pre">-&gt;</span> <span class="pre">Flask</span> <span class="pre">-&gt;</span> <span class="pre">spaCy</span> <span class="pre">-&gt;</span> <span class="pre">NER</span></code></p>
 <p><img alt="../_images/3_scalable_rest_api.png" src="../_images/3_scalable_rest_api.png" /></p>
 </div>
+<hr class="docutils" />
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords">Tweets Keywords Used</a></p></li>
+<li><p>Config file used : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin">default_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html">TwitterProducer</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection">PostgresqlConnection</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.nlp.html?highlight=nerextraction#ssp.spark.streaming.nlp.ner_extraction.NerExtraction">NerExtraction</a></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/app.gin">api.gin</a></p></li>
+<li><p>Kubernets port number is configured <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/kubernetes/spacy-flask-ner-python.service.yaml">here</a></p></li>
+</ul>
+</div>
+<hr class="docutils" />
 <div class="section" id="how-to-run">
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
@@ -205,33 +221,48 @@ is the difference, once the terminal is launched, the steps are common.</p>
 <p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
 Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
 <p>This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
-Hence the first half details teh steps to test at 3 different levels and in the second part to start the
+Hence the first half contains the steps to test at 3 different levels and in the second part to start the
 Spark Streaming application</p>
+<p>On each terminal move to source folder</p>
+<ul class="simple">
+<li><p>If it is on on local machine</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># 
+cd /path/to/spark-streaming-playground/ 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you wanted to run on Docker, then ‘spark-streaming-playground’ is mounted as a volume at <code class="docutils literal notranslate"><span class="pre">/host/</span></code></p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d&#39; &#39; -f1) bash
+cd /host  
+</pre></div>
+</div>
 <ul>
-<li><p>API server
+<li><p><strong>API server</strong>
 There are three stages of testing the API REST end points, beofre useing them in Spark Streaming…</p>
 <ol>
 <li><p>As a standalone Flask server</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># [api]</span>
-    <span class="nb">bin</span><span class="o">/</span><span class="n">flask</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="n">sh</span>
-    <span class="c1"># test it to see everything working</span>
-    <span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5000</span><span class="o">/</span><span class="n">text</span><span class="o">/</span><span class="n">ner</span><span class="o">/</span><span class="n">spacy</span>
-    <span class="c1"># output</span>
-        <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">201</span> <span class="n">CREATED</span>
-        <span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
-        <span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">34</span>
-        <span class="n">Server</span><span class="p">:</span> <span class="n">Werkzeug</span><span class="o">/</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span> <span class="n">Python</span><span class="o">/</span><span class="mf">3.6</span><span class="o">.</span><span class="mi">9</span>
-        <span class="n">Date</span><span class="p">:</span> <span class="n">Thu</span><span class="p">,</span> <span class="mi">02</span> <span class="n">Apr</span> <span class="mi">2020</span> <span class="mi">18</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">28</span> <span class="n">GMT</span>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># [api]
+    bin/flask/api_endpoint.sh
+    # test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; http://127.0.0.1:5000/text/ner/spacy
+    # output
+        HTTP/1.0 201 CREATED
+        Content-Type: application/json
+        Content-Length: 34
+        Server: Werkzeug/1.0.0 Python/3.6.9
+        Date: Thu, 02 Apr 2020 18:08:28 GMT
 
-        <span class="p">{</span>
-          <span class="s2">&quot;res&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;DATE&#39;: &#39;Friday&#39;}&quot;</span>
-        <span class="p">}</span>
+        {
+          &quot;res&quot;: &quot;{&#39;DATE&#39;: &#39;Friday&#39;}&quot;
+        }
 </pre></div>
 </div>
 </li>
 <li><p>As part of docker</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#[docker]
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[docker]
 
     docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
     docker run -d -p 5000:5000 spacy-flask-ner-python
@@ -245,55 +276,59 @@ There are three stages of testing the API REST end points, beofre useing them in
 </div>
 <ol>
 <li><p>As part of Kubernetes</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#[kubernetes]</span>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[kubernetes]
 
-    <span class="n">sudo</span> <span class="n">minikube</span> <span class="n">start</span> <span class="o">--</span><span class="n">vm</span><span class="o">-</span><span class="n">driver</span><span class="o">=</span><span class="n">none</span> 
+    sudo minikube start --vm-driver=none 
 
-    <span class="c1"># note only first time below commands will add the docker file and run its as as service,</span>
-    <span class="c1"># there on, our service will be started by default when we start the Kubernetes!</span>
-    <span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">deployment</span><span class="o">.</span><span class="n">yaml</span> 
-    <span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">yaml</span>
+    # note only first time below commands will add the docker file and run its as as service,
+    # there on, our service will be started by default when we start the Kubernetes!
+    kubectl create -f kubernetes/spacy-flask-ner-python.deployment.yaml 
+    kubectl create -f kubernetes/spacy-flask-ner-python.service.yaml
 
-    <span class="c1"># on local machine, test it to see everything working</span>
-    <span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30123</span><span class="o">/</span><span class="n">text</span><span class="o">/</span><span class="n">ner</span><span class="o">/</span><span class="n">spacy</span>
+    # on local machine, test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; http://127.0.0.1:30123/text/ner/spacy
 
-    <span class="c1"># on docker, test it to see everything working</span>
-    <span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="o">-</span><span class="n">sS</span> <span class="n">host</span><span class="o">.</span><span class="n">docker</span><span class="o">.</span><span class="n">internal</span><span class="p">:</span><span class="mi">30123</span><span class="o">/</span><span class="n">text</span><span class="o">/</span><span class="n">ner</span><span class="o">/</span><span class="n">spacy</span>
+    # on docker, test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; -sS host.docker.internal:30123/text/ner/spacy
 
-    <span class="c1"># kubernetes restart</span>
-    <span class="n">kubectl</span> <span class="n">delete</span> <span class="n">service</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">service</span> <span class="n">deployment</span><span class="o">.</span><span class="n">apps</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">deployment</span>
-    <span class="c1"># and then create the services again</span>
+    # kubernetes restart
+    kubectl delete service/spacy-flask-ner-python-service deployment.apps/spacy-flask-ner-python-deployment
+    # and then create the services again
 </pre></div>
 </div>
 </li>
 <li><p>Python App test</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 python3 src/ssp/spark/udf/spacy_ner_udf.py # test it to see everything working
 </pre></div>
 </div>
 </li>
 </ol>
 </li>
-<li><p>Spark Streaming Application</p></li>
+<li><p>[producer] &lt;- Guake terminal name!</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/ # Local machine
-cd /host  # Docker
-export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
-
-#[producer] Guake terminal name! 
-    vim bin/data/start_kafka_producer.sh
-    bin/data/start_kafka_producer.sh
-
-#[ner]
-    cd /path/to/spark-streaming-playground/ # Local machine
-    cd /host  # Docker
-
-    sudo netstat -tulpen | grep 30123 # check the port is in use or not
-    vim bin/nlp/ner_extraction_using_spacy.sh
-    bin/nlp/ner_extraction_using_spacy.sh
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/start_kafka_producer.sh
+bin/data/start_kafka_producer.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[ner]</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+sudo netstat -tulpen | grep 30123 # make sure the port is listed
+vim bin/nlp/ner_extraction_using_spacy.sh
+bin/nlp/ner_extraction_using_spacy.sh
 </pre></div>
 </div>
 <p><img alt="../_images/ner_out.png" src="../_images/ner_out.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="take-aways-learning-s">
+<h2>Take Aways / Learning’s<a class="headerlink" href="#take-aways-learning-s" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>TODOs</p></li>
+</ul>
 </div>
 </div>
 

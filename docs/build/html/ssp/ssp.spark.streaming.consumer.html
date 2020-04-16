@@ -96,24 +96,28 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ssp</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="ssp.spark.html">ssp.spark</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="ssp.spark.streaming.html">ssp.spark.streaming</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ssp.spark.udf.html">ssp.spark.udf</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ssp.spark.html">ssp.spark</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="ssp.spark.streaming.html">ssp.spark.streaming</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.analytics.html">ssp.spark.streaming.analytics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.common.html">ssp.spark.streaming.common</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ssp.spark.streaming.consumer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.ml.html">ssp.spark.streaming.ml</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssp.spark.streaming.nlp.html">ssp.spark.streaming.nlp</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.spark.udf.html">ssp.spark.udf</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
 </ul>
 </li>
 </ul>
@@ -161,8 +165,6 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="modules.html">ssp</a> &raquo;</li>
-        
           <li><a href="ssp.html">ssp</a> &raquo;</li>
         
           <li><a href="ssp.spark.html">ssp.spark</a> &raquo;</li>
@@ -196,7 +198,7 @@
 <dd></dd></dl>
 
 <hr class="docutils" />
-<span class="target" id="module-ssp.spark.streaming.consumer.tweet_web_scrappy"></span><span class="target" id="module-ssp.spark.streaming.consumer.twiteer_stream_consumer"></span><p>SSP modules that handles all data at ingestion level frm Twitter stream</p>
+<span class="target" id="module-ssp.spark.streaming.consumer.tweet_web_scrappy"></span><span class="target" id="module-ssp.spark.streaming.consumer.twiteer_stream_consumer"></span><p>SSP modules that handles all data at ingestion level from Twitter stream</p>
 <dl class="py class">
 <dt id="ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset">
 <em class="property">class </em><code class="sig-prename descclassname">ssp.spark.streaming.consumer.twiteer_stream_consumer.</code><code class="sig-name descname">TwitterDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="default_value">'localhost:9092'</span></em>, <em class="sig-param"><span class="n">kafka_topic</span><span class="o">=</span><span class="default_value">'mix_tweets_topic'</span></em>, <em class="sig-param"><span class="n">checkpoint_dir</span><span class="o">=</span><span class="default_value">'hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/'</span></em>, <em class="sig-param"><span class="n">bronze_parquet_dir</span><span class="o">=</span><span class="default_value">'hdfs://localhost:9000/tmp/ssp/data/lake/bronze/'</span></em>, <em class="sig-param"><span class="n">warehouse_location</span><span class="o">=</span><span class="default_value">'/opt/spark-warehouse/'</span></em>, <em class="sig-param"><span class="n">spark_master</span><span class="o">=</span><span class="default_value">'spark://IMCHLT276:7077'</span></em>, <em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="default_value">'raw_tweet_dataset'</span></em>, <em class="sig-param"><span class="n">processing_time</span><span class="o">=</span><span class="default_value">'5 seconds'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/spark/streaming/consumer/twiteer_stream_consumer.html#TwitterDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset" title="Permalink to this definition">¶</a></dt>
@@ -269,7 +271,7 @@
 :return:</p>
 </dd></dl>
 
-<span class="target" id="module-ssp.spark.streaming.consumer.twiteer_stream_consumer_main"></span><p>SSP modules that handles all data at ingestion level frm Twitter stream</p>
+<span class="target" id="module-ssp.spark.streaming.consumer.twiteer_stream_consumer_main"></span><p>SSP modules that handles all data at ingestion level from Twitter stream</p>
 </div>
 
 
