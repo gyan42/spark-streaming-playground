@@ -1,14 +1,25 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
+import gin
 from flask import Flask, render_template
 import json
 from flask import jsonify
 import plotly
+from ssp.posgress.dataset_base import PostgresqlConnection
 from ssp.utils.config_manager import ConfigManager
 from ssp.utils.postgresql import postgressql_connection, create_pandas_table
 
 app = Flask(__name__)
 app.debug = True
-
-
 
 @app.route('/')
 def index():
@@ -16,16 +27,10 @@ def index():
 
 @app.route('/trending_tags')
 def trending_tags():
-    config = ConfigManager(config_path="config/config.ini")
-    postgresql_host = config.get_item("postgresql", "host")
-    postgresql_port = config.get_item("postgresql", "port")
-    postgresql_database = config.get_item("postgresql", "database")
-    postgresql_user = config.get_item("postgresql", "user")
-    postgresql_password = config.get_item("postgresql", "password")
+    db = PostgresqlConnection()
 
-    conn = postgressql_connection(postgresql_host, postgresql_port, postgresql_database, postgresql_user, postgresql_password)
     try:
-        df = create_pandas_table("select * from trending_hashtags", database_connection=conn)
+        df = db.query_to_df("select * from trending_hashtags")
 
         df = df.sort_values(["count"], ascending=0)
         df = df[df["hashtag"] != "no tags"]
@@ -55,8 +60,11 @@ def trending_tags():
         return jsonify("{Table `trending_hashtags` is not yet created}")
 
 
-if __name__ == '__main__':
-    config = ConfigManager(config_path="config/config.ini")
-    host = config.get_item("dashboard", "host")
-    port = config.get_item("dashboard", "port")
+@gin.configurable
+def trending_hashtags(host,
+                      port):
     app.run(debug=True, host=host, port=port)
+
+if __name__ == '__main__':
+    gin.parse_config_file(config_file="config/trending_hashtags.gin")
+    trending_hashtags()

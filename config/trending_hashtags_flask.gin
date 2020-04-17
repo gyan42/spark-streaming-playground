@@ -1,0 +1,10 @@
+trending_hashtags.host = "0.0.0.0"
+trending_hashtags.port = "5001"
+
+
+PostgresqlConnection.postgresql_host = "localhost"
+PostgresqlConnection.postgresql_port = "5432"
+PostgresqlConnection.postgresql_database = "sparkstreamingdb"
+PostgresqlConnection.postgresql_user = "sparkstreaming"
+PostgresqlConnection.postgresql_password = "sparkstreaming"
+

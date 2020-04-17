@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import re
 import gin
 import json
@@ -13,12 +24,17 @@ from kafka import KafkaProducer
 from ssp.utils.ai_key_words import AIKeyWords
 from ssp.logger.pretty_print import print_error, print_info
 
-# http://docs.tweepy.org/en/latest/streaming_how_to.html
-# we create this class that inherits from the StreamListener in tweepy StreamListener
 from ssp.utils.eda import get_stop_words
 
 
 def pick_text(text, rtext, etext):
+    """
+    Twitter Json data has three level of text. This function picks what is available in the order etext > rtext > text
+    :param text: Plain text at top level of the Json with stipped content and an URL
+    :param rtext: Retweeted full text
+    :param etext: Extended retweeted full text
+    :return:
+    """
     ret = ""
     if etext:
         ret = etext
@@ -33,11 +49,20 @@ def pick_text(text, rtext, etext):
 
 
 class TweetsListener(StreamListener):
-
+    """
+    Tweepy StreamListener.
+    Reference: http://docs.tweepy.org/en/latest/streaming_how_to.html
+    
+    :param kafka_addr: (str) Kafka host address <host_url:port>
+    :param topic: (str) Kafka topic
+    :param is_ai: (bool) Used to differentiate AI tweets wuth green color and red for other category tweets
+    """
     def __init__(self,
                  kafka_addr='localhost:9092',
                  topic='ai_tweets_topic',
                  is_ai=False):
+
+
         StreamListener.__init__(self)
         # Kafka settings
         self._kafka_producer = KafkaProducer(bootstrap_servers=kafka_addr)
@@ -47,6 +72,7 @@ class TweetsListener(StreamListener):
     def on_data(self, data):
         data_dict = json.loads(data)
 
+        # Debug info
         if "text" in data_dict.keys():
             text = data_dict["text"]
         else:
@@ -73,6 +99,8 @@ class TweetsListener(StreamListener):
             print_error(text)
         # with open("/tmp/tweets/{}.json".format(json.loads(data)["id_str"]), "wt", encoding='utf-8') as file:
         #     file.write(data)
+
+        # this is where the data is dumped into the Kafka topic
         self._kafka_producer.send(self._kafka_topic, data.encode('utf-8')).get(timeout=10)
         return True
 
@@ -84,9 +112,16 @@ class TweetsListener(StreamListener):
 @gin.configurable
 class TwitterProducer(object):
     """
-    Twitter ingestion class
-    - Gets the twitter stream data and dumps the data into Kafka topic
-    - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS
+    Twitter data ingestion. Gets the twitter stream data and dumps the data into Kafka topic(s).
+
+    :param twitter_consumer_key: (str) Twitter Consumer Key
+    :param twitter_consumer_secret: (str) Twitter Consumer secret
+    :param twitter_access_token: (str)  Twitter Access token
+    :param twitter_access_secret: (str) Twitter Access secret
+    :param kafka_address: (str) Kafka host address <host_url:port>
+    :param kafka_topic_1: (str) Tweet stream Kafka topic defaults to use  :func:`~ssp.utils.AIKeyWords.POSITIVE`
+    :param kafka_topic_2: (str) Tweet stream Kafka topic
+    :param topic_2_filter_words: (list) Filter words to be used for second stream
     """
 
     def __init__(self,
@@ -94,11 +129,11 @@ class TwitterProducer(object):
                  twitter_consumer_secret=None,
                  twitter_access_token=None,
                  twitter_access_secret=None,
-                 mode=False,
                  kafka_address='localhost:9092',
                  kafka_topic_1='ai_tweets_topic',
                  kafka_topic_2='mix_tweets_topic',
                  topic_2_filter_words=None):
+
         self._twitter_consumer_key = twitter_consumer_key
         self._twitter_consumer_secret = twitter_consumer_secret
         self._twitter_access_token = twitter_access_token
@@ -110,9 +145,7 @@ class TwitterProducer(object):
 
         self._topic_2_filter_words = topic_2_filter_words
 
-        self._mode = mode
-
-    def twitter_kafka_stream(self, kafka_topic, keywords, is_ai=False):
+    def _twitter_kafka_stream(self, kafka_topic, keywords, is_ai=False):
         """
 
         :param kafka_topic:
@@ -124,7 +157,8 @@ class TwitterProducer(object):
         auth.set_access_token(self._twitter_access_token, self._twitter_access_secret)
 
         print_info("\n\n---------------------------------------------------------------------------------\n\n")
-        print_info(f"Kafka topic : {kafka_topic} Twitter Keywords : {keywords}")
+        print_info(f"Kafka topic : {kafka_topic}")
+        print_info(f"Twitter Keywords : {keywords}")
         print_info("\n\n---------------------------------------------------------------------------------\n\n")
         
         while True:
@@ -139,13 +173,13 @@ class TwitterProducer(object):
     def run(self):
         """
         Starts two Kafka producers
-        :return:
+        :return: None
         """
         if self._topic_2_filter_words is None:
             self._topic_2_filter_words = AIKeyWords.ALL.split("|")
 
-        ai_stream = threading.Thread(target=self.twitter_kafka_stream, args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True,))
-        non_ai_stream = threading.Thread(target=self.twitter_kafka_stream, args=(self._kafka_topic_2, self._topic_2_filter_words,))
+        ai_stream = threading.Thread(target=self._twitter_kafka_stream, args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True,))
+        non_ai_stream = threading.Thread(target=self._twitter_kafka_stream, args=(self._kafka_topic_2, self._topic_2_filter_words,))
 
         ai_stream.setDaemon(True)
         non_ai_stream.setDaemon(True)

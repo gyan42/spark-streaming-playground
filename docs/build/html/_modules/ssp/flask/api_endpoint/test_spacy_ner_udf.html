@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ssp.flask.api.test_spacy_ner_udf &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  <title>ssp.flask.api_endpoint.test_spacy_ner_udf &mdash; spark-streaming-playground 0.0.1 documentation</title>
   
 
   
@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -142,7 +142,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>ssp.flask.api.test_spacy_ner_udf</li>
+      <li>ssp.flask.api_endpoint.test_spacy_ner_udf</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,18 +157,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for ssp.flask.api.test_spacy_ner_udf</h1><div class="highlight"><pre>
+  <h1>Source code for ssp.flask.api_endpoint.test_spacy_ner_udf</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pytest</span>
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">ssp.flask.api.app</span> <span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">api_app</span>
+<span class="kn">from</span> <span class="nn">ssp.flask.api_endpoint.app</span> <span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">api_app</span>
 
 
-<div class="viewcode-block" id="app"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api.html#ssp.flask.api.test_spacy_ner_udf.app">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<div class="viewcode-block" id="app"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.test_spacy_ner_udf.app">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
 <span class="k">def</span> <span class="nf">app</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">api_app</span></div>
 
 
-<div class="viewcode-block" id="test_get_ner"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api.html#ssp.flask.api.test_spacy_ner_udf.test_get_ner">[docs]</a><span class="k">def</span> <span class="nf">test_get_ner</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+<div class="viewcode-block" id="test_get_ner"><a class="viewcode-back" href="../../../../ssp/ssp.flask.api_endpoint.html#ssp.flask.api_endpoint.test_spacy_ner_udf.test_get_ner">[docs]</a><span class="k">def</span> <span class="nf">test_get_ner</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
     <span class="n">mimetype</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">mimetype</span><span class="p">,</span>

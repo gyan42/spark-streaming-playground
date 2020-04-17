@@ -31,6 +31,8 @@ schema = ArrayType(StructType([
     StructField("word", StringType(), False)
 ]))
 
+
+# TODO fixed for now, expose/configure the URL through gin config
 def get_ner_udf(is_docker):
     if is_docker:
         url = "http://host.docker.internal:30123/text/ner/spacy"
@@ -38,6 +40,7 @@ def get_ner_udf(is_docker):
     else:
         url = "http://127.0.0.1:30123/text/ner/spacy"
         return udf(lambda x: get_ner(text=x, url=url), schema)
+
 
 if __name__ == "__main__":
 

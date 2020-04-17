@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ssp.flask.api &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  <title>ssp.flask.api_endpoint &mdash; spark-streaming-playground 0.0.1 documentation</title>
   
 
   
@@ -96,26 +96,23 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ssp</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="ssp.flask.html">ssp.flask</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="ssp.flask.ai_tweets_dashboard.html">ssp.flask.ai_tweets_dashboard</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">ssp.flask.api</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ssp.flask.tagger.html">ssp.flask.tagger</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ssp.flask.trending_hashtags.html">ssp.flask.trending_hashtags</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ssp.flask.html">ssp.flask</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ssp.flask.ai_tweets_dashboard.html">ssp.flask.ai_tweets_dashboard</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ssp.flask.api_endpoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.flask.tagger.html">ssp.flask.tagger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.flask.trending_hashtags.html">ssp.flask.trending_hashtags</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
 </ul>
 </li>
 </ul>
@@ -163,19 +160,17 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="modules.html">ssp</a> &raquo;</li>
-        
           <li><a href="ssp.html">ssp</a> &raquo;</li>
         
           <li><a href="ssp.flask.html">ssp.flask</a> &raquo;</li>
         
-      <li>ssp.flask.api</li>
+      <li>ssp.flask.api_endpoint</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/ssp/ssp.flask.api.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/ssp/ssp.flask.api_endpoint.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -188,39 +183,39 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-ssp.flask.api">
-<span id="ssp-flask-api"></span><h1>ssp.flask.api<a class="headerlink" href="#module-ssp.flask.api" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-ssp.flask.api_endpoint">
+<span id="ssp-flask-api-endpoint"></span><h1>ssp.flask.api_endpoint<a class="headerlink" href="#module-ssp.flask.api_endpoint" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
-<span class="target" id="module-ssp.flask.api.app"></span><dl class="py function">
-<dt id="ssp.flask.api.app.create_app">
-<code class="sig-prename descclassname">ssp.flask.api.app.</code><code class="sig-name descname">create_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api/app.html#create_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api.app.create_app" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-ssp.flask.api_endpoint.app"></span><dl class="py function">
+<dt id="ssp.flask.api_endpoint.app.api_endpoint">
+<code class="sig-prename descclassname">ssp.flask.api_endpoint.app.</code><code class="sig-name descname">api_endpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host</span></em>, <em class="sig-param"><span class="n">port</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api_endpoint/app.html#api_endpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api_endpoint.app.api_endpoint" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="ssp.flask.api.app.get_ner">
-<code class="sig-prename descclassname">ssp.flask.api.app.</code><code class="sig-name descname">get_ner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api/app.html#get_ner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api.app.get_ner" title="Permalink to this definition">¶</a></dt>
+<dt id="ssp.flask.api_endpoint.app.get_ner">
+<code class="sig-prename descclassname">ssp.flask.api_endpoint.app.</code><code class="sig-name descname">get_ner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api_endpoint/app.html#get_ner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api_endpoint.app.get_ner" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="ssp.flask.api.app.index">
-<code class="sig-prename descclassname">ssp.flask.api.app.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api/app.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api.app.index" title="Permalink to this definition">¶</a></dt>
+<dt id="ssp.flask.api_endpoint.app.index">
+<code class="sig-prename descclassname">ssp.flask.api_endpoint.app.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api_endpoint/app.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api_endpoint.app.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Home page with list of links for upload and download
 :return:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="ssp.flask.api.app.text_clasification">
-<code class="sig-prename descclassname">ssp.flask.api.app.</code><code class="sig-name descname">text_clasification</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api/app.html#text_clasification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api.app.text_clasification" title="Permalink to this definition">¶</a></dt>
+<dt id="ssp.flask.api_endpoint.app.text_clasification">
+<code class="sig-prename descclassname">ssp.flask.api_endpoint.app.</code><code class="sig-name descname">text_clasification</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api_endpoint/app.html#text_clasification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api_endpoint.app.text_clasification" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<span class="target" id="module-ssp.flask.api.test_spacy_ner_udf"></span><dl class="py function">
-<dt id="ssp.flask.api.test_spacy_ner_udf.app">
-<code class="sig-prename descclassname">ssp.flask.api.test_spacy_ner_udf.</code><code class="sig-name descname">app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api/test_spacy_ner_udf.html#app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api.test_spacy_ner_udf.app" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-ssp.flask.api_endpoint.test_spacy_ner_udf"></span><dl class="py function">
+<dt id="ssp.flask.api_endpoint.test_spacy_ner_udf.app">
+<code class="sig-prename descclassname">ssp.flask.api_endpoint.test_spacy_ner_udf.</code><code class="sig-name descname">app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api_endpoint/test_spacy_ner_udf.html#app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api_endpoint.test_spacy_ner_udf.app" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="ssp.flask.api.test_spacy_ner_udf.test_get_ner">
-<code class="sig-prename descclassname">ssp.flask.api.test_spacy_ner_udf.</code><code class="sig-name descname">test_get_ner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api/test_spacy_ner_udf.html#test_get_ner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api.test_spacy_ner_udf.test_get_ner" title="Permalink to this definition">¶</a></dt>
+<dt id="ssp.flask.api_endpoint.test_spacy_ner_udf.test_get_ner">
+<code class="sig-prename descclassname">ssp.flask.api_endpoint.test_spacy_ner_udf.</code><code class="sig-name descname">test_get_ner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/flask/api_endpoint/test_spacy_ner_udf.html#test_get_ner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.flask.api_endpoint.test_spacy_ner_udf.test_get_ner" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -163,7 +163,7 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">SSP modules that handles all data at ingestion level frm Twitter stream</span>
+<span class="sd">SSP modules that handles all data at ingestion level from Twitter stream</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
@@ -254,9 +254,22 @@
 <div class="viewcode-block" id="TwitterDataset"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">TwitterDataset</span><span class="p">(</span><span class="n">TwitterStreamerBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Twitter ingestion class</span>
-<span class="sd">    - Gets the twitter stream data and dumps the data into Kafka topic</span>
-<span class="sd">    - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS</span>
+<span class="sd">    Twitter ingestion class \n</span>
+<span class="sd">    - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS / Postgresql</span>
+
+<span class="sd">    :param kafka_bootstrap_servers: (str) Kafka bootstram server</span>
+<span class="sd">    :param kafka_topic: (str) Kafka topic</span>
+<span class="sd">    :param checkpoint_dir: (str) Checkpoint directory for fault tolerance</span>
+<span class="sd">    :param bronze_parquet_dir: (str) Store path to dump tweet data</span>
+<span class="sd">    :param warehouse_location: Spark warehouse location</span>
+<span class="sd">    :param spark_master: Spark Master URL</span>
+<span class="sd">    :param postgresql_host: Postgresql host</span>
+<span class="sd">    :param postgresql_port: Postgresql port</span>
+<span class="sd">    :param postgresql_database: Postgresql Database</span>
+<span class="sd">    :param postgresql_user: Postgresql user name</span>
+<span class="sd">    :param postgresql_password: Postgresql user password</span>
+<span class="sd">    :param raw_tweet_table_name_prefix: Postgresql table name prefix</span>
+<span class="sd">    :param processing_time: Processing time trigger</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">,</span>
@@ -272,22 +285,6 @@
                  <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
                  <span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="s2">&quot;raw_tweet_dataset&quot;</span><span class="p">,</span>
                  <span class="n">processing_time</span><span class="o">=</span><span class="s1">&#39;5 seconds&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        :param kafka_bootstrap_servers:</span>
-<span class="sd">        :param kafka_topic:</span>
-<span class="sd">        :param checkpoint_dir: For fault tolerance</span>
-<span class="sd">        :param bronze_parquet_dir:</span>
-<span class="sd">        :param warehouse_location:</span>
-<span class="sd">        :param spark_master:</span>
-<span class="sd">        :param postgresql_host:</span>
-<span class="sd">        :param postgresql_port:</span>
-<span class="sd">        :param postgresql_database:</span>
-<span class="sd">        :param postgresql_user:</span>
-<span class="sd">        :param postgresql_password:</span>
-<span class="sd">        :param raw_tweet_table_name_prefix:</span>
-<span class="sd">        :param processing_time:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">TwitterStreamerBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                      <span class="n">spark_master</span><span class="o">=</span><span class="n">spark_master</span><span class="p">,</span>
                                      <span class="n">checkpoint_dir</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">,</span>
@@ -307,7 +304,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_database</span> <span class="o">=</span> <span class="n">postgresql_database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_user</span> <span class="o">=</span> <span class="n">postgresql_user</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_password</span> <span class="o">=</span> <span class="n">postgresql_password</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_broad_cast_raw_tweet_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spark</span><span class="p">()</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">accumulator</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_broad_cast_raw_tweet_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_spark</span><span class="p">()</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">accumulator</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span> <span class="o">=</span> <span class="n">kafka_topic</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_kafka_ai_topic</span> <span class="o">=</span> <span class="s2">&quot;ai_tweets_topic&quot;</span>
@@ -357,9 +354,16 @@
                 <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of records received so far in topic </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TwitterDataset.dump_into_postgresql_internal"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql_internal">[docs]</a>    <span class="k">def</span> <span class="nf">dump_into_postgresql_internal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="mi">25000</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_dump_into_postgresql_internal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="mi">25000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dumps the live tweet stream into Postgresql DB</span>
+<span class="sd">        :param run_id:</span>
+<span class="sd">        :param kafka_topic:</span>
+<span class="sd">        :param num_records:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source_stream</span><span class="p">(</span><span class="n">kafka_topic</span><span class="p">)</span>
+        <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_source_stream</span><span class="p">(</span><span class="n">kafka_topic</span><span class="p">)</span>
         <span class="n">raw_tweet_table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_tweet_table_name_prefix</span> <span class="o">+</span> <span class="s2">&quot;_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
 
 
@@ -397,11 +401,11 @@
         <span class="n">monitor_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="n">query</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span>
-        <span class="n">monitor_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+        <span class="n">monitor_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 
 <div class="viewcode-block" id="TwitterDataset.dump_into_postgresql"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.consumer.html#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset.dump_into_postgresql">[docs]</a>    <span class="k">def</span> <span class="nf">dump_into_postgresql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="mi">50000</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_into_postgresql_internal</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="n">num_records</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_into_postgresql_internal</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_ai_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="n">num_records</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dump_into_postgresql_internal</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="n">num_records</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dump_into_postgresql_internal</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">kafka_topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_ai_topic</span><span class="p">,</span> <span class="n">num_records</span><span class="o">=</span><span class="n">num_records</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

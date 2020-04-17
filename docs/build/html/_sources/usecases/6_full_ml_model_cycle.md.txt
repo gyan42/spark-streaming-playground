@@ -14,6 +14,8 @@
 - Deploy the model, classify the text
 - Extract the web links from tweets and store the urls
 
+------------------------------------------------------------------------------------------------------------------------
+
 ## Implementation
 
 1. Problem Definition
@@ -63,6 +65,20 @@ Dataset tables:
 |train_dataset_0                   |~      |Model train dataset |
 
 ![](../drawio/6_full_ml_model_cycle.png)
+
+------------------------------------------------------------------------------------------------------------------------
+
+## Configuration
+- [Tweets Keywords Used](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords)
+- Config file used : [default_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin)
+- [TwitterProducer](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html)
+- [TwitterDataset](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.consumer.html?highlight=twitterdataset#ssp.spark.streaming.consumer.twiteer_stream_consumer.TwitterDataset)
+- [SSPMLDataset](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.ml.dataset.html?highlight=sspmldataset#ssp.ml.dataset.prepare_dataset.SSPMLDataset)
+- [tagger.gin](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/tagger.gin)
+- [NaiveTextClassifier](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.dl.tf.classifier.html?highlight=naivetextclassifier#ssp.dl.tf.classifier.naive_text_classifier.NaiveTextClassifier)
+- [SreamingTextClassifier](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.nlp.html?highlight=sreamingtextclassifier#ssp.spark.streaming.nlp.spark_dl_text_classification.SreamingTextClassifier)
+
+------------------------------------------------------------------------------------------------------------------------
 
 ## How to run?
 
@@ -126,7 +142,6 @@ This example needs multiple terminals:
     not_nlp             5      [0]    0.0132    0.0120     0.0004
     not_ai              6      [0]    0.0084    0.0067     0.0059
     not_cv              7      [0]    0.0081    0.0068     0.0016
-    Training LabelModel
   ``` 
 
 - Mannual tagger
@@ -165,6 +180,15 @@ This example needs multiple terminals:
     # [Spark Streaming]
         bin/nlp/spark_dl_text_classification_main.sh
     ```
+
+------------------------------------------------------------------------------------------------------------------------
+ 
+## Take Aways / Learning's 
+
+- TODOs
+
+------------------------------------------------------------------------------------------------------------------------
+
 
 **References**
 - https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65

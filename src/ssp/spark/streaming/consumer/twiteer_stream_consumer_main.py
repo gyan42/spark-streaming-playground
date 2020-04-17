@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-SSP modules that handles all data at ingestion level frm Twitter stream
+SSP modules that handles all data at ingestion level from Twitter stream
 """
 
 __author__ = "Mageswaran Dhandapani"

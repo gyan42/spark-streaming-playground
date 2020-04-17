@@ -1,4 +1,15 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import re
 from flask import Flask, render_template
 import gin

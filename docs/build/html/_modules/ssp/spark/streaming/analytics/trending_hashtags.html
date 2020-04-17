@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -158,22 +158,28 @@
            <div itemprop="articleBody">
             
   <h1>Source code for ssp.spark.streaming.analytics.trending_hashtags</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2020, The Spark Structured Playground Project&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Apache License&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;mageswaran1989@gmail.com&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;Education Purpose&quot;</span>
+
 <span class="kn">import</span> <span class="nn">gin</span>
-<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">udf</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">explode</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">ArrayType</span><span class="p">,</span> <span class="n">StringType</span>
-
 <span class="kn">from</span> <span class="nn">ssp.spark.streaming.common.twitter_streamer_base</span> <span class="kn">import</span> <span class="n">TwitterStreamerBase</span>
-<span class="kn">from</span> <span class="nn">ssp.utils.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
-<span class="kn">from</span> <span class="nn">ssp.utils.configuration</span> <span class="kn">import</span> <span class="n">StreamingConfigs</span>
 
 
 <div class="viewcode-block" id="extract_hashtag"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.extract_hashtag">[docs]</a><span class="k">def</span> <span class="nf">extract_hashtag</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extracts the twitter #hashtag from the text</span>
-<span class="sd">    :param text: Twitter text</span>
-<span class="sd">    :return: List of hashtags</span>
+<span class="sd">    :param text: (str) Twitter text</span>
+<span class="sd">    :return: (list) List of hashtags</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -189,13 +195,32 @@
 
 <div class="viewcode-block" id="TrendingHashTags"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">TrendingHashTags</span><span class="p">(</span><span class="n">TwitterStreamerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts hash tags and counts the individual occurrence of tags.</span>
+<span class="sd">    And then dumps the data into a Postgresql Database table</span>
+
+<span class="sd">    :param kafka_bootstrap_servers: (str) host_url:port</span>
+<span class="sd">    :param kafka_topic: (str) Live stream Kafka topic</span>
+<span class="sd">    :param checkpoint_dir: (str) Spark Streaming checkpoint directory</span>
+<span class="sd">    :param bronze_parquet_dir: (str) Input stream directory path. For local paths prefix it with &quot;file///&quot;</span>
+<span class="sd">    :param warehouse_location: (str) Spark warehouse location</span>
+<span class="sd">    :param spark_master: (str) Spark master url</span>
+<span class="sd">    :param postgresql_host: (str) Postgresql host url</span>
+<span class="sd">    :param postgresql_port: (str) Postgres port</span>
+<span class="sd">    :param postgresql_database: (str) Database name</span>
+<span class="sd">    :param postgresql_user: (str) Postgresql user name</span>
+<span class="sd">    :param postgresql_password: (str) Postgresql user password</span>
+<span class="sd">    :param processing_time: (str) Spark Streaming process interval</span>
+<span class="sd">    :param is_live_stream: (bool) Use live stream or to use streamed directory as input</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">kafka_bootstrap_servers</span><span class="o">=</span><span class="s2">&quot;localhost:9092&quot;</span><span class="p">,</span>
                  <span class="n">kafka_topic</span><span class="o">=</span><span class="s2">&quot;ai_tweets_topic&quot;</span><span class="p">,</span>
                  <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s2">&quot;hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/&quot;</span><span class="p">,</span>
                  <span class="n">bronze_parquet_dir</span><span class="o">=</span><span class="s2">&quot;hdfs://localhost:9000/tmp/ssp/data/lake/bronze/&quot;</span><span class="p">,</span>
                  <span class="n">warehouse_location</span><span class="o">=</span><span class="s2">&quot;/opt/spark-warehouse/&quot;</span><span class="p">,</span>
-                 <span class="n">spark_master</span><span class="o">=</span><span class="s2">&quot;spark://IMCHLT276:7077&quot;</span><span class="p">,</span>
+                 <span class="n">spark_master</span><span class="o">=</span><span class="s2">&quot;spark://IMCHLT304:7077&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_port</span><span class="o">=</span><span class="s2">&quot;5432&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_database</span><span class="o">=</span><span class="s2">&quot;sparkstreamingdb&quot;</span><span class="p">,</span>
@@ -203,6 +228,7 @@
                  <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
                  <span class="n">processing_time</span><span class="o">=</span><span class="s1">&#39;5 seconds&#39;</span><span class="p">,</span>
                  <span class="n">is_live_stream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
         <span class="n">TwitterStreamerBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                      <span class="n">spark_master</span><span class="o">=</span><span class="n">spark_master</span><span class="p">,</span>
                                      <span class="n">checkpoint_dir</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">,</span>
@@ -212,7 +238,7 @@
                                      <span class="n">processing_time</span><span class="o">=</span><span class="n">processing_time</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_bronze_parquet_dir</span> <span class="o">=</span> <span class="n">bronze_parquet_dir</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spark</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spark</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spark</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_spark</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span> <span class="o">=</span> <span class="n">postgresql_host</span>
@@ -223,12 +249,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_live_stream</span> <span class="o">=</span> <span class="n">is_live_stream</span>
 
+    <span class="k">def</span> <span class="nf">_online_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_source_stream</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">tweet_stream</span>
 
-<div class="viewcode-block" id="TrendingHashTags.online_process"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags.online_process">[docs]</a>    <span class="k">def</span> <span class="nf">online_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source_stream</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">tweet_stream</span></div>
-
-<div class="viewcode-block" id="TrendingHashTags.hdfs_process"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags.hdfs_process">[docs]</a>    <span class="k">def</span> <span class="nf">hdfs_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_hdfs_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">userSchema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bronze_parquet_dir</span><span class="p">)</span><span class="o">.</span><span class="n">schema</span>
         <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">readStream</span><span class="o">.</span> \
             <span class="n">schema</span><span class="p">(</span><span class="n">userSchema</span><span class="p">)</span><span class="o">.</span>\
@@ -237,13 +262,13 @@
             <span class="n">option</span><span class="p">(</span><span class="s2">&quot;failOnDataLoss&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span><span class="o">.</span> \
             <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bronze_parquet_dir</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">tweet_stream</span></div>
+        <span class="k">return</span> <span class="n">tweet_stream</span>
 
 <div class="viewcode-block" id="TrendingHashTags.process"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_live_stream</span><span class="p">:</span>
-            <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">online_process</span><span class="p">()</span>
+            <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_online_process</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdfs_process</span><span class="p">()</span>
+            <span class="n">tweet_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_process</span><span class="p">()</span>
 
         <span class="n">tweet_stream</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 

@@ -97,7 +97,9 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Trending Twitter Hash Tags</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="3_scalable_rest_api.html">Scalable REST end point a naive approach</a></li>
@@ -109,7 +111,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -187,6 +189,7 @@
 <li><p>Design a simple naive dash board with Bar charts for trending tweets</p></li>
 </ul>
 </div>
+<hr class="docutils" />
 <div class="section" id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -197,56 +200,112 @@
 <li><p>Use plotly to create Bar chart and display it on the HTML page</p></li>
 </ul>
 <p>Below is the data flow path:</p>
-<p><code class="docutils literal notranslate"><span class="pre">Bronze</span> <span class="pre">Lake/Live</span> <span class="pre">Stream</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Parquet</span> <span class="pre">Source</span> <span class="pre">-&gt;</span> <span class="pre">Extract</span> <span class="pre">Hash</span> <span class="pre">Tags</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Postgresql</span> <span class="pre">Sink</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">Postgresql</span> <span class="pre">-&gt;</span> <span class="pre">Flask</span> <span class="pre">REST</span> <span class="pre">API</span> <span class="pre">-&gt;</span> <span class="pre">Web</span> <span class="pre">Application</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bronze</span> <span class="n">Lake</span><span class="o">/</span><span class="n">Live</span> <span class="n">Stream</span> <span class="o">---&gt;</span> <span class="n">Spark</span> <span class="n">Structured</span> <span class="n">Streaming</span> <span class="n">Parquet</span> <span class="n">Source</span> <span class="o">---&gt;</span> <span class="n">Extract</span> <span class="n">Hash</span> <span class="n">Tags</span> <span class="k">with</span> <span class="n">UDF</span> <span class="o">--</span>
+                                    <span class="o">-&gt;</span> <span class="n">Spark</span> <span class="n">Structured</span> <span class="n">Streaming</span> <span class="n">Postgresql</span> <span class="n">Sink</span>
+
+<span class="n">Postgresql</span> <span class="o">---&gt;</span> <span class="n">Flask</span> <span class="n">REST</span> <span class="n">API</span> <span class="o">---&gt;</span> <span class="n">Web</span> <span class="n">Application</span>
+</pre></div>
+</div>
 <p><img alt="../_images/2_trending_tweets.png" src="../_images/2_trending_tweets.png" /></p>
 </div>
+<hr class="docutils" />
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords">Tweets Keywords Used</a></p></li>
+<li><p>Config file used : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin">default_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html">TwitterProducer</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.analytics.html#ssp.spark.streaming.analytics.trending_hashtags.TrendingHashTags">TrendingHashTags</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection">PostgresqlConnection</a></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/trending_hashtags_flask.gin">trending_hashtags_flask.gin</a></p></li>
+</ul>
+</div>
+<hr class="docutils" />
 <div class="section" id="how-to-run">
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common.</p>
 <p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
 Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
-<p>This example needs two terminals:</p>
+<p>This example needs multiple terminals:</p>
 <ul class="simple">
+<li><p>Producer <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/bin/data/start_kafka_producer.sh">bin/data/start_kafka_producer.sh</a></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Twitter</span> <span class="pre">API</span> <span class="pre">-&gt;</span> <span class="pre">Kafka</span> <span class="pre">Producer</span> <span class="pre">-&gt;</span> <span class="pre">Kafka</span> <span class="pre">Server</span></code></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py">src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py</a></p></li>
+</ul>
+</li>
 <li><p>Hashtag <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/bin/analytics/trending_tweet_hashtags.sh">bin/trending_tweet_hashtags.sh</a></p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Bronze</span> <span class="pre">Lake</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Parquet</span> <span class="pre">Source</span> <span class="pre">-&gt;</span> <span class="pre">Extract</span> <span class="pre">Hash</span> <span class="pre">Tags</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Postgresql</span> <span class="pre">Sink</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Bronze</span> <span class="pre">Lake</span> <span class="pre">---&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Parquet</span> <span class="pre">Source</span> <span class="pre">---&gt;</span> <span class="pre">Extract</span> <span class="pre">Hash</span> <span class="pre">Tags</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">---&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Postgresql</span> <span class="pre">Sink</span></code></p></li>
 <li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/spark/streaming/analytics/trending_hashtags_main.py">src/ssp/spark/streaming/analytics/trending_hashtags_main.py</a></p></li>
 </ul>
 </li>
 <li><p>Dashboard <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/bin/flask/trending_hashtags_dashboard.sh">bin/flask/trending_hashtags_dashboard.sh</a></p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Postgresql</span> <span class="pre">-&gt;</span> <span class="pre">Flask</span> <span class="pre">REST</span> <span class="pre">API</span> <span class="pre">-&gt;</span> <span class="pre">Web</span> <span class="pre">Application</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Postgresql</span> <span class="pre">---&gt;</span> <span class="pre">Flask</span> <span class="pre">REST</span> <span class="pre">API</span> <span class="pre">---&gt;</span> <span class="pre">Web</span> <span class="pre">Application</span></code></p></li>
 <li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/flask/dashboard/app.py">src/ssp/flask/dashboard/app.py</a></p></li>
 </ul>
 </li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/ # Local machine
-cd /host  # Docker
-export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
-
-#[producer] Guake terminal name! 
-    vim bin/data/start_kafka_producer.sh
-    bin/data/start_kafka_producer.sh
-
-#[hashtag] Guake terminal name! 
-    vim bin/analytics/trending_tweet_hashtags.sh
-    bin/analytics/trending_tweet_hashtags.sh
-
-#[dashboard] Guake terminal name! 
-    vim bin/flask/trending_hashtags_dashboard.sh
-    bin/flask/trending_hashtags_dashboard.sh
+<p>On each terminal move to source folder</p>
+<ul class="simple">
+<li><p>If it is on on local machine</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># 
+cd /path/to/spark-streaming-playground/ 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you wanted to run on Docker, then ‘spark-streaming-playground’ is mounted as a volume at <code class="docutils literal notranslate"><span class="pre">/host/</span></code></p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d&#39; &#39; -f1) bash
+cd /host  
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[producer] &lt;- Guake terminal name!</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/start_kafka_producer.sh
+bin/data/start_kafka_producer.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[hashtag]</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/analytics/trending_tweet_hashtags.sh
+bin/analytics/trending_tweet_hashtags.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[dashboard]</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/flask/trending_hashtags_dashboard.sh
+bin/flask/trending_hashtags_dashboard.sh
 </pre></div>
 </div>
 <p>Head to http://0.0.0.0:5001/ for live count on the trending #hashtags
 <img alt="../_images/trending_tags.png" src="../_images/trending_tags.png" /></p>
-<p>For people who are looking for more advanced dashboard can refer these links:</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="take-aways-learning-s">
+<h2>Take Aways / Learning’s<a class="headerlink" href="#take-aways-learning-s" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>https://medium.com/analytics-vidhya/building-a-dashboard-app-using-plotlys-dash-a-complete-guide-from-beginner-to-pro-61e890bdc423</p></li>
-<li><p>https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f</p></li>
-<li><p>https://github.com/Chulong-Li/Real-time-Sentiment-Tracking-on-Twitter-for-Brand-Improvement-and-Trend-Recognition (TODO)</p></li>
-<li><p>http://davidiscoding.com/real-time-twitter-analysis-4-displaying-the-data</p></li>
+<li><p>Covers the previous <a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/usecases/1_dump_tweets.html#take-aways-learning-s">use case learnings</a></p></li>
+<li><p>How to <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/src/ssp/spark/streaming/analytics/trending_hashtags.py#L94">dump the processed streaming data to Postgresql</a></p></li>
+<li><p>How to use the <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/src/ssp/flask/trending_hashtags/app.py#L18">Flask and Python to read the data from Postgres and create a bar chart on a naive dashboard</a></p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>References</strong>
+For people who are looking for more advanced dashboard can refer these links:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://medium.com/analytics-vidhya/building-a-dashboard-app-using-plotlys-dash-a-complete-guide-from-beginner-to-pro-61e890bdc423">https://medium.com/analytics-vidhya/building-a-dashboard-app-using-plotlys-dash-a-complete-guide-from-beginner-to-pro-61e890bdc423</a></p></li>
+<li><p><a class="reference external" href="https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f">https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f</a></p></li>
+<li><p><a class="reference external" href="https://github.com/Chulong-Li/Real-time-Sentiment-Tracking-on-Twitter-for-Brand-Improvement-and-Trend-Recognition">https://github.com/Chulong-Li/Real-time-Sentiment-Tracking-on-Twitter-for-Brand-Improvement-and-Trend-Recognition</a> (TODO)</p></li>
+<li><p><a class="reference external" href="http://davidiscoding.com/real-time-twitter-analysis-4-displaying-the-data">http://davidiscoding.com/real-time-twitter-analysis-4-displaying-the-data</a></p></li>
 </ul>
 </div>
 </div>

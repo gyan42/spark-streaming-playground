@@ -5,7 +5,7 @@ from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
 
 
 def _get_test_spark_stream(spark_session):
-    schema = TwitterStreamerBase.get_schema()
+    schema = TwitterStreamerBase._get_schema()
     test_files_path = "file:///" + os.path.abspath("data/streams/tweets/")
     sdf = spark_session.readStream.format("json").schema(schema).load(test_files_path)
     return sdf

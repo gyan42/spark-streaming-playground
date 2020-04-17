@@ -36,6 +36,13 @@ Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake (H
 
 ------------------------------------------------------------------------------------------------------------------------
 
+## Configuration
+- [Tweets Keywords Used](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords)
+- Config file used : [default_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin)
+- [TwitterProducer](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html)
+
+------------------------------------------------------------------------------------------------------------------------
+
 ## How to run?
 
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
@@ -62,29 +69,47 @@ This example needs three terminals:
 - HDFS 
     - Command line tool to test the parquet file storage
     
-```shell script
-# Local machine
+    
+On each terminal move to source folder
+
+- If it is on on local machine
+```shell script 
+# 
 cd /path/to/spark-streaming-playground/ 
+```
 
-# On Docker 'spark-streaming-playground' is mountes as a volume at /host/
+- If you wanted to run on Docker, then 'spark-streaming-playground' is mounted as a volume at `/host/`
+```shell script
+docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
 cd /host  
+```
 
+- [producer] <- custom (guake) terminal name!
+``` 
 export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/start_kafka_producer.sh
+bin/data/start_kafka_producer.sh
+```
 
-#[producer] Guake terminal name! 
-    vim bin/data/start_kafka_producer.sh
-    bin/data/start_kafka_producer.sh
+- [visualize]
+```
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/visulaize_raw_text.sh
+bin/data/visulaize_raw_text.sh
+```
 
-#[visualize]
-    vim bin/data/visulaize_raw_text.sh
-    bin/data/visulaize_raw_text.sh
+- [consumer]
+```
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/dump_raw_data_into_bronze_lake.sh
+bin/data/dump_raw_data_into_bronze_lake.sh
+```
 
-#[consumer]
-    vim bin/data/dump_raw_data_into_bronze_lake.sh
-    bin/data/dump_raw_data_into_bronze_lake.sh
-
-#[hdfs]
-    hdfs dfs -ls /tmp/ssp/data/lake/bronze/delta/
+- [hdfs]
+```
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+hdfs dfs -ls /tmp/ssp/data/lake/bronze/delta/
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -92,17 +117,22 @@ export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 ## Take Aways / Learning's 
 
 - Understand how to get an Twitter API
-- Learn to use Python library Tweepy to listen to Twitter stream
-    - http://docs.tweepy.org/en/latest/streaming_how_to.html
-- Understand to use Apache Kafka topic
-    - `sudo /opt/binaries/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 20 --topic ai_tweets_topic` 
+- Learn to use Python library [Tweepy to listen to Twitter stream](http://docs.tweepy.org/en/latest/streaming_how_to.html)
+- Understand creation of Kafka topic
+    - ```sudo /opt/binaries/kafka/bin/kafka-topics.sh \
+         --create 
+         --zookeeper localhost:2181 \
+         --replication-factor 1 
+         --partitions 20 
+         --topic {topic}``` 
 - Dumping the data to Kafka topic : [TweetsListener](https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py)
     - Define `KafkaProducer` with Kafka master url
     - Send the data to specific topic
 - Using Spark Structured Streaming to read Kafka topic
     - Configuring the read stream
     - Defining the Schema as per [Twitter Json schema](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object)
-- Using Spark Structured Streaming to store streaming data as parquet in HDFS
-- View the data with HDFS commands
+      in our [code](https://github.com/gyan42/spark-streaming-playground/blob/master/src/ssp/spark/streaming/common/twitter_streamer_base.py#L56)
+- Using Spark Structured Streaming to store streaming data as [parquet](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/src/ssp/spark/streaming/common/streamer_base.py#L57) in HDFS/local path
+- View the stored data with HDFS commands
     
 

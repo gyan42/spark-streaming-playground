@@ -1,14 +1,37 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import argparse
 import gin
 from pyspark.sql import SparkSession
 
 from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
-#from ssp.spark.streaming.ml.sentiment_analysis_model_main import SentimentSparkModel
 from ssp.spark.streaming.ml import SentimentSparkModel
 # from ssp.customudf.textblob_sentiment import textblob_sentiment_analysis_udf
 
 @gin.configurable
 class SentimentAnalysis(TwitterStreamerBase):
+    """
+    Uses the :ssp.spark.streaming.ml.SentimentSparkModel to classify the stream text
+
+    :param kafka_bootstrap_servers:
+    :param kafka_topic: Kafka topic to listen for
+    :param checkpoint_dir: Spark Streaming checkpoint directory
+    :param parquet_dir: Parquet directory to read the streamed data
+    :param warehouse_location: Spark warehouse location
+    :param spark_master: Spark Master URL
+    :param is_live_stream: (bool) Use live stream or parquet diretory
+    :param processing_time: (bool) Spark Streaming processing trigger time delay
+    """
+
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
                  kafka_topic="ai_tweets_topic",
@@ -18,7 +41,6 @@ class SentimentAnalysis(TwitterStreamerBase):
                  spark_master="spark://IMCHLT276:7077",
                  is_live_stream=True,
                  processing_time='5 seconds'):
-
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
@@ -32,23 +54,14 @@ class SentimentAnalysis(TwitterStreamerBase):
         self._parquet_dir = parquet_dir
         self._warehouse_location = warehouse_location
 
-        self.spark = SparkSession.builder. \
-            appName("twitter_stream"). \
-            master(self._spark_master). \
-            config("spark.sql.warehouse.dir", self._warehouse_location). \
-            config("spark.sql.streaming.checkpointLocation", self._checkpoint_dir). \
-            enableHiveSupport(). \
-            getOrCreate()
-
-        self.spark.sparkContext.setLogLevel("error")
-
+        self.spark = self._get_spark()
         self._model = SentimentSparkModel(spark=self.spark)
 
         self._is_live_stream = is_live_stream
 
 
     def online_process(self):
-        tweet_stream = self.get_source_stream()
+        tweet_stream = self._get_source_stream()
         return tweet_stream
 
     def hdfs_process(self):

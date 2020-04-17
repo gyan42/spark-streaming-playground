@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -158,7 +158,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for ssp.ml.dataset.prepare_dataset</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">gin</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2020, The Spark Structured Playground Project&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Apache License&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;mageswaran1989@gmail.com&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;Education Purpose&quot;</span>
+
+<span class="kn">import</span> <span class="nn">gin</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -191,6 +202,33 @@
 
 <div class="viewcode-block" id="SSPMLDataset"><a class="viewcode-back" href="../../../../ssp/ssp.ml.dataset.html#ssp.ml.dataset.prepare_dataset.SSPMLDataset">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">SSPMLDataset</span><span class="p">(</span><span class="n">PostgresqlDatasetBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the raw tweet data dump from Postgresql, splits the data and annotates the text with Snorkel. \n</span>
+<span class="sd">    Dumps the data into postgresql for annotation and conitnuous improvement purpose \n</span>
+<span class="sd">    Dumps the data into given path as train/dev/test/snorkell train data for model building</span>
+
+<span class="sd">    :param text_column: Name of the text column</span>
+<span class="sd">    :param label_output_column:  Name of the label column to be created using the snorkel labeler</span>
+<span class="sd">    :param raw_tweet_table_name_prefix: Raw tweet table dump name prefix</span>
+<span class="sd">    :param postgresql_host: Postgresql host</span>
+<span class="sd">    :param postgresql_port: Postgresql port</span>
+<span class="sd">    :param postgresql_database: Postgresql Database</span>
+<span class="sd">    :param postgresql_user: Postgresql user name</span>
+<span class="sd">    :param postgresql_password: Postgresql user password</span>
+<span class="sd">    :param overwrite: Overwrite the table and disk data</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">            |Table Name                        |Records|Info                       |</span>
+<span class="sd">            |----------------------------------|-------|---------------------------|</span>
+<span class="sd">            |raw_tweet_dataset_0               | 50K+  |Full Raw Dataset           |</span>
+<span class="sd">            |deduplicated_raw_tweet_dataset_0  | ~     |Depulicated on text column |</span>
+<span class="sd">            |test_dataset_0                    |1000   |Test dataset               |</span>
+<span class="sd">            |dev_dataset_0                     |500    |Dev dataset                |</span>
+<span class="sd">            |snorkel_train_dataset_0           |10K    |Snorkel train dataset      |</span>
+<span class="sd">            |train_dataset_0                   |~      |Model train dataset        |</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">text_column</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
                  <span class="n">label_output_column</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">,</span>
@@ -201,7 +239,6 @@
                  <span class="n">postgresql_user</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
                  <span class="n">postgresql_password</span><span class="o">=</span><span class="s2">&quot;sparkstreaming&quot;</span><span class="p">,</span>
                  <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
         <span class="n">PostgresqlDatasetBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                        <span class="n">text_column</span><span class="o">=</span><span class="n">text_column</span><span class="p">,</span>
                                        <span class="n">label_output_column</span><span class="o">=</span><span class="n">label_output_column</span><span class="p">,</span>

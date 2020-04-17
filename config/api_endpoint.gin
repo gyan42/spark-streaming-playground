@@ -1,0 +1,2 @@
+api_endpoint.host = "0.0.0.0"
+api_endpoint.port = "5000"

@@ -20,6 +20,20 @@
 
 ![](../drawio/3_scalable_rest_api.png)
 
+------------------------------------------------------------------------------------------------------------------------
+
+## Configuration
+
+- [Tweets Keywords Used](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords)
+- Config file used : [default_ssp_config.gin](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin)
+- [TwitterProducer](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html)
+- [PostgresqlConnection](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection)
+- [NerExtraction](https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.nlp.html?highlight=nerextraction#ssp.spark.streaming.nlp.ner_extraction.NerExtraction)
+- [api.gin](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/app.gin)
+- Kubernets port number is configured [here](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/kubernetes/spacy-flask-ner-python.service.yaml)
+
+------------------------------------------------------------------------------------------------------------------------
+
 ## How to run?
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common. 
@@ -28,16 +42,30 @@ To get a new terminal for our docker instance run : `docker exec -it $(docker ps
 Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`
 
 This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
-Hence the first half details teh steps to test at 3 different levels and in the second part to start the 
+Hence the first half contains the steps to test at 3 different levels and in the second part to start the 
 Spark Streaming application
 
-- API server
+On each terminal move to source folder
+
+- If it is on on local machine
+```shell script 
+# 
+cd /path/to/spark-streaming-playground/ 
+```
+
+- If you wanted to run on Docker, then 'spark-streaming-playground' is mounted as a volume at `/host/`
+```shell script
+docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash
+cd /host  
+```
+
+- **API server**
     There are three stages of testing the API REST end points, beofre useing them in Spark Streaming...  
     
     1. As a standalone Flask server
-        ```
+        ```shell script
         # [api]
-            bin/flask/api.sh
+            bin/flask/api_endpoint.sh
             # test it to see everything working
             curl -i -H "Content-Type: application/json" -X POST -d '{"text":"Ram read a book on Friday 20/11/2019"}' http://127.0.0.1:5000/text/ner/spacy
             # output
@@ -53,7 +81,7 @@ Spark Streaming application
         ```
     
     2. As part of docker
-    ```
+    ```shell script
     #[docker]
     
         docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
@@ -67,7 +95,7 @@ Spark Streaming application
     ```
     
     3. As part of Kubernetes
-        ```
+        ```shell script
         #[kubernetes]
         
             sudo minikube start --vm-driver=none 
@@ -88,29 +116,30 @@ Spark Streaming application
             # and then create the services again
         ```  
    4. Python App test
-        ```
+        ```shell script
         export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
         python3 src/ssp/spark/udf/spacy_ner_udf.py # test it to see everything working
         ```
-    
-- Spark Streaming Application
-
-```   
-cd /path/to/spark-streaming-playground/ # Local machine
-cd /host  # Docker
+          
+- [producer] <- Guake terminal name! 
+```shell script
 export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/start_kafka_producer.sh
+bin/data/start_kafka_producer.sh
+```
 
-#[producer] Guake terminal name! 
-    vim bin/data/start_kafka_producer.sh
-    bin/data/start_kafka_producer.sh
-
-#[ner]
-    cd /path/to/spark-streaming-playground/ # Local machine
-    cd /host  # Docker
-
-    sudo netstat -tulpen | grep 30123 # check the port is in use or not
-    vim bin/nlp/ner_extraction_using_spacy.sh
-    bin/nlp/ner_extraction_using_spacy.sh
+- [ner]
+```shell script
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+sudo netstat -tulpen | grep 30123 # make sure the port is listed
+vim bin/nlp/ner_extraction_using_spacy.sh
+bin/nlp/ner_extraction_using_spacy.sh
 ```  
 
 ![](../images/ner_out.png)
+
+------------------------------------------------------------------------------------------------------------------------
+ 
+## Take Aways / Learning's 
+
+- TODOs

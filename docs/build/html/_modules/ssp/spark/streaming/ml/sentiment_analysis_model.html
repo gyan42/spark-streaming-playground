@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -158,7 +158,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for ssp.spark.streaming.ml.sentiment_analysis_model</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2020, The Spark Structured Playground Project&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Apache License&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Mageswaran Dhandapani&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;mageswaran1989@gmail.com&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;Education Purpose&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
@@ -177,20 +188,27 @@
 <span class="c1"># https://github.com/tthustla/setiment_analysis_pyspark/blob/master/Sentiment%20Analysis%20with%20PySpark.ipynb</span>
 <div class="viewcode-block" id="SentimentSparkModel"><a class="viewcode-back" href="../../../../../ssp/ssp.spark.streaming.ml.html#ssp.spark.streaming.ml.sentiment_analysis_model.SentimentSparkModel">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
 <span class="k">class</span> <span class="nc">SentimentSparkModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Build text classification model for tweet sentiment classification</span>
+<span class="sd">    If HDFS details are given, model will be stored in HDFS</span>
+
+<span class="sd">    :param spark: Sparksession</span>
+<span class="sd">    :param spark_master: Spark master URL</span>
+<span class="sd">    :param sentiment_dataset_path: Tweeter Kaggle sentiment dataset path</span>
+<span class="sd">    :param model_dir: Model sava directory</span>
+<span class="sd">    :param hdfs_host: HDFS host url</span>
+<span class="sd">    :param hdfs_port: HDFS port</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">spark</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s2">&quot;hdfs://localhost:9000/tmp/ssp/data/lake/checkpoint/&quot;</span><span class="p">,</span>
-                 <span class="n">warehouse_location</span><span class="o">=</span><span class="s2">&quot;/opt/spark-warehouse/&quot;</span><span class="p">,</span>
                  <span class="n">spark_master</span><span class="o">=</span><span class="s2">&quot;spark://IMCHLT276:7077&quot;</span><span class="p">,</span>
-                 <span class="n">ai_tweets_topicset_path</span><span class="o">=</span><span class="s2">&quot;data/dataset/sentiment140/&quot;</span><span class="p">,</span>
+                 <span class="n">sentiment_dataset_path</span><span class="o">=</span><span class="s2">&quot;data/dataset/sentiment140/&quot;</span><span class="p">,</span>
                  <span class="n">model_dir</span><span class="o">=</span><span class="s2">&quot;~/ssp/data/model/sentiment/&quot;</span><span class="p">,</span>
                  <span class="n">hdfs_host</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">hdfs_port</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span> <span class="o">=</span> <span class="n">spark_master</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_dir</span> <span class="o">=</span> <span class="n">checkpoint_dir</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span> <span class="o">=</span> <span class="n">warehouse_location</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdfs_port</span> <span class="o">=</span> <span class="n">hdfs_host</span><span class="p">,</span> <span class="n">hdfs_port</span>
@@ -217,7 +235,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span> \
                 <span class="n">appName</span><span class="p">(</span><span class="s2">&quot;twitter_stream&quot;</span><span class="p">)</span><span class="o">.</span> \
-                <span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.warehouse.dir&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_warehouse_location</span><span class="p">)</span><span class="o">.</span> \
                 <span class="n">master</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spark_master</span><span class="p">)</span><span class="o">.</span> \
                 <span class="n">enableHiveSupport</span><span class="p">()</span><span class="o">.</span> \
                 <span class="n">getOrCreate</span><span class="p">()</span>
@@ -225,7 +242,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_path</span> <span class="o">=</span> <span class="s2">&quot;file:///&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ai_tweets_topicset_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_path</span> <span class="o">=</span> <span class="s2">&quot;file:///&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">sentiment_dataset_path</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ai_tweets_topicset_schema</span> <span class="o">=</span> <span class="n">StructType</span><span class="p">([</span>
             <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">False</span><span class="p">),</span>
@@ -283,6 +300,7 @@
         <span class="n">pipeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_ngrams_wocs</span><span class="p">()</span>
         <span class="n">print_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="o">.</span><span class="n">show</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_train_df</span><span class="p">)</span>
+        <span class="c1"># TODO</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">write</span><span class="p">()</span><span class="o">.</span><span class="n">overwrite</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_dir</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span></div>
 

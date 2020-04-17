@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import gin
 import argparse
 import os
@@ -31,6 +42,33 @@ def insert_id_n_label_col(df):
 
 @gin.configurable
 class SSPMLDataset(PostgresqlDatasetBase):
+    """
+    Reads the raw tweet data dump from Postgresql, splits the data and annotates the text with Snorkel. \n
+    Dumps the data into postgresql for annotation and conitnuous improvement purpose \n
+    Dumps the data into given path as train/dev/test/snorkell train data for model building
+
+    :param text_column: Name of the text column
+    :param label_output_column:  Name of the label column to be created using the snorkel labeler
+    :param raw_tweet_table_name_prefix: Raw tweet table dump name prefix
+    :param postgresql_host: Postgresql host
+    :param postgresql_port: Postgresql port
+    :param postgresql_database: Postgresql Database
+    :param postgresql_user: Postgresql user name
+    :param postgresql_password: Postgresql user password
+    :param overwrite: Overwrite the table and disk data
+
+    .. code-block:: python
+
+            |Table Name                        |Records|Info                       |
+            |----------------------------------|-------|---------------------------|
+            |raw_tweet_dataset_0               | 50K+  |Full Raw Dataset           |
+            |deduplicated_raw_tweet_dataset_0  | ~     |Depulicated on text column |
+            |test_dataset_0                    |1000   |Test dataset               |
+            |dev_dataset_0                     |500    |Dev dataset                |
+            |snorkel_train_dataset_0           |10K    |Snorkel train dataset      |
+            |train_dataset_0                   |~      |Model train dataset        |
+
+    """
     def __init__(self,
                  text_column="text",
                  label_output_column="slabel",
@@ -41,7 +79,6 @@ class SSPMLDataset(PostgresqlDatasetBase):
                  postgresql_user="sparkstreaming",
                  postgresql_password="sparkstreaming",
                  overwrite=False):
-
         PostgresqlDatasetBase.__init__(self,
                                        text_column=text_column,
                                        label_output_column=label_output_column,

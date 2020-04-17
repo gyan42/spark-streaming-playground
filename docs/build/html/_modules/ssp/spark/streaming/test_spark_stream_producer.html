@@ -94,7 +94,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/modules.html">ssp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ssp/ssp.html">ssp</a></li>
 </ul>
 
             
@@ -165,7 +165,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_test_spark_stream</span><span class="p">(</span><span class="n">spark_session</span><span class="p">):</span>
-    <span class="n">schema</span> <span class="o">=</span> <span class="n">TwitterStreamerBase</span><span class="o">.</span><span class="n">get_schema</span><span class="p">()</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">TwitterStreamerBase</span><span class="o">.</span><span class="n">_get_schema</span><span class="p">()</span>
     <span class="n">test_files_path</span> <span class="o">=</span> <span class="s2">&quot;file:///&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;data/streams/tweets/&quot;</span><span class="p">)</span>
     <span class="n">sdf</span> <span class="o">=</span> <span class="n">spark_session</span><span class="o">.</span><span class="n">readStream</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">schema</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">test_files_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sdf</span>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-SSP modules that handles all data at ingestion level frm Twitter stream
+SSP modules that handles all data at ingestion level from Twitter stream
 """
 
 __author__ = "Mageswaran Dhandapani"
@@ -92,9 +92,22 @@ filter_possible_ai_tweet_udf = udf(filter_possible_ai_tweet, IntegerType())
 @gin.configurable
 class TwitterDataset(TwitterStreamerBase):
     """
-    Twitter ingestion class
-    - Gets the twitter stream data and dumps the data into Kafka topic
-    - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS
+    Twitter ingestion class \n
+    - Starts the Spark Structured Streaming against the Kafka topic and dumps the data to HDFS / Postgresql
+
+    :param kafka_bootstrap_servers: (str) Kafka bootstram server
+    :param kafka_topic: (str) Kafka topic
+    :param checkpoint_dir: (str) Checkpoint directory for fault tolerance
+    :param bronze_parquet_dir: (str) Store path to dump tweet data
+    :param warehouse_location: Spark warehouse location
+    :param spark_master: Spark Master URL
+    :param postgresql_host: Postgresql host
+    :param postgresql_port: Postgresql port
+    :param postgresql_database: Postgresql Database
+    :param postgresql_user: Postgresql user name
+    :param postgresql_password: Postgresql user password
+    :param raw_tweet_table_name_prefix: Postgresql table name prefix
+    :param processing_time: Processing time trigger
     """
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
@@ -110,22 +123,6 @@ class TwitterDataset(TwitterStreamerBase):
                  postgresql_password="sparkstreaming",
                  raw_tweet_table_name_prefix="raw_tweet_dataset",
                  processing_time='5 seconds'):
-        """
-
-        :param kafka_bootstrap_servers:
-        :param kafka_topic:
-        :param checkpoint_dir: For fault tolerance
-        :param bronze_parquet_dir:
-        :param warehouse_location:
-        :param spark_master:
-        :param postgresql_host:
-        :param postgresql_port:
-        :param postgresql_database:
-        :param postgresql_user:
-        :param postgresql_password:
-        :param raw_tweet_table_name_prefix:
-        :param processing_time:
-        """
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
@@ -145,7 +142,7 @@ class TwitterDataset(TwitterStreamerBase):
         self._postgresql_database = postgresql_database
         self._postgresql_user = postgresql_user
         self._postgresql_password = postgresql_password
-        self._broad_cast_raw_tweet_count = self.get_spark().sparkContext.accumulator(0)
+        self._broad_cast_raw_tweet_count = self._get_spark().sparkContext.accumulator(0)
 
         self._kafka_topic = kafka_topic
         self._kafka_ai_topic = "ai_tweets_topic"
@@ -195,9 +192,16 @@ class TwitterDataset(TwitterStreamerBase):
                 print_info(f"Number of records received so far in topic {topic} is {count}")
             time.sleep(1)
 
-    def dump_into_postgresql_internal(self, run_id, kafka_topic, num_records=25000):
+    def _dump_into_postgresql_internal(self, run_id, kafka_topic, num_records=25000):
+        """
+        Dumps the live tweet stream into Postgresql DB
+        :param run_id:
+        :param kafka_topic:
+        :param num_records:
+        :return:
+        """
 
-        tweet_stream = self.get_source_stream(kafka_topic)
+        tweet_stream = self._get_source_stream(kafka_topic)
         raw_tweet_table_name = self._raw_tweet_table_name_prefix + "_{}".format(run_id)
 
 
@@ -238,5 +242,5 @@ class TwitterDataset(TwitterStreamerBase):
         monitor_thread.join()
 
     def dump_into_postgresql(self, run_id, num_records=50000):
-        self.dump_into_postgresql_internal(run_id=run_id, kafka_topic=self._kafka_topic, num_records=num_records//2)
-        self.dump_into_postgresql_internal(run_id=run_id, kafka_topic=self._kafka_ai_topic, num_records=num_records)
+        self._dump_into_postgresql_internal(run_id=run_id, kafka_topic=self._kafka_topic, num_records=num_records // 2)
+        self._dump_into_postgresql_internal(run_id=run_id, kafka_topic=self._kafka_ai_topic, num_records=num_records)

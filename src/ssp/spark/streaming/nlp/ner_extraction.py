@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import argparse
 import gin
 from pyspark.sql import SparkSession
@@ -9,6 +20,25 @@ from ssp.spark.udf.spacy_ner_udf import get_ner_udf
 
 @gin.configurable
 class NerExtraction(TwitterStreamerBase):
+    """
+    Uses external REST endpoint to get NER tags
+
+    :param kafka_bootstrap_servers: (str) host_url:port
+    :param kafka_topic: (str) Live stream Kafka topic
+    :param checkpoint_dir: (str) Spark Streaming checkpoint directory
+    :param bronze_parquet_dir: (str) Input stream directory path. For local paths prefix it with "file///"
+    :param warehouse_location: (str) Spark warehouse location
+    :param spark_master: (str) Spark master url
+    :param postgresql_host: (str) Postgresql host url
+    :param postgresql_port: (str) Postgres port
+    :param postgresql_database: (str) Database name
+    :param postgresql_user: (str) Postgresql user name
+    :param postgresql_password: (str) Postgresql user password
+    :param processing_time: (str) Spark Streaming process interval
+    :param is_live_stream: (bool) Use live stream or to use streamed directory as input
+    :param is_docker: (bool) Run environment local machine or docker, to use appropriate host name in REST endpoints
+    """
+
     def __init__(self,
                  kafka_bootstrap_servers="localhost:9092",
                  kafka_topic="ai_tweets_topic",
@@ -24,7 +54,6 @@ class NerExtraction(TwitterStreamerBase):
                  processing_time='5 seconds',
                  is_live_stream=True,
                  is_docker=False):
-
         TwitterStreamerBase.__init__(self,
                                      spark_master=spark_master,
                                      checkpoint_dir=checkpoint_dir,
@@ -58,7 +87,7 @@ class NerExtraction(TwitterStreamerBase):
         self._is_docker = is_docker
 
     def online_process(self):
-        tweet_stream = self.get_source_stream()
+        tweet_stream = self._get_source_stream()
         return tweet_stream
 
     def hdfs_process(self):

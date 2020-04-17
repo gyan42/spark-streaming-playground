@@ -23,6 +23,7 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 ssp:
+	touch source/ssp/temp.rst
 	rm source/ssp/*.rst
 	sphinx-apidoc -E -M -d 2 -f ../src/ssp/ -o source/ssp/
 	cd source/ssp/ && sed -i 's/ package//g' *.rst
