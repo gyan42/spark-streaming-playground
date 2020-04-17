@@ -24,5 +24,5 @@ if __name__ == "__main__":
     classifer.evaluate()
     classifer.save()
 
-    print_info(np.argmax(classifer.predict(classifer._test_df["text"].values), axis=1))
+    #print_info(np.argmax(classifer.predict(classifer._test_df["text"].values), axis=1))
 

@@ -1,8 +1,5 @@
 import argparse
 import gin
-from pyspark.sql import SparkSession
-
-from ssp.spark.streaming.analytics.sentiment_analysis import SentimentAnalysis
 
 if __name__ == "__main__":
     optparse = argparse.ArgumentParser("Twitter Spark SentimentAnalysis pipeline:")
@@ -15,7 +12,7 @@ if __name__ == "__main__":
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
-
+    from ssp.spark.streaming.analytics.sentiment_analysis import SentimentAnalysis
     nlp_processing = SentimentAnalysis()
 
     nlp_processing.process()

@@ -220,7 +220,7 @@ class SSPLabelEvaluator(PostgresqlDatasetBase):
         self._snorkel_labeler = SSPTweetLabeller()
 
     def run_labeler(self):
-        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.get_processed_datasets()
+        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.get_processed_datasets(version=2)
         self._snorkel_labeler.fit(snorkel_train_df)
         self._snorkel_labeler.evaluate(test_df, test_df[self._label_output_column])
 

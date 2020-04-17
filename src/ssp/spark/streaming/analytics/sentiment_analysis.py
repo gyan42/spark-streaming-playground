@@ -3,7 +3,8 @@ import gin
 from pyspark.sql import SparkSession
 
 from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
-from ssp.spark.streaming.ml.sentiment_analysis_model_main import SentimentSparkModel
+#from ssp.spark.streaming.ml.sentiment_analysis_model_main import SentimentSparkModel
+from ssp.spark.streaming.ml import SentimentSparkModel
 # from ssp.customudf.textblob_sentiment import textblob_sentiment_analysis_udf
 
 @gin.configurable

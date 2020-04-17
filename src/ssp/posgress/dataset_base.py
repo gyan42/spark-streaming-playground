@@ -78,11 +78,11 @@ class PostgresqlConnection(object):
         :return: None
         """
         print_info(f"{df.shape[0]} records will be written to {path}")
-        if overwrite:
-            os.remove(path)
 
         if os.path.exists(path):
             print_error(f"File path {path} exists!\n")
+            if overwrite:
+            	os.remove(path)
             return
         os.makedirs("/".join(path.split("/")[:-1]), exist_ok=True)
         df["id"] = np.arange(0, len(df), dtype=int)
@@ -148,8 +148,8 @@ class PostgresqlConnection(object):
         :return:
         """
         tables = self.get_raw_dump_tables_list()
-        table_name = tables[version]
-        assert version == int(table_name.split("_")[-1])
+        table_name = tables[0]
+        #assert version == int(table_name.split("_")[-1])
         return table_name
 
     def get_table(self, table_name):
@@ -191,6 +191,7 @@ class PostgresqlConnection(object):
             if table in tables:
                 print_info(f"Found {table}!")
                 res.append(pd.read_sql(f"select * from {table}", conn))
+        print_error(len(res))
 
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = res
         return raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df

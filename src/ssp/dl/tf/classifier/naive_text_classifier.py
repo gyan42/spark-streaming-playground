@@ -85,7 +85,8 @@ class NaiveTextClassifier(object):
         self._wipe_old_data = wipe_old_data
 
         if model_root_dir:
-            self._model_dir = os.path.expanduser(model_root_dir) + "/" + self._model_name + "/" + str(self._model_version) + "/"
+            self._model_dir_ = os.path.expanduser(model_root_dir) + "/" + self._model_name + "/" + str(self._model_version) + "/"
+            self._model_dir =self._model_dir_.replace("//", "/")
             self._model_export_dir = os.path.expanduser(model_root_dir) + "/" + self._model_name + "/exported/" + str(self._model_version) + "/"
 
         # Format the path for HDFS storage
@@ -223,14 +224,14 @@ class NaiveTextClassifier(object):
 
             if self._hdfs_fs.exists(self._model_dir):
                 self._pre_trained = True
-                print_info(f"Loading model...{self._model_dir}")
+                print_info(f"Loading model from HDFS...{self._model_dir}")
                 self._model = tf.keras.models.load_model(self._model_dir)
             else:
                 self._model = self.define_model()
         else:
             if os.path.exists(self._model_dir):
                 self._pre_trained = True
-                print_info(f"Loading model...{self._model_dir}")
+                print_info(f"Loading model from localpath...{self._model_dir}")
                 self._model = tf.keras.models.load_model(self._model_dir)
             else:
                 self._model = self.define_model()
@@ -255,20 +256,21 @@ class NaiveTextClassifier(object):
         tf.keras.models.save_model(
             model,
             export_path,
-            overwrite=True,
+            overwrite=False,
             include_optimizer=True,
             save_format=None,
-            signatures=None,
-            options=None
+            #signatures=None,
+            #options=None
         )
 
     def save(self):
         if self._is_local_dir:
             if os.path.exists(self._model_dir):
                 print_info("Model exists")
+            print_info(f"Saving model to {self._model_dir}")
             check_n_mk_dirs(self._model_dir, is_remove=self._wipe_old_data)
-            self._model.save(self._model_dir)
-            with open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
+            self._model.save(os.path.join(self._model_dir,'model.h5'),overwrite=False)
+            with open(os.path.join(self._model_dir,'tokenizer.pickle'), 'wb') as handle:
                 pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
         else:
             if self._hdfs_fs.exists(self._model_dir):
@@ -278,5 +280,6 @@ class NaiveTextClassifier(object):
             self._model.save(self._model_dir)
             with self._hdfs_fs.open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
                 pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        self.export_tf_model(model=self._model, export_path=self._model_export_dir)
+        check_n_mk_dirs(self._model_export_dir.replace("//", "/"), is_remove=self._wipe_old_data)
+        self.export_tf_model(model=self._model, export_path=os.path.join(self._model_export_dir.replace("//", "/"),'model.h5'))
 

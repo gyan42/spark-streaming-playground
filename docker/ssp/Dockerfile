@@ -55,6 +55,7 @@ ENV HADOOP_MAPRED_HOME ${HADOOP_HOME}
 ENV HADOOP_COMMON_HOME ${HADOOP_HOME}
 ENV HADOOP_HDFS_HOME ${HADOOP_HOME}
 ENV YARN_HOME ${HADOOP_HOME}
+ENV ARROW_LIBHDFS_DIR=${HADOOP_HOME}/lib/native
 
 RUN apt-get install -y vim
 
@@ -127,6 +128,8 @@ RUN pip3 install -r /opt/binaries/requirements.txt
 ENV PYSPARK_PYTHON /usr/bin/python3
 ENV PYSPARK_DRIVER_PYTHON /usr/bin/python3
 ENV PYTHONIOENCODING utf8
+RUN python3 -m nltk.downloader stopwords
+RUN python3 -m spacy download en_core_web_sm
 
 ADD docker/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 ADD docker/start-all.sh /opt/binaries/start-all.sh

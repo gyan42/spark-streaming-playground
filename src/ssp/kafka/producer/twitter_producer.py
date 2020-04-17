@@ -135,8 +135,6 @@ class TwitterProducer(object):
                 twitter_stream.filter(track=keywords, languages=["en"])
             except Exception as e:
                 print("Error: Restarting the twitter stream")
-                print(e.__doc__)
-                print(e.message)
 
     def run(self):
         """
