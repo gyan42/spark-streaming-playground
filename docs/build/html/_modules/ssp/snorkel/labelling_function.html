@@ -175,7 +175,7 @@
 <span class="kn">import</span> <span class="nn">nltk</span>
 
 <span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">labeling_function</span>
-<span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">PandasLFApplier</span><span class="p">,</span> <span class="n">LFApplier</span>
+<span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">LFApplier</span>
 <span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">LFAnalysis</span>
 <span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="n">LabelModel</span>
 
@@ -184,7 +184,13 @@
 <span class="kn">from</span> <span class="nn">ssp.posgress.dataset_base</span> <span class="kn">import</span> <span class="n">PostgresqlDatasetBase</span>
 <span class="kn">from</span> <span class="nn">ssp.utils.ai_key_words</span> <span class="kn">import</span> <span class="n">AIKeyWords</span>
 
+
 <div class="viewcode-block" id="SSPTweetLabeller"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller">[docs]</a><span class="k">class</span> <span class="nc">SSPTweetLabeller</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Snorkel Transformer uses LFs to train a Label Model, that can annotate AI text and non AI text</span>
+<span class="sd">    :param input_col: Name of the input text column if Dataframe is used</span>
+<span class="sd">    :param output_col: Name of the ouput label column if Dataframe is used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Set voting values.</span>
     <span class="c1"># all other tweets</span>
     <span class="n">ABSTAIN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -195,7 +201,9 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">input_col</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-                 <span class="n">output_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">):</span>
+                 <span class="n">output_col</span><span class="o">=</span><span class="s2">&quot;slabel&quot;</span><span class="p">):</span>
+
+        <span class="c1"># LFs needs to be static or normal function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">is_ai_tweet</span><span class="p">,</span>
                                      <span class="bp">self</span><span class="o">.</span><span class="n">is_not_ai_tweet</span><span class="p">,</span>
                                      <span class="bp">self</span><span class="o">.</span><span class="n">not_data_science</span><span class="p">,</span>
@@ -205,7 +213,6 @@
                                      <span class="bp">self</span><span class="o">.</span><span class="n">not_ai</span><span class="p">,</span>
                                      <span class="bp">self</span><span class="o">.</span><span class="n">not_cv</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pandas_applier</span> <span class="o">=</span> <span class="n">PandasLFApplier</span><span class="p">(</span><span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_input_col</span> <span class="o">=</span> <span class="n">input_col</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_col</span> <span class="o">=</span> <span class="n">output_col</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span> <span class="o">=</span> <span class="n">LFApplier</span><span class="p">(</span><span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span>
@@ -215,15 +222,16 @@
 <div class="viewcode-block" id="SSPTweetLabeller.fit"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">        :param X:</span>
-<span class="sd">        :param y:</span>
+<span class="sd">        :param X: (Dataframe) / (List) Input text</span>
+<span class="sd">        :param y: None</span>
 <span class="sd">        :return: Numpy Array [num of samples, num of LF functions]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pandas_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_col</span><span class="p">]</span>
+            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span>
             <span class="n">print_info</span><span class="p">(</span><span class="n">LFAnalysis</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span><span class="o">.</span><span class="n">lf_summary</span><span class="p">())</span>
             <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Training LabelModel&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">L_train</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">log_freq</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -265,7 +273,8 @@
             <span class="n">print_info</span><span class="p">(</span><span class="n">LFAnalysis</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">lfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labelling_functions</span><span class="p">)</span><span class="o">.</span><span class="n">lf_summary</span><span class="p">())</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Label Model Accuracy:&#39;</span><span class="si">:</span><span class="s2">&lt;25</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">label_model_acc</span> <span class="o">*</span> <span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pandas_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_col</span><span class="p">]</span>
+            <span class="n">X_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_applier</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span>
             <span class="n">label_model_acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">X_labels</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">tie_break_policy</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">)[</span>
                 <span class="s2">&quot;accuracy&quot;</span>
             <span class="p">]</span>
@@ -275,9 +284,6 @@
 
 <div class="viewcode-block" id="SSPTweetLabeller.positive_search"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.positive_search">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">positive_search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key_words</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">text</span> <span class="c1">#Dataframe series</span>
-
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">key_words</span><span class="p">:</span>
             <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span> <span class="ow">in</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">:</span>
@@ -286,8 +292,6 @@
 
 <div class="viewcode-block" id="SSPTweetLabeller.negative_search"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.negative_search">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">negative_search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">positive_keywords</span><span class="p">,</span> <span class="n">false_positive_keywords</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">text</span> <span class="c1">#Dataframe series</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
         <span class="n">positive</span> <span class="o">=</span> <span class="kc">False</span>
@@ -308,15 +312,12 @@
 
 <div class="viewcode-block" id="SSPTweetLabeller.bigram_check"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPTweetLabeller.bigram_check">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">bigram_check</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">word1</span><span class="p">,</span> <span class="n">word2</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">text</span>
         <span class="c1"># Get bigrams and check tuple exists or not</span>
         <span class="n">bigrm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nltk</span><span class="o">.</span><span class="n">bigrams</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
         <span class="n">bigrm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">,</span> <span class="n">bigrm</span><span class="p">))</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">bigrm</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">word1</span> <span class="ow">in</span> <span class="n">pair</span> <span class="ow">and</span> <span class="n">word2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pair</span><span class="p">:</span>
-
                 <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">SSPTweetLabeller</span><span class="o">.</span><span class="n">NEGATIVE</span>
@@ -390,8 +391,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span> <span class="o">=</span> <span class="n">SSPTweetLabeller</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SSPLabelEvaluator.run_labeler"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPLabelEvaluator.run_labeler">[docs]</a>    <span class="k">def</span> <span class="nf">run_labeler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_processed_datasets</span><span class="p">()</span>
+<div class="viewcode-block" id="SSPLabelEvaluator.run_labeler"><a class="viewcode-back" href="../../../ssp/ssp.snorkel.html#ssp.snorkel.labelling_function.SSPLabelEvaluator.run_labeler">[docs]</a>    <span class="k">def</span> <span class="nf">run_labeler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">raw_tweet_dataset_df_deduplicated</span><span class="p">,</span> <span class="n">test_df</span><span class="p">,</span> <span class="n">dev_df</span><span class="p">,</span> \
+                <span class="n">snorkel_train_df</span><span class="p">,</span> <span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_processed_datasets</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">snorkel_train_df</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_snorkel_labeler</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_output_column</span><span class="p">])</span></div></div>
 

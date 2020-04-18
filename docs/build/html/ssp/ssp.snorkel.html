@@ -184,15 +184,18 @@
 <dd><p>Bases: <a class="reference internal" href="ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase" title="ssp.posgress.dataset_base.PostgresqlDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.posgress.dataset_base.PostgresqlDatasetBase</span></code></a></p>
 <dl class="py method">
 <dt id="ssp.snorkel.labelling_function.SSPLabelEvaluator.run_labeler">
-<code class="sig-name descname">run_labeler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPLabelEvaluator.run_labeler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPLabelEvaluator.run_labeler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_labeler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPLabelEvaluator.run_labeler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPLabelEvaluator.run_labeler" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="ssp.snorkel.labelling_function.SSPTweetLabeller">
-<em class="property">class </em><code class="sig-prename descclassname">ssp.snorkel.labelling_function.</code><code class="sig-name descname">SSPTweetLabeller</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_col</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">output_col</span><span class="o">=</span><span class="default_value">'label'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">ssp.snorkel.labelling_function.</code><code class="sig-name descname">SSPTweetLabeller</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_col</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">output_col</span><span class="o">=</span><span class="default_value">'slabel'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/snorkel/labelling_function.html#SSPTweetLabeller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
+<p>Snorkel Transformer uses LFs to train a Label Model, that can annotate AI text and non AI text
+:param input_col: Name of the input text column if Dataframe is used
+:param output_col: Name of the ouput label column if Dataframe is used</p>
 <dl class="py attribute">
 <dt id="ssp.snorkel.labelling_function.SSPTweetLabeller.ABSTAIN">
 <code class="sig-name descname">ABSTAIN</code><em class="property"> = -1</em><a class="headerlink" href="#ssp.snorkel.labelling_function.SSPTweetLabeller.ABSTAIN" title="Permalink to this definition">¶</a></dt>
@@ -224,8 +227,8 @@
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> – </p></li>
-<li><p><strong>y</strong> – </p></li>
+<li><p><strong>X</strong> – (Dataframe) / (List) Input text</p></li>
+<li><p><strong>y</strong> – None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

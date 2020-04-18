@@ -69,10 +69,10 @@ SentimentAnalysis.processing_time = '5 seconds'
 #                                               DL                                                                    #
 #######################################################################################################################
 
-NaiveTextClassifier.train_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_2/train.parquet"
-NaiveTextClassifier.test_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_2/test.parquet"
-NaiveTextClassifier.dev_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_2/dev.parquet"
-NaiveTextClassifier.model_root_dir = "~/ssp/model/raw_tweet_dataset_2/"
+NaiveTextClassifier.train_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_0/train.parquet"
+NaiveTextClassifier.test_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_0/test.parquet"
+NaiveTextClassifier.dev_df_or_path = "~/ssp/data/dump/raw_tweet_dataset_0/dev.parquet"
+NaiveTextClassifier.model_root_dir = "~/ssp/model/raw_tweet_dataset_0/"
 NaiveTextClassifier.model_version = 1
 NaiveTextClassifier.wipe_old_data = False
 NaiveTextClassifier.text_column = "text"

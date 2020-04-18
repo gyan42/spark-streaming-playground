@@ -11,21 +11,12 @@ __status__ = "Education Purpose"
 
 import os
 import shutil
-import sys
-import ast
 from flask import Flask, render_template, request, url_for, jsonify
-import pandas as pd
-import json
-import plotly
-from werkzeug.datastructures import FileStorage
 import gin
 
 from ssp.posgress.dataset_base import PostgresqlConnection
-from ssp.utils.config_manager import ConfigManager
 from ssp.logger.pretty_print import print_error, print_info
-from ssp.utils.postgresql import postgressql_connection, create_pandas_table
 from flask_paginate import Pagination, get_page_args
-from flask import send_file
 
 # https://gist.github.com/mozillazg/69fb40067ae6d80386e10e105e6803c9#file-index-html-L5
 # https://github.com/doccano/doccano
@@ -149,10 +140,6 @@ def tagger(host,
 if __name__ == '__main__':
     gin.parse_config_file(config_file="config/tagger.gin")
     tagger()
-
-
-
-
 
 
 

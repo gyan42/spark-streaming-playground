@@ -29,13 +29,13 @@ if __name__ == "__main__":
 
     optparse.add_argument("-sw", "--mode",
                           type=str,
-                          default="ai",
+                          default="both",
                           required=False,
-                          help="Filter twitter stream including one of [ai|stopwords|ai_stopwords] keywords")
+                          help="[topic1, topic2, both]")
 
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
 
-    producer = TwitterProducer(mode=parsed_args.mode)
-    producer.run()
+    producer = TwitterProducer()
+    producer.run(stream=parsed_args.mode)

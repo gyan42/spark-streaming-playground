@@ -2,7 +2,7 @@
 
 ## Requirements  
 
-- Refer the following link for general architecture of our continuous integration ML pipeline[theory on Architecting a Machine Learning Pipeline](https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7)   
+- Refer the following link for general architecture of our continuous integration ML pipeline [theory on Architecting a Machine Learning Pipeline](https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7)   
 - Create a pipeline with following diagram as reference...   
     ![](../images/ml_pipeline.png)
 - Build ground up dataset for tweet classification (AI tweet or not) using the live streaming data
@@ -103,7 +103,12 @@ This example needs multiple terminals:
 
 - Data collection
     - There can be of two ways
-    - First way is dumping data from live stream, which may take few hours depending up on the 
+    - First and easy way is use the dump as part of this repo      
+    ```shell script
+    export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+    python src/ssp/posgress/dataset_base.py --mode=upload
+    ```
+    - Second way is dumping data from live stream, which may take few hours depending up on the 
     frequency of the AI/ML/Big Data tweets
     ```shell script
     #[producer] Guake terminal name! 
@@ -115,14 +120,7 @@ This example needs multiple terminals:
         vim bin/data/dump_raw_data_into_postgresql.sh
         bin/data/dump_raw_data_into_postgresql.sh
     ```
-    - Second way is use the dump as part of this repo      
-    ```shell script
-    python src/ssp/posgress/dataset_base.py --mode=upload
-  
-    # If there is any Postgresql permission error related to schema, run below command on `psql` terminal
-    GRANT ALL ON schema public TO sparkstreaming;
- 
-    ```
+
 
 - Data preparation for model training, with default snorkel labeller
     ```shell script
@@ -154,18 +152,21 @@ This example needs multiple terminals:
 - Evalaute the Snorkel labeller with respect to hand labels
     ```shell script
     #[snorkell]
+        vim bin/models/evalaute_snorkel_labeller.sh
         bin/models/evalaute_snorkel_labeller.sh
     ```
 
 - Train Deep Learning model 
     ```shell script
     #[DL Text classification Model]
+        vim config/default_ssp_config.gin #check the paths in NaiveTextClassifier params 
         bin/models/build_naive_dl_text_classifier.sh 
     ```
 - Start Tensorflow Serving
     ```shell script
     #[Tensorflow Serving]
-        export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_2/naive_text_classifier/exported/
+        # give appropriate model path that needs to be served
+        export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
         # test the model 
         saved_model_cli show --dir ${MODEL_DIR}/1/ --all
         # start the serving server
@@ -180,7 +181,12 @@ This example needs multiple terminals:
     # [Spark Streaming]
         bin/nlp/spark_dl_text_classification_main.sh
     ```
-
+- Clean all Postgresql DB tables
+```
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public AUTHORIZATION sparkstreaming;
+GRANT ALL ON schema public TO sparkstreaming;
+```
 ------------------------------------------------------------------------------------------------------------------------
  
 ## Take Aways / Learning's 

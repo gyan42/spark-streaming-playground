@@ -21,8 +21,14 @@ if __name__ == "__main__":
                           required=False,
                           help="File path of config.ini")
 
+    optparse.add_argument("-v", "--version",
+                          default=0,
+                          required=False,
+                          help="Version number. To be used to pick the respective tables for labeling")
+
+
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
     dataset = SSPLabelEvaluator()
-    dataset.run_labeler()
+    dataset.run_labeler(version=parsed_args.version)

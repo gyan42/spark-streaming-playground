@@ -206,9 +206,9 @@ Reference: <a class="reference external" href="http://docs.tweepy.org/en/latest/
 <dl class="py method">
 <dt id="ssp.kafka.producer.twitter_producer.TweetsListener.on_data">
 <code class="sig-name descname">on_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/kafka/producer/twitter_producer.html#TweetsListener.on_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.kafka.producer.twitter_producer.TweetsListener.on_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called when raw data is received from connection.</p>
-<p>Override this method if you wish to manually handle
-the stream data. Return False to stop stream and close connection.</p>
+<dd><p>Gets triggered by the Twitter stream API
+:param data: Tweet Json data
+:return: dumps the data into Kafka topic</p>
 </dd></dl>
 
 </dd></dl>
@@ -234,7 +234,7 @@ the stream data. Return False to stop stream and close connection.</p>
 </dl>
 <dl class="py method">
 <dt id="ssp.kafka.producer.twitter_producer.TwitterProducer.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/kafka/producer/twitter_producer.html#TwitterProducer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.kafka.producer.twitter_producer.TwitterProducer.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream</span><span class="o">=</span><span class="default_value">'both'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/kafka/producer/twitter_producer.html#TwitterProducer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.kafka.producer.twitter_producer.TwitterProducer.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts two Kafka producers
 :return: None</p>
 </dd></dl>

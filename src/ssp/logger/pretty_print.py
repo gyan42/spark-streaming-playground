@@ -9,7 +9,7 @@ __maintainer__ = "Mageswaran Dhandapani"
 __email__ = "mageswaran1989@gmail.com"
 __status__ = "Education Purpose"
 
-CEND      = '\33[0m'
+
 CBOLD     = '\33[1m'
 CITALIC   = '\33[3m'
 CURL      = '\33[4m'
@@ -53,6 +53,7 @@ CVIOLETBG2 = '\33[105m'
 CBEIGEBG2  = '\33[106m'
 CWHITEBG2  = '\33[107m'
 
+CEND      = '\33[0m'
 CBLUE   = '\33[34m'
 CYELLOW2 = '\33[93m'
 CRED    = '\33[31m'

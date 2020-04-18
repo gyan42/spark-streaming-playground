@@ -139,32 +139,6 @@ class PostgresqlConnection(object):
         """
         return pd.read_sql(query, conn)["table_name"].values
 
-    def get_raw_dump_tables_list(self):
-        """
-        Returns list of raw data tables datasets dumped by the Spark streaming application
-        :return: List of string Eg: [raw_tweet_dataset_0,raw_tweet_dataset_1]
-        """
-        tables = self.get_tables_list()
-        tables = sorted(
-            [table for table in tables if table.startswith(self._raw_tweet_table_name_prefix)],
-            reverse=False)
-
-        print_info("List of raw dataset tables avaialable : {}\n\n".format("\n".join(tables)))
-        if len(tables) == 0:
-            raise UserWarning("No data found in Postgresql DB")
-        return tables
-
-    def get_latest_raw_dataset_name_n_version(self, version=0):
-        """
-
-        :param version:
-        :return:
-        """
-        tables = self.get_raw_dump_tables_list()
-        table_name = tables[0]
-        #assert version == int(table_name.split("_")[-1])
-        return table_name
-
     def get_table(self, table_name):
         """
         Use to get the Postgresql table as Pandas dataframe
@@ -184,31 +158,6 @@ class PostgresqlConnection(object):
         print_info(f"Runing query : {query}")
         conn = self.get_sqlalchemy_connection()
         return pd.read_sql_query(query, conn)
-
-    def get_processed_datasets(self, version=0):
-        conn = self.get_sqlalchemy_connection()
-
-        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
-        tables = self.get_tables_list()
-        print_error(tables)
-
-        res = list()
-
-        for table in [f"deduplicated_raw_tweet_dataset_{version}",
-                      f"test_dataset_{version}",
-                      f"dev_dataset_{version}",
-                      f"snorkel_train_dataset_{version}",
-                      f"train_dataset_{version}"]:
-            print_info(f"Checking for {table}...")
-
-            if table in tables:
-                print_info(f"Found {table}!")
-                res.append(pd.read_sql(f"select * from {table}", conn))
-        print_error(len(res))
-
-        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = res
-        return raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df
-
 
 @gin.configurable
 class PostgresqlDatasetBase(PostgresqlConnection):
@@ -249,10 +198,60 @@ class PostgresqlDatasetBase(PostgresqlConnection):
         self._label_output_column = label_output_column
         self._text_column = text_column
 
+    def get_processed_datasets(self, version=0):
+        conn = self.get_sqlalchemy_connection()
+
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name(version=version)
+        tables = self.get_tables_list()
+        print_error(tables)
+
+        res = list()
+
+        for table in [f"deduplicated_raw_tweet_dataset_{version}",
+                      f"test_dataset_{version}",
+                      f"dev_dataset_{version}",
+                      f"snorkel_train_dataset_{version}",
+                      f"train_dataset_{version}"]:
+            print_info(f"Checking for {table}...")
+
+            if table in tables:
+                print_info(f"Found {table}!")
+                res.append(pd.read_sql(f"select * from {table}", conn))
+        print_error(len(res))
+
+        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = res
+        return raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df
+
+    def get_raw_dump_tables_list(self):
+        """
+        Returns list of raw data tables dataset dumped by ~ssp.spark.consumer.TwitterDataset
+        :return: List of string Eg: [raw_tweet_dataset_0,raw_tweet_dataset_1]
+        """
+        tables = self.get_tables_list()
+        tables = sorted(
+            [table for table in tables if table.startswith(self._raw_tweet_table_name_prefix)],
+            reverse=False)
+
+        print_info("List of raw dataset tables avaialable : {}\n\n".format("\n".join(tables)))
+        if len(tables) == 0:
+            raise UserWarning("No data found in Postgresql DB")
+        return tables
+
+    def get_latest_raw_dataset_name(self, version=0):
+        """
+        Returns the specific version of raw tweet table
+        :param version: (int) Run id/version used while dumping the data using ~ssp.spark.consumer.TwitterDataset
+        :return: (str) name of the table with version
+        """
+        tables = self.get_raw_dump_tables_list()
+        table_name = tables[version]
+        # asserts we have the requested version
+        assert version == int(table_name.split("_")[-1])
+        return table_name
 
     def split_dataset_table(self, version=0):
         conn = self.get_sqlalchemy_connection()
-        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name(version=version)
 
         # Download dataset from postgresql
         raw_tweet_dataset_df = pd.read_sql(f"select * from {raw_tweet_dataset_table_name}", conn)

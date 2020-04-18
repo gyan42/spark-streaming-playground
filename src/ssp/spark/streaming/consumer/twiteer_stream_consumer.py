@@ -182,7 +182,7 @@ class TwitterDataset(TwitterStreamerBase):
             try:
                 print_info(query.lastProgress())
             except:
-                print_info("No stream progress")
+                pass #print_info("No stream progress")
 
             if count > num_records:
                 print_info(f"Number of records received so far in topic {topic} is {count}")

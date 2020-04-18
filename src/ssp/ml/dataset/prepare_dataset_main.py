@@ -28,8 +28,18 @@ if __name__ == "__main__":
                           required=True,
                           help="Version of raw tweet dump data to use ")
 
+    optparse.add_argument("-m", "--mode",
+                          default="split",
+                          type=str,
+                          required=False,
+                          help="[split/down] Prepare the dataset by splitting raw data table "
+                               "or downloads the annotated data from tables")
     parsed_args = optparse.parse_args()
 
     gin.parse_config_file(parsed_args.config_file)
     dataset = SSPMLDataset()
-    dataset.store(parsed_args.version)
+
+    if parsed_args.mode == "split":
+        dataset.split_n_store(version=parsed_args.version)
+    else:
+        dataset.download_n_store(version=parsed_args.version)

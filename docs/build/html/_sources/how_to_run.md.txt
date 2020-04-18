@@ -117,4 +117,4 @@ docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) 
 ```
 
 From here on you can try the use cases. (Use cases documents too repeat some of these steps for clarity!)
-witter App credentials and update it here [twitter.ini](config/twitter.ini).
+Twitter App credentials and update it here [twitter_ssp_config.gin](chttps://github.com/gyan42/spark-streaming-playground/blob/master/config/twitter_ssp_config.gin).

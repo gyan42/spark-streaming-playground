@@ -183,7 +183,7 @@
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Refer the following link for general architecture of our continuous integration ML pipeline<a class="reference external" href="https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7">theory on Architecting a Machine Learning Pipeline</a></p></li>
+<li><p>Refer the following link for general architecture of our continuous integration ML pipeline <a class="reference external" href="https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7">theory on Architecting a Machine Learning Pipeline</a></p></li>
 <li><p>Create a pipeline with following diagram as reference…<br /><img alt="../_images/ml_pipeline.png" src="../_images/ml_pipeline.png" /></p></li>
 <li><p>Build ground up dataset for tweet classification (AI tweet or not) using the live streaming data</p></li>
 <li><p>Dump the raw tweet data into a table in Postgresql DB called <code class="docutils literal notranslate"><span class="pre">streamingdb</span></code></p></li>
@@ -319,7 +319,14 @@ export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
 <li><p>Data collection</p>
 <ul class="simple">
 <li><p>There can be of two ways</p></li>
-<li><p>First way is dumping data from live stream, which may take few hours depending up on the
+<li><p>First and easy way is use the dump as part of this repo</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+python src/ssp/posgress/dataset_base.py --mode=upload
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Second way is dumping data from live stream, which may take few hours depending up on the
 frequency of the AI/ML/Big Data tweets</p></li>
 </ul>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[producer] Guake terminal name! 
@@ -330,15 +337,6 @@ frequency of the AI/ML/Big Data tweets</p></li>
     #by default 50K tweets (25K AI tweets + 25K False positive) will be collected and dumbed into the table
     vim bin/data/dump_raw_data_into_postgresql.sh
     bin/data/dump_raw_data_into_postgresql.sh
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Second way is use the dump as part of this repo</p></li>
-</ul>
-<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>python src/ssp/posgress/dataset_base.py --mode=upload
-
-# If there is any Postgresql permission error related to schema, run below command on `psql` terminal
-GRANT ALL ON schema public TO sparkstreaming;
 </pre></div>
 </div>
 </li>
@@ -371,19 +369,22 @@ GRANT ALL ON schema public TO sparkstreaming;
 </li>
 <li><p>Evalaute the Snorkel labeller with respect to hand labels</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[snorkell]
+    vim bin/models/evalaute_snorkel_labeller.sh
     bin/models/evalaute_snorkel_labeller.sh
 </pre></div>
 </div>
 </li>
 <li><p>Train Deep Learning model</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[DL Text classification Model]
+    vim config/default_ssp_config.gin #check the paths in NaiveTextClassifier params 
     bin/models/build_naive_dl_text_classifier.sh 
 </pre></div>
 </div>
 </li>
 <li><p>Start Tensorflow Serving</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[Tensorflow Serving]
-    export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_2/naive_text_classifier/exported/
+    # give appropriate model path that needs to be served
+    export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
     # test the model 
     saved_model_cli show --dir ${MODEL_DIR}/1/ --all
     # start the serving server
@@ -400,7 +401,13 @@ GRANT ALL ON schema public TO sparkstreaming;
 </pre></div>
 </div>
 </li>
+<li><p>Clean all Postgresql DB tables</p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">SCHEMA</span> <span class="n">public</span> <span class="n">CASCADE</span><span class="p">;</span>
+<span class="n">CREATE</span> <span class="n">SCHEMA</span> <span class="n">public</span> <span class="n">AUTHORIZATION</span> <span class="n">sparkstreaming</span><span class="p">;</span>
+<span class="n">GRANT</span> <span class="n">ALL</span> <span class="n">ON</span> <span class="n">schema</span> <span class="n">public</span> <span class="n">TO</span> <span class="n">sparkstreaming</span><span class="p">;</span>
+</pre></div>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="take-aways-learning-s">

@@ -171,21 +171,12 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">jsonify</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">plotly</span>
-<span class="kn">from</span> <span class="nn">werkzeug.datastructures</span> <span class="kn">import</span> <span class="n">FileStorage</span>
 <span class="kn">import</span> <span class="nn">gin</span>
 
 <span class="kn">from</span> <span class="nn">ssp.posgress.dataset_base</span> <span class="kn">import</span> <span class="n">PostgresqlConnection</span>
-<span class="kn">from</span> <span class="nn">ssp.utils.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
 <span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span><span class="p">,</span> <span class="n">print_info</span>
-<span class="kn">from</span> <span class="nn">ssp.utils.postgresql</span> <span class="kn">import</span> <span class="n">postgressql_connection</span><span class="p">,</span> <span class="n">create_pandas_table</span>
 <span class="kn">from</span> <span class="nn">flask_paginate</span> <span class="kn">import</span> <span class="n">Pagination</span><span class="p">,</span> <span class="n">get_page_args</span>
-<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">send_file</span>
 
 <span class="c1"># https://gist.github.com/mozillazg/69fb40067ae6d80386e10e105e6803c9#file-index-html-L5</span>
 <span class="c1"># https://github.com/doccano/doccano</span>
@@ -309,10 +300,6 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">gin</span><span class="o">.</span><span class="n">parse_config_file</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;config/tagger.gin&quot;</span><span class="p">)</span>
     <span class="n">tagger</span><span class="p">()</span>
-
-
-
-
 
 
 

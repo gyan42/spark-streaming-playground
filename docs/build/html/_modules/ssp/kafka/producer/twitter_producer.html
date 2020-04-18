@@ -184,9 +184,6 @@
 <span class="kn">from</span> <span class="nn">ssp.utils.ai_key_words</span> <span class="kn">import</span> <span class="n">AIKeyWords</span>
 <span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span><span class="p">,</span> <span class="n">print_info</span>
 
-<span class="kn">from</span> <span class="nn">ssp.utils.eda</span> <span class="kn">import</span> <span class="n">get_stop_words</span>
-
-
 <div class="viewcode-block" id="pick_text"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.pick_text">[docs]</a><span class="k">def</span> <span class="nf">pick_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">rtext</span><span class="p">,</span> <span class="n">etext</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Twitter Json data has three level of text. This function picks what is available in the order etext &gt; rtext &gt; text</span>
@@ -230,6 +227,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_ai</span> <span class="o">=</span> <span class="n">is_ai</span>
 
 <div class="viewcode-block" id="TweetsListener.on_data"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TweetsListener.on_data">[docs]</a>    <span class="k">def</span> <span class="nf">on_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets triggered by the Twitter stream API</span>
+<span class="sd">        :param data: Tweet Json data</span>
+<span class="sd">        :return: dumps the data into Kafka topic</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># Debug info</span>
@@ -329,10 +331,8 @@
                 <span class="n">twitter_stream</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">track</span><span class="o">=</span><span class="n">keywords</span><span class="p">,</span> <span class="n">languages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;en&quot;</span><span class="p">])</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Restarting the twitter stream&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TwitterProducer.run"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TwitterProducer.run"><a class="viewcode-back" href="../../../../ssp/ssp.kafka.producer.html#ssp.kafka.producer.twitter_producer.TwitterProducer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Starts two Kafka producers</span>
 <span class="sd">        :return: None</span>
@@ -340,16 +340,34 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topic_2_filter_words</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_topic_2_filter_words</span> <span class="o">=</span> <span class="n">AIKeyWords</span><span class="o">.</span><span class="n">ALL</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
 
-        <span class="n">ai_stream</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_twitter_kafka_stream</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic_1</span><span class="p">,</span> <span class="n">AIKeyWords</span><span class="o">.</span><span class="n">POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,))</span>
-        <span class="n">non_ai_stream</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_twitter_kafka_stream</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic_2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topic_2_filter_words</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">stream</span> <span class="o">==</span> <span class="s2">&quot;topic1&quot;</span><span class="p">:</span>
+            <span class="n">ai_stream</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_twitter_kafka_stream</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic_1</span><span class="p">,</span> <span class="n">AIKeyWords</span><span class="o">.</span><span class="n">POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,))</span>
+            <span class="n">ai_stream</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ai_stream</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">ai_stream</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">stream</span> <span class="o">==</span> <span class="s2">&quot;topic2&quot;</span><span class="p">:</span>
+            <span class="n">non_ai_stream</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_twitter_kafka_stream</span><span class="p">,</span>
+                                             <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic_2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topic_2_filter_words</span><span class="p">,))</span>
 
-        <span class="n">ai_stream</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">ai_stream</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ai_stream</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_twitter_kafka_stream</span><span class="p">,</span>
+                                         <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic_1</span><span class="p">,</span> <span class="n">AIKeyWords</span><span class="o">.</span><span class="n">POSITIVE</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">),</span> <span class="kc">True</span><span class="p">,))</span>
+            <span class="n">non_ai_stream</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_twitter_kafka_stream</span><span class="p">,</span>
+                                             <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kafka_topic_2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topic_2_filter_words</span><span class="p">,))</span>
 
-        <span class="n">ai_stream</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-        <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div></div>
+            <span class="n">ai_stream</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ai_stream</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+            <span class="n">ai_stream</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="n">non_ai_stream</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div></div>
+
+
+
 
 
 </pre></div>

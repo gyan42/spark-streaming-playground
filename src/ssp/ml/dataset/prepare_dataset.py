@@ -35,7 +35,7 @@ def insert_id_n_label_col(df):
     if "slabel" in df.columns:
         df["label"] = df["slabel"]
     else:
-        print_warn("No Snorkell labels found!")
+        print_warn("No Snorkel label column `slabel` found, and hence default value of -1 is inserted into `label` column")
         df["label"] = -1
     return df
 
@@ -91,9 +91,11 @@ class SSPMLDataset(PostgresqlDatasetBase):
         self._overwrite = overwrite
         self._labeler = SSPTweetLabeller(input_col="text", output_col=label_output_column)
 
-    def store(self, version=0):
-        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name_n_version(version=version)
-        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.split_dataset_table(version=version)
+    def split_n_store(self, version=0):
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name(version=version)
+
+        raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.split_dataset_table(
+                version=version)
 
         self._labeler = self._labeler.fit(snorkel_train_df)
         test_df = self._labeler.transform(test_df)
@@ -149,3 +151,36 @@ class SSPMLDataset(PostgresqlDatasetBase):
         self.to_posgresql_table(df=train_df,
                                 table_name=f"train_dataset_{version}",
                                 if_exists=if_exists)
+
+    def download_n_store(self, version=0):
+        raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name(version=version)
+
+        raw_tweet_dataset_df_deduplicated, test_df, dev_df, \
+            snorkel_train_df, train_df = self.get_processed_datasets(version=version)
+
+        dir_path = f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}" + "_mannual_annotated"
+        check_n_mk_dirs(dir_path)
+
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        self.store_df_as_parquet(df=test_df,
+                                 overwrite=self._overwrite,
+                                 path=dir_path + "/test.parquet")
+
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        self.store_df_as_parquet(df=dev_df,
+                                 overwrite=self._overwrite,
+                                 path=dir_path + "/dev.parquet")
+
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        self.store_df_as_parquet(df=snorkel_train_df,
+                                 overwrite=self._overwrite,
+                                 path=dir_path + "/snorkel_train_df.parquet")
+
+
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        self.store_df_as_parquet(train_df,
+                                 overwrite=self._overwrite,
+                                 path=dir_path + "/train.parquet")

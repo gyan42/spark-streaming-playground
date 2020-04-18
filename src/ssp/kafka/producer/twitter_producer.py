@@ -24,9 +24,6 @@ from kafka import KafkaProducer
 from ssp.utils.ai_key_words import AIKeyWords
 from ssp.logger.pretty_print import print_error, print_info
 
-from ssp.utils.eda import get_stop_words
-
-
 def pick_text(text, rtext, etext):
     """
     Twitter Json data has three level of text. This function picks what is available in the order etext > rtext > text
@@ -70,6 +67,11 @@ class TweetsListener(StreamListener):
         self._is_ai = is_ai
 
     def on_data(self, data):
+        """
+        Gets triggered by the Twitter stream API
+        :param data: Tweet Json data
+        :return: dumps the data into Kafka topic
+        """
         data_dict = json.loads(data)
 
         # Debug info
@@ -170,7 +172,7 @@ class TwitterProducer(object):
             except Exception as e:
                 print("Error: Restarting the twitter stream")
 
-    def run(self):
+    def run(self, stream="both"):
         """
         Starts two Kafka producers
         :return: None
@@ -178,15 +180,33 @@ class TwitterProducer(object):
         if self._topic_2_filter_words is None:
             self._topic_2_filter_words = AIKeyWords.ALL.split("|")
 
-        ai_stream = threading.Thread(target=self._twitter_kafka_stream, args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True,))
-        non_ai_stream = threading.Thread(target=self._twitter_kafka_stream, args=(self._kafka_topic_2, self._topic_2_filter_words,))
+        if stream == "topic1":
+            ai_stream = threading.Thread(target=self._twitter_kafka_stream, args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True,))
+            ai_stream.setDaemon(True)
+            ai_stream.start()
+            ai_stream.join()
+        elif stream == "topic2":
+            non_ai_stream = threading.Thread(target=self._twitter_kafka_stream,
+                                             args=(self._kafka_topic_2, self._topic_2_filter_words,))
 
-        ai_stream.setDaemon(True)
-        non_ai_stream.setDaemon(True)
-        ai_stream.start()
-        non_ai_stream.start()
+            non_ai_stream.setDaemon(True)
+            non_ai_stream.start()
+            non_ai_stream.join()
+        else:
+            ai_stream = threading.Thread(target=self._twitter_kafka_stream,
+                                         args=(self._kafka_topic_1, AIKeyWords.POSITIVE.split("|"), True,))
+            non_ai_stream = threading.Thread(target=self._twitter_kafka_stream,
+                                             args=(self._kafka_topic_2, self._topic_2_filter_words,))
 
-        ai_stream.join()
-        non_ai_stream.join()
+            ai_stream.setDaemon(True)
+            non_ai_stream.setDaemon(True)
+            ai_stream.start()
+            non_ai_stream.start()
+
+            ai_stream.join()
+            non_ai_stream.join()
+
+
+
 
 
