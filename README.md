@@ -33,4 +33,6 @@ cd docs
 make ssp
 ```
 
+## Medium Post @ [https://medium.com/@mageswaran1989/big-data-play-ground-for-engineers-intro-71d7c174dfd0](https://medium.com/@mageswaran1989/big-data-play-ground-for-engineers-intro-71d7c174dfd0)
+
 

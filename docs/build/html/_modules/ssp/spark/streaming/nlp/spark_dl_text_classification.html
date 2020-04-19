@@ -170,10 +170,11 @@
 <span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;Education Purpose&quot;</span>
 
 <span class="kn">import</span> <span class="nn">gin</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">explode</span><span class="p">,</span> <span class="n">col</span>
 
-<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span>
+<span class="kn">from</span> <span class="nn">ssp.logger.pretty_print</span> <span class="kn">import</span> <span class="n">print_error</span><span class="p">,</span> <span class="n">print_info</span>
 <span class="kn">from</span> <span class="nn">ssp.spark.streaming.common.twitter_streamer_base</span> <span class="kn">import</span> <span class="n">TwitterStreamerBase</span>
 <span class="kn">from</span> <span class="nn">ssp.spark.udf.tensorflow_serving_api_udf</span> <span class="kn">import</span> <span class="n">get_text_classifier_udf</span>
 
@@ -273,14 +274,21 @@
         <span class="c1"># Note: UDF with wrapper for different URL based on from where the code is triggered docker/local machine</span>
         <span class="n">text_clsfier</span> <span class="o">=</span> <span class="n">get_text_classifier_udf</span><span class="p">(</span><span class="n">is_docker</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_docker</span><span class="p">,</span> <span class="n">tokenizer_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenizer_path</span><span class="p">)</span>
         <span class="n">tweet_stream</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
-        <span class="n">tweet_stream</span> <span class="o">=</span> <span class="n">tweet_stream</span><span class="o">.</span> \
-            <span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;ai_prob&quot;</span><span class="p">,</span> <span class="n">text_clsfier</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)))</span><span class="o">.</span> \
-            <span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;ai_prob&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span>
+
 
         <span class="k">def</span> <span class="nf">foreach_batch_function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epoch_id</span><span class="p">):</span>
             <span class="c1"># Transform and write batchDF</span>
             <span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;ai_prob&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&quot;</span><span class="p">)</span>
+
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Number of records in this batch : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">count</span><span class="p">()))</span>
+
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;ai_prob&quot;</span><span class="p">,</span> <span class="n">text_clsfier</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)))</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Time taken to get predicted : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()))</span>
+            <span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&quot;</span><span class="p">)</span>
 
             <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
             <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;jdbc:postgresql://</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_postgresql_host</span><span class="p">,</span>

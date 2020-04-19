@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+
+<head>
+    <style type="text/css">
+        .header{
+            text-align: center;
+            background-color: rgb(136, 185, 229);
+            height: 70px;
+            line-height: 70px;
+        }
+        .chart{
+            margin-top: 30px;
+            text-align: center;
+        }
+        .pagination-page-info {
+            padding: .6em;
+            padding-left: 0;
+            width: 40em;
+            margin: .5em;
+            margin-left: 0;
+            font-size: 12px;
+        }
+        .pagination-page-info b {
+            color: black;
+            background: #6aa6ed;
+            padding-left: 2px;
+            padding: .1em .25em;
+            font-size: 150%;
+        }
+        .boxed {
+          border: 5px solid lightskyblue ;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="header">
+        <h3>Tweets with Prediction Value</h3>
+    </div>
+    <br>
+        <br>
+    {{ pagination.links }}
+    <br>
+
+   <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+
+
+       {%for i in range(0, len)%}
+            <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word; background-color:lightskyblue;",  class="boxed">
+            <a name="text_{{ i|string }}">{{ text[i]|safe }}</a>
+                <br>
+            {{ prob[i] }}
+
+            </div>
+           <br>
+       {%endfor%}
+
+        <input name="prob{{ i|string }}" value={{ prob[i] }} type="hidden" size="5"  />
+        <input name="page" value={{ page }} type="hidden" size="5"  />
+        <input name="per_page" value={{ per_page }} type="hidden" size="5"  />
+        <input name="offset" value={{ offset }} type="hidden" size="5"  />
+
+
+    <br>
+    {{ pagination.links }}
+    <br>
+
+    <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+
+</body>
+</html>

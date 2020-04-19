@@ -214,8 +214,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;layouts/index.html&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ai_tweets"><a class="viewcode-back" href="../../../../ssp/ssp.flask.ai_tweets_dashboard.html#ssp.flask.ai_tweets_dashboard.app.ai_tweets">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/ai_tweets&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ai_tweets</span><span class="p">():</span>
+<div class="viewcode-block" id="all_tweets"><a class="viewcode-back" href="../../../../ssp/ssp.flask.ai_tweets_dashboard.html#ssp.flask.ai_tweets_dashboard.app.all_tweets">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/all_tweets&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">all_tweets</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Home page with list of links for upload and download</span>
 <span class="sd">    :return:</span>
@@ -240,12 +240,48 @@
                             <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
                             <span class="n">css_framework</span><span class="o">=</span><span class="s1">&#39;bootstrap4&#39;</span><span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;layouts/all_tweets.html&#39;</span><span class="p">,</span>
+                           <span class="nb">len</span><span class="o">=</span><span class="n">data_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">prob</span><span class="o">=</span><span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;ai_prob&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span>
+                           <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">repl_func</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()],</span>
+                           <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+                           <span class="n">per_page</span><span class="o">=</span><span class="n">PER_PAGE</span><span class="p">,</span>
+                           <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+                           <span class="n">pagination</span><span class="o">=</span><span class="n">pagination</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ai_tweets"><a class="viewcode-back" href="../../../../ssp/ssp.flask.ai_tweets_dashboard.html#ssp.flask.ai_tweets_dashboard.app.ai_tweets">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/ai_tweets&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ai_tweets</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Home page with list of links for upload and download</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">PostgresqlConnection</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query_to_df</span><span class="p">(</span><span class="s2">&quot;select count(*) as count from ai_tweets where ai_prob &gt; 0.5&quot;</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># print(df)</span>
+    <span class="c1"># print(total)</span>
+
+    <span class="n">page</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_page_args</span><span class="p">(</span><span class="n">page_parameter</span><span class="o">=</span><span class="s1">&#39;page&#39;</span><span class="p">,</span>
+                               <span class="n">per_page_parameter</span><span class="o">=</span><span class="s1">&#39;per_page&#39;</span><span class="p">)</span>
+    <span class="c1"># No updates and hence to scrolling</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">PER_PAGE</span> <span class="o">*</span> <span class="p">(</span><span class="n">page</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">print_error</span><span class="p">([</span><span class="n">page</span><span class="p">,</span> <span class="n">PER_PAGE</span><span class="p">,</span> <span class="n">offset</span><span class="p">])</span>
+
+    <span class="n">data_df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query_to_df</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;select * from ai_tweets where ai_prob &gt; 0.5 limit </span><span class="si">{</span><span class="n">PER_PAGE</span><span class="si">}</span><span class="s2"> offset </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Pagination, listing only a subset at a time</span>
+    <span class="n">pagination</span> <span class="o">=</span> <span class="n">Pagination</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+                            <span class="n">per_page</span><span class="o">=</span><span class="n">PER_PAGE</span><span class="p">,</span>
+                            <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
+                            <span class="n">css_framework</span><span class="o">=</span><span class="s1">&#39;bootstrap4&#39;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;layouts/ai_tweets.html&#39;</span><span class="p">,</span>
                            <span class="nb">len</span><span class="o">=</span><span class="n">data_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                            <span class="n">prob</span><span class="o">=</span><span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;ai_prob&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span>
                            <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">repl_func</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data_df</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()],</span>
                            <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
-                           <span class="n">per_page</span><span class="o">=</span><span class="n">per_page</span><span class="p">,</span>
+                           <span class="n">per_page</span><span class="o">=</span><span class="n">PER_PAGE</span><span class="p">,</span>
                            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
                            <span class="n">pagination</span><span class="o">=</span><span class="n">pagination</span><span class="p">)</span></div>
 

@@ -1,9 +1,12 @@
 # Streaming ML Classification with Active Learning Model
 
-## Requirements  
+The client startup company wants to retweet all AI tweets which  has links in them, they think doing so will attract 
+more followers to their handle.
 
+## Requirements  
+  
 - Refer the following link for general architecture of our continuous integration ML pipeline [theory on Architecting a Machine Learning Pipeline](https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7)   
-- Create a pipeline with following diagram as reference...   
+- Create a pipeline similar to following illustration
     ![](../images/ml_pipeline.png)
 - Build ground up dataset for tweet classification (AI tweet or not) using the live streaming data
 - Dump the raw tweet data into a table in Postgresql DB called `streamingdb`
@@ -51,6 +54,9 @@
    ```
    Postgresql ---> Flask API ---> Dashboard
    ```
+
+![](../drawio/usecase6.png)
+
 
 Dataset tables:
 - Tables are suffixed with `run/version id` starting from `0`, refer respective bin/*.sh files for version configurations
@@ -181,6 +187,14 @@ This example needs multiple terminals:
     # [Spark Streaming]
         bin/nlp/spark_dl_text_classification_main.sh
     ```
+- Start the AI Tweets dash board
+    ```shell script
+    [dashboard]
+        bin/flask/ai_tweets_dashboard.sh 
+    ```
+    ![](../images/ai_tweets_dashboard.png)
+    A Flask Web UI with the text and its prediction probability!
+    
 - Clean all Postgresql DB tables
 ```
 DROP SCHEMA public CASCADE;
@@ -195,6 +209,9 @@ GRANT ALL ON schema public TO sparkstreaming;
 
 ------------------------------------------------------------------------------------------------------------------------
 
+Medium post on the use case @ [https://medium.com/@mageswaran1989/big-data-play-ground-for-engineers-architecting-a-realtime-streaming-deep-learning-pipeline-with-c0305407f21d](https://medium.com/@mageswaran1989/big-data-play-ground-for-engineers-architecting-a-realtime-streaming-deep-learning-pipeline-with-c0305407f21d)
+
+------------------------------------------------------------------------------------------------------------------------
 
 **References**
 - https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65

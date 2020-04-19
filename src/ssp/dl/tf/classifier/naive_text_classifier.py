@@ -64,7 +64,7 @@ class NaiveTextClassifier(object):
                  label_column="label",
                  num_words=8000,
                  seq_len=128,
-                 embedding_size=128,
+                 embedding_size=64,
                  batch_size=64,
                  hdfs_host=None,
                  hdfs_port=None):
@@ -137,14 +137,14 @@ class NaiveTextClassifier(object):
     def define_model(self):
         model = tf.keras.Sequential([
             tf.keras.layers.Embedding(self._num_words, self._embedding_size),
-            tf.keras.layers.GlobalAveragePooling1D(),
+            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(self._embedding_size)),
+            # tf.keras.layers.GlobalAveragePooling1D(),
+            tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(32, activation='relu'),
-            tf.keras.layers.Dense(2, activation='softmax')])
+            tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dense(2, activation='softmax')], name="naive_rnn_classifier")
 
         model.summary()
-
-        def f1(y_true, y_pred):
-            return f1_score(y_true, y_pred)
 
         model.compile(optimizer='adam',
                       loss='categorical_crossentropy',
@@ -283,7 +283,7 @@ class NaiveTextClassifier(object):
                 print_info("Model exists")
             print_info(f"Saving model to {self._model_dir}")
             check_n_mk_dirs(self._model_dir, is_remove=self._wipe_old_data)
-            self._model.save(os.path.join(self._model_dir,'model.h5'),overwrite=False)
+            self._model.save(os.path.join(self._model_dir,'model.h5'), overwrite=False)
             with open(os.path.join(self._model_dir,'tokenizer.pickle'), 'wb') as handle:
                 pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
         else:
@@ -294,6 +294,7 @@ class NaiveTextClassifier(object):
             self._model.save(self._model_dir)
             with self._hdfs_fs.open(self._model_dir + 'tokenizer.pickle', 'wb') as handle:
                 pickle.dump(self._tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        check_n_mk_dirs(self._model_export_dir.replace("//", "/"), is_remove=self._wipe_old_data)
-        self.export_tf_model(model=self._model, export_path=os.path.join(self._model_export_dir.replace("//", "/"),'model.h5'))
+
+        # check_n_mk_dirs(self._model_export_dir.replace("//", "/"), is_remove=self._wipe_old_data)
+        self.export_tf_model(model=self._model, export_path=os.path.join(self._model_export_dir.replace("//", "/")))
 

@@ -87,7 +87,9 @@ class TwitterStreamerBase(StreamerBase):
             add('text', StringType(), False). \
             add('extended_tweet', StructType().add("full_text", StringType(), True), True). \
             add('entities', entities, False). \
-            add('retweeted_status', StructType().add('extended_tweet', StructType().add("full_text", StringType(), True), True).add('user', StructType().add('description', StringType())), True). \
+            add('retweeted_status', StructType().add('extended_tweet', StructType().\
+                                                     add("full_text", StringType(), True), True).\
+                add('user', StructType().add('description', StringType())), True). \
             add('geo', StringType(), True). \
             add('retweet_count', IntegerType(), True)
 
@@ -139,6 +141,7 @@ class TwitterStreamerBase(StreamerBase):
             withColumn("hash", sha2("text", 256)). \
             drop("rtext", "etext"). \
             where(~isnull(col("id_str")))
+
             # TODO https://stackoverflow.com/questions/45474270/how-to-expire-state-of-dropduplicates-in-structured-streaming-to-avoid-oom
             # withWatermark("timestamp", "10 minutes"). \
             # dropDuplicates("id_str")

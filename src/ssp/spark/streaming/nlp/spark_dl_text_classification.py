@@ -10,10 +10,11 @@ __email__ = "mageswaran1989@gmail.com"
 __status__ = "Education Purpose"
 
 import gin
+from datetime import datetime
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import explode, col
 
-from ssp.logger.pretty_print import print_error
+from ssp.logger.pretty_print import print_error, print_info
 from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
 from ssp.spark.udf.tensorflow_serving_api_udf import get_text_classifier_udf
 
@@ -113,14 +114,21 @@ class SreamingTextClassifier(TwitterStreamerBase):
         # Note: UDF with wrapper for different URL based on from where the code is triggered docker/local machine
         text_clsfier = get_text_classifier_udf(is_docker=self._is_docker, tokenizer_path=self._tokenizer_path)
         tweet_stream.printSchema()
-        tweet_stream = tweet_stream. \
-            withColumn("ai_prob", text_clsfier(col("text"))). \
-            where(col("ai_prob") > 0.5)
+
 
         def foreach_batch_function(df, epoch_id):
             # Transform and write batchDF
             df.printSchema()
-            df.select(["text", "ai_prob"]).show(50, False)
+            print_info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+            print_info("Number of records in this batch : {}".format(df.count()))
+
+            t1 = datetime.now()
+            df = df.withColumn("ai_prob", text_clsfier(col("text")))
+            t2 = datetime.now()
+            delta = t2 - t1
+            print_info("Time taken to get predicted : {}".format(delta.total_seconds()))
+            print_info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
             mode = "append"
             url = "jdbc:postgresql://{}:{}/{}".format(self._postgresql_host,

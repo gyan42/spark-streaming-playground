@@ -25,8 +25,7 @@ schema = FloatType()
 
 
 def get_text_classifier_udf(is_docker, tokenizer_path):
-    if is_docker:
-        pass
+    if is_docker: #when the example is trigger inside the Docker environment
         url = "http://host.docker.internal:8501/text/ner/spacy"
         return udf(lambda x: predict_text_class(text=x, tokenizer_path=tokenizer_path, url=url), schema)
     else:
@@ -39,13 +38,13 @@ def predict(text):
         URL = "http://host.docker.internal:30123/text/ner/spacy"
         data = predict_text_class(text=text,
                                   url=URL,
-                                  tokenizer_path="~/ssp/model/raw_tweet_dataset_2/naive_text_classifier/1/")
+                                  tokenizer_path="~/ssp/model/raw_tweet_dataset_0/naive_text_classifier/1/")
     except:
         URL = "http://localhost:8501/v1/models/naive_text_clf:predict"
         data = predict_text_class(
             text=text,
             url=URL,
-            tokenizer_path="~/ssp/model/raw_tweet_dataset_2/naive_text_classifier/1/")
+            tokenizer_path="~/ssp/model/raw_tweet_dataset_0/naive_text_classifier/1/")
 
     print(data)
 

@@ -24,7 +24,7 @@ from ssp.utils.misc import check_n_mk_dirs
 from ssp.logger.pretty_print import print_info, print_error, print_warn
 
 
-def insert_id_n_label_col(df):
+def insert_id_col(df):
     """
     Inserts `text_id` column considering the number of rows and a label column.
     `label` column copies the values of `slabel` column, if exists or inserts `-1` as value
@@ -32,11 +32,6 @@ def insert_id_n_label_col(df):
     :return: Pandas DataFrame
     """
     df["text_id"] = list(range(1, df.shape[0]+1))
-    if "slabel" in df.columns:
-        df["label"] = df["slabel"]
-    else:
-        print_warn("No Snorkel label column `slabel` found, and hence default value of -1 is inserted into `label` column")
-        df["label"] = -1
     return df
 
 
@@ -89,7 +84,8 @@ class SSPMLDataset(PostgresqlDatasetBase):
                                        postgresql_user=postgresql_user,
                                        postgresql_password=postgresql_password)
         self._overwrite = overwrite
-        self._labeler = SSPTweetLabeller(input_col="text", output_col=label_output_column)
+        self._snorkel_labeler = SSPTweetLabeller(input_col="text", output_col=label_output_column)
+        self._naive_labeler = SSPTextLabeler(input_col="text", output_col="label")
 
     def split_n_store(self, version=0):
         raw_tweet_dataset_table_name = self.get_latest_raw_dataset_name(version=version)
@@ -97,16 +93,20 @@ class SSPMLDataset(PostgresqlDatasetBase):
         raw_tweet_dataset_df_deduplicated, test_df, dev_df, snorkel_train_df, train_df = self.split_dataset_table(
                 version=version)
 
-        self._labeler = self._labeler.fit(snorkel_train_df)
-        test_df = self._labeler.transform(test_df)
-        dev_df = self._labeler.transform(dev_df)
-        train_df = self._labeler.transform(train_df)
+        self._snorkel_labeler = self._snorkel_labeler.fit(snorkel_train_df)
+        test_df = self._snorkel_labeler.transform(test_df)
+        dev_df = self._snorkel_labeler.transform(dev_df)
+        train_df = self._snorkel_labeler.transform(train_df)
+
+        test_df = self._naive_labeler.transform(test_df)
+        dev_df = self._naive_labeler.transform(dev_df)
+        train_df = self._naive_labeler.transform(train_df)
 
         raw_tweet_dataset_df_deduplicated, \
-        test_df, dev_df, snorkel_train_df, train_df = insert_id_n_label_col(raw_tweet_dataset_df_deduplicated), \
-                                                      insert_id_n_label_col(test_df), insert_id_n_label_col(dev_df), \
-                                                      insert_id_n_label_col(snorkel_train_df), \
-                                                      insert_id_n_label_col(train_df)
+        test_df, dev_df, snorkel_train_df, train_df = insert_id_col(raw_tweet_dataset_df_deduplicated), \
+                                                      insert_id_col(test_df), insert_id_col(dev_df), \
+                                                      insert_id_col(snorkel_train_df), \
+                                                      insert_id_col(train_df)
 
         check_n_mk_dirs(f"{os.path.expanduser('~')}/ssp/data/dump/{raw_tweet_dataset_table_name}")
 
@@ -116,7 +116,7 @@ class SSPMLDataset(PostgresqlDatasetBase):
             if_exists = "fail"
 
         # Store the deduplicated tweets collected with respective to AI keywords
-        self.to_posgresql_table(df=insert_id_n_label_col(raw_tweet_dataset_df_deduplicated),
+        self.to_posgresql_table(df=insert_id_col(raw_tweet_dataset_df_deduplicated),
                                 table_name=f"deduplicated_{raw_tweet_dataset_table_name}",
                                 if_exists=if_exists)
         # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

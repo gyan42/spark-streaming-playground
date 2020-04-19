@@ -54,8 +54,8 @@ def index():
     """
     return render_template('layouts/index.html')
 
-@app.route('/ai_tweets')
-def ai_tweets():
+@app.route('/all_tweets')
+def all_tweets():
     """
     Home page with list of links for upload and download
     :return:
@@ -80,12 +80,48 @@ def ai_tweets():
                             total=total,
                             css_framework='bootstrap4')
 
+    return render_template('layouts/all_tweets.html',
+                           len=data_df.shape[0],
+                           prob=data_df["ai_prob"].to_list(),
+                           text=[re.sub(pattern, repl_func, t) for t in data_df["text"].to_list()],
+                           page=page,
+                           per_page=PER_PAGE,
+                           offset=offset,
+                           pagination=pagination)
+
+
+@app.route('/ai_tweets')
+def ai_tweets():
+    """
+    Home page with list of links for upload and download
+    :return:
+    """
+    db = PostgresqlConnection()
+    df = db.query_to_df("select count(*) as count from ai_tweets where ai_prob > 0.5")
+    total = df["count"].values[0]
+    # print(df)
+    # print(total)
+
+    page, _, _ = get_page_args(page_parameter='page',
+                               per_page_parameter='per_page')
+    # No updates and hence to scrolling
+    offset = PER_PAGE * (page-1)
+    print_error([page, PER_PAGE, offset])
+
+    data_df = db.query_to_df(f"select * from ai_tweets where ai_prob > 0.5 limit {PER_PAGE} offset {offset}")
+
+    # Pagination, listing only a subset at a time
+    pagination = Pagination(page=page,
+                            per_page=PER_PAGE,
+                            total=total,
+                            css_framework='bootstrap4')
+
     return render_template('layouts/ai_tweets.html',
                            len=data_df.shape[0],
                            prob=data_df["ai_prob"].to_list(),
                            text=[re.sub(pattern, repl_func, t) for t in data_df["text"].to_list()],
                            page=page,
-                           per_page=per_page,
+                           per_page=PER_PAGE,
                            offset=offset,
                            pagination=pagination)
 

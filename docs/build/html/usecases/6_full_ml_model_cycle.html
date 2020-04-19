@@ -180,11 +180,14 @@
             
   <div class="section" id="streaming-ml-classification-with-active-learning-model">
 <h1>Streaming ML Classification with Active Learning Model<a class="headerlink" href="#streaming-ml-classification-with-active-learning-model" title="Permalink to this headline">¶</a></h1>
+<p>The client startup company wants to retweet all AI tweets which  has links in them, they think doing so will attract
+more followers to their handle.</p>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Refer the following link for general architecture of our continuous integration ML pipeline <a class="reference external" href="https://towardsdatascience.com/architecting-a-machine-learning-pipeline-a847f094d1c7">theory on Architecting a Machine Learning Pipeline</a></p></li>
-<li><p>Create a pipeline with following diagram as reference…<br /><img alt="../_images/ml_pipeline.png" src="../_images/ml_pipeline.png" /></p></li>
+<li><p>Create a pipeline similar to following illustration
+<img alt="../_images/ml_pipeline.png" src="../_images/ml_pipeline.png" /></p></li>
 <li><p>Build ground up dataset for tweet classification (AI tweet or not) using the live streaming data</p></li>
 <li><p>Dump the raw tweet data into a table in Postgresql DB called <code class="docutils literal notranslate"><span class="pre">streamingdb</span></code></p></li>
 <li><p>Have configuration to prefix the name of the raw tweet data and version config to dump the tables into DB</p></li>
@@ -236,6 +239,7 @@ Tweets ---&gt; Twitter Stream ---&gt; Tweepy ---&gt; Kafka Producer ---&gt; Kafk
 </div>
 </li>
 </ol>
+<p><img alt="../_images/usecase6.png" src="../_images/usecase6.png" /></p>
 <p>Dataset tables:</p>
 <ul class="simple">
 <li><p>Tables are suffixed with <code class="docutils literal notranslate"><span class="pre">run/version</span> <span class="pre">id</span></code> starting from <code class="docutils literal notranslate"><span class="pre">0</span></code>, refer respective bin/*.sh files for version configurations</p></li>
@@ -401,6 +405,14 @@ frequency of the AI/ML/Big Data tweets</p></li>
 </pre></div>
 </div>
 </li>
+<li><p>Start the AI Tweets dash board</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>[dashboard]
+    bin/flask/ai_tweets_dashboard.sh 
+</pre></div>
+</div>
+<p><img alt="../_images/ai_tweets_dashboard.png" src="../_images/ai_tweets_dashboard.png" />
+A Flask Web UI with the text and its prediction probability!</p>
+</li>
 <li><p>Clean all Postgresql DB tables</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">SCHEMA</span> <span class="n">public</span> <span class="n">CASCADE</span><span class="p">;</span>
@@ -415,6 +427,8 @@ frequency of the AI/ML/Big Data tweets</p></li>
 <ul class="simple">
 <li><p>TODOs</p></li>
 </ul>
+<hr class="docutils" />
+<p>Medium post on the use case &#64; <a class="reference external" href="https://medium.com/&#64;mageswaran1989/big-data-play-ground-for-engineers-architecting-a-realtime-streaming-deep-learning-pipeline-with-c0305407f21d">https://medium.com/&#64;mageswaran1989/big-data-play-ground-for-engineers-architecting-a-realtime-streaming-deep-learning-pipeline-with-c0305407f21d</a></p>
 <hr class="docutils" />
 <p><strong>References</strong></p>
 <ul class="simple">
