@@ -1,4 +1,4 @@
-# Streaming ML Classification with Active Learning Model
+# Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python
 
 The client startup company wants to retweet all AI tweets which  has links in them, they think doing so will attract 
 more followers to their handle.
