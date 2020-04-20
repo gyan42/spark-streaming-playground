@@ -1,4 +1,4 @@
-# [Structured Streaming Playground](https://gyan42.github.io/spark-streaming-playground/)
+# [Fullstack Data Science Examples  wuth Structured Streaming](https://gyan42.github.io/spark-streaming-playground/)
 
 The aim of the this project is to create a zoo of Big Data frameworks on a single machine,
 where pipelines can be build and tested based on Twitter stream. Which involves but not limited to fetch,
