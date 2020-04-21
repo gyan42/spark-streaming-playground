@@ -29,6 +29,11 @@
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common. 
 
+Start the docker container, if needed:
+```
+docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+```
+
 To get a new terminal for our docker instance run :   
 `docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash`
 Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`

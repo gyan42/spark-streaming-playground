@@ -32,7 +32,7 @@ if __name__ == "__main__":
                           default="split",
                           type=str,
                           required=False,
-                          help="[split/down] Prepare the dataset by splitting raw data table "
+                          help="[split/download] Prepare the dataset by splitting raw data table "
                                "or downloads the annotated data from tables")
     parsed_args = optparse.parse_args()
 

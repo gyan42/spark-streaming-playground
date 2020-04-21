@@ -91,6 +91,11 @@ Dataset tables:
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common. 
 
+Start the docker container, if needed:
+```
+docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+```
+
 To get a new terminal for our docker instance run : `docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash`
 Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`
 
@@ -131,7 +136,10 @@ This example needs multiple terminals:
 - Data preparation for model training, with default snorkel labeller
     ```shell script
     #[ssp data]
-        vim bin/data/prepare_ssp_dataset.sh # check the version points to the one we wanted, to begin with it has to be 0
+        # check the version points to the one we wanted, to begin with it has to be 0
+        # --mode switch has two options: 'split' for crating the train/test set from initial full data table and
+        # 'download' to dump the labelled data, same outpath is used expect it is annotated with '_labelled'
+        vim bin/data/prepare_ssp_dataset.sh 
         vim config/default_ssp_config.gin # check for `SSPMLDataset` params
         bin/data/prepare_ssp_dataset.sh
     ```

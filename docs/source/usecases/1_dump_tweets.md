@@ -48,6 +48,11 @@ Spark Structured Streaming with Kafka Consumer -> Parquet Sink -> Bronze Lake (H
 There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common. 
 
+Start the docker container, if needed:
+```
+docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+```
+
 To get a new terminal for our docker instance run :   
 `docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1) bash`
 Note: We pull our container run id with `$(docker ps | grep sparkstructuredstreaming-pg | cut -d' ' -f1)`
@@ -135,4 +140,11 @@ hdfs dfs -ls /tmp/ssp/data/lake/bronze/delta/
 - Using Spark Structured Streaming to store streaming data as [parquet](https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/src/ssp/spark/streaming/common/streamer_base.py#L57) in HDFS/local path
 - View the stored data with HDFS commands
     
+------------------------------------------------------------------------------------------------------------------------
 
+## Limitations / TODOs
+- The free Twitter streaming API is sampling [1% to 40% of tweets for given filter words](https://brightplanet.com/2013/06/25/twitter-firehose-vs-twitter-api-whats-the-difference-and-why-should-you-care/).
+ So how to handle to full scale real time tweets with services like [Gnip Firehose](https://support.gnip.com/apis/firehose/overview.html)?  
+- Have common APIs for all File systems : Local Disk, HDFS, AWS S3. GFS
+- Understand more on Kafka topic creation and its distribution configuration paramaters like partitions, replicas etc.,
+- Come up with Apache Spark Streaming Listeners, to monitor the streaming data  

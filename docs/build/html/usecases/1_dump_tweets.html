@@ -99,6 +99,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations-todos">Limitations / TODOs</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
@@ -232,6 +233,10 @@ that talks about <code class="docutils literal notranslate"><span class="pre">Da
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common.</p>
+<p>Start the docker container, if needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+</pre></div>
+</div>
 <p>To get a new terminal for our docker instance run :<br /><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
 Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
 <p>This example needs three terminals:</p>
@@ -341,6 +346,17 @@ in our <a class="reference external" href="https://github.com/gyan42/spark-strea
 </li>
 <li><p>Using Spark Structured Streaming to store streaming data as <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/src/ssp/spark/streaming/common/streamer_base.py#L57">parquet</a> in HDFS/local path</p></li>
 <li><p>View the stored data with HDFS commands</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="limitations-todos">
+<h2>Limitations / TODOs<a class="headerlink" href="#limitations-todos" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The free Twitter streaming API is sampling <a class="reference external" href="https://brightplanet.com/2013/06/25/twitter-firehose-vs-twitter-api-whats-the-difference-and-why-should-you-care/">1% to 40% of tweets for given filter words</a>.
+So how to handle to full scale real time tweets with services like <a class="reference external" href="https://support.gnip.com/apis/firehose/overview.html">Gnip Firehose</a>?</p></li>
+<li><p>Have common APIs for all File systems : Local Disk, HDFS, AWS S3. GFS</p></li>
+<li><p>Understand more on Kafka topic creation and its distribution configuration paramaters like partitions, replicas etc.,</p></li>
+<li><p>Come up with Apache Spark Streaming Listeners, to monitor the streaming data</p></li>
 </ul>
 </div>
 </div>

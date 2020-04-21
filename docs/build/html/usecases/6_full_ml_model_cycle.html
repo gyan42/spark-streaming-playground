@@ -305,6 +305,10 @@ Tweets ---&gt; Twitter Stream ---&gt; Tweepy ---&gt; Kafka Producer ---&gt; Kafk
 <h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
 <p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
 is the difference, once the terminal is launched, the steps are common.</p>
+<p>Start the docker container, if needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+</pre></div>
+</div>
 <p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
 Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
 <p>This example needs multiple terminals:</p>
@@ -346,7 +350,10 @@ frequency of the AI/ML/Big Data tweets</p></li>
 </li>
 <li><p>Data preparation for model training, with default snorkel labeller</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[ssp data]
-    vim bin/data/prepare_ssp_dataset.sh # check the version points to the one we wanted, to begin with it has to be 0
+    # check the version points to the one we wanted, to begin with it has to be 0
+    # --mode switch has two options: &#39;split&#39; for crating the train/test set from initial full data table and
+    # &#39;download&#39; to dump the labelled data, same outpath is used expect it is annotated with &#39;_labelled&#39;
+    vim bin/data/prepare_ssp_dataset.sh 
     vim config/default_ssp_config.gin # check for `SSPMLDataset` params
     bin/data/prepare_ssp_dataset.sh
 </pre></div>
