@@ -11,6 +11,25 @@ where pipelines can be build and tested based on Twitter stream. Which involves 
 store the data in data lake, play around with the Spark Structured SQLs for processing, create dataset from live
 stream for Machine Learning and do interactive visualization from the data lake.
 
+## What is [Spark Streaming](https://techvidvan.com/tutorials/spark-streaming/)?
+
+First of all, what is streaming? A data stream is an unbounded sequence of data arriving continuously.
+Streaming divides continuously flowing input data into discrete units for processing. Stream processing is low latency
+processing and analyzing of streaming data. Spark Streaming is an extension of the core Spark API that enables scalable,
+high-throughput, fault-tolerant stream processing of live data. Spark Streaming is for use cases which require a
+significant amount of data to be quickly processed as soon as it arrives. Example real-time use cases are:
+
+- Website monitoring, network monitoring
+- Fraud detection
+- Web clicks
+- Advertising
+- Internet of Things sensors
+
+Spark Streaming supports data sources such as HDFS directories, TCP sockets, Kafka, Flume, Twitter, etc.
+Data Streams can be processed with Spark’s core APIS, DataFrames SQL, or machine learning APIs, and can be persisted
+to a filesystem, HDFS, databases, or any data source offering a Hadoop OutputFormat.
+
+
 Code base can be found @ `https://github.com/gyan42/spark-streaming-playground <https://github.com/gyan42/spark-streaming-playground/>`_.
 
 .. image:: drawio/big_data_zoo.png
