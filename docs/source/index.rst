@@ -11,7 +11,8 @@ where pipelines can be build and tested based on Twitter stream. Which involves 
 store the data in data lake, play around with the Spark Structured SQLs for processing, create dataset from live
 stream for Machine Learning and do interactive visualization from the data lake.
 
-## What is [Spark Streaming](https://techvidvan.com/tutorials/spark-streaming/)?
+What is `Spark Streaming? <https://techvidvan.com/tutorials/spark-streaming/>`_
+#########################
 
 First of all, what is streaming? A data stream is an unbounded sequence of data arriving continuously.
 Streaming divides continuously flowing input data into discrete units for processing. Stream processing is low latency
