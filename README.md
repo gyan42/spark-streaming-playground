@@ -23,7 +23,6 @@ Spark Streaming supports data sources such as HDFS directories, TCP sockets, Kaf
 Data Streams can be processed with Spark’s core APIS, DataFrames SQL, or machine learning APIs, and can be persisted 
 to a filesystem, HDFS, databases, or any data source offering a Hadoop OutputFormat.
 
-## Use cases
 - [Spark Streaming Playground Environment Setup](https://gyan42.github.io/spark-streaming-playground/build/html/setup/setup.html)
 - [Learning Materials](https://gyan42.github.io/spark-streaming-playground/build/html/tutorials.html)
 - [Localhost Port Number used](https://gyan42.github.io/spark-streaming-playground/build/html/host_urls_n_ports.html)
