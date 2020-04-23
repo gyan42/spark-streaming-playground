@@ -5,6 +5,8 @@ where pipelines can be build and tested based on Twitter stream. Which involves 
 store the data in data lake, play around with the Spark Structured SQLs for processing, create dataset from live 
 stream for Machine Learning and do interactive visualization from the data lake.
 
+![](docs/source/drawio/big_data_zoo.png)
+
 ## What is [Spark Streaming](https://techvidvan.com/tutorials/spark-streaming/)?   
 
 First of all, what is streaming? A data stream is an unbounded sequence of data arriving continuously. 
@@ -34,7 +36,7 @@ to a filesystem, HDFS, databases, or any data source offering a Hadoop OutputFor
     - Spark ML Model
     - Stackoverflow Dataset Exploration
     - Streaming ML Classification with Online Learning Model
-
+    ![](docs/source/drawio/usecase6.png)
 
 **Sanity test**
 
@@ -54,3 +56,6 @@ make ssp
 ## Medium Post @ [https://medium.com/@mageswaran1989/big-data-play-ground-for-engineers-intro-71d7c174dfd0](https://medium.com/@mageswaran1989/big-data-play-ground-for-engineers-intro-71d7c174dfd0)
 
 
+## Block Chain and Streaming
+
+https://github.com/dhiraa/blockchain-streaming
