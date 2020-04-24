@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Spark on K8s &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp" href="../ssp/ssp.html" />
+    <link rel="prev" title="Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python" href="6_full_ml_model_cycle.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_dump_tweets.html">Dump Tweet data into Data Lake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_scalable_rest_api.html">Scalable REST end point a naive approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_spark_ml.html">Spark ML Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_static_table_stackoverflow.html">Stackoverflow Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_full_ml_model_cycle.html">Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Spark on K8s</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a><ul>
+<li class="toctree-l4"><a class="reference external" href="https://docs.docker.com/registry/insecure/">https://docs.docker.com/registry/insecure/</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations-todos">Limitations / TODOs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="usecases.html">Usecases</a> &raquo;</li>
+        
+      <li>Spark on K8s</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/7_spark_on_k8s.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="spark-on-k8s">
+<h1>Spark on K8s<a class="headerlink" href="#spark-on-k8s" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://thenewstack.io/big-data-google-replaces-yarn-with-kubernetes-to-schedule-apache-spark/">Google has adopted Kubernetes as cluster manager</a>,
+so even our client wanted to test out Kubernetes for Spark Applications</p>
+<hr class="docutils" />
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Setup local Kubernetes cluster to run Spark examples</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>Read the Spark <a class="reference external" href="https://spark.apache.org/docs/latest/running-on-kubernetes.html">Kubernetes docs</a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+<p>Make sure the Spark version &gt; 2.4.5 for this to work seamlessly.</p>
+<p>Handy Links</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://docs.docker.com/registry/insecure/">https://docs.docker.com/registry/insecure/</a></li>
+</ul>
+</div>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>cd /path/to/spark-streaming-playground/kubernetes/spark/
+</pre></div>
+</div>
+<p>Install k8s tooling locally, start minikube, initialize helm and deploy a docker registry chart to your minikube:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span>
+</pre></div>
+</div>
+<p>If everything goes well, you should see a message like this: Registry successfully deployed in minikube. Make sure you
+add 192.168.99.100:30000 to your insecure registries before continuing.
+Check https://docs.docker.com/registry/insecure/ for more information on how to do it in your platform.</p>
+<p>In simple words, you needs to add an entry as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">docker</span><span class="o">/</span><span class="n">daemon</span><span class="o">.</span><span class="n">json</span> <span class="c1"># and add followning line</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;insecure-registries&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;192.168.99.100:30000&quot;</span><span class="p">]</span>
+  <span class="p">}</span> 
+</pre></div>
+</div>
+<p>Restart the docker…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
+<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">docker</span>
+<span class="n">docker</span> <span class="n">info</span>
+</pre></div>
+</div>
+<p>You should see following log:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">Insecure</span> <span class="n">Registries</span><span class="p">:</span>
+     <span class="mf">192.168</span><span class="o">.</span><span class="mf">99.100</span><span class="p">:</span><span class="mi">30000</span>
+     <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">8</span>
+</pre></div>
+</div>
+<p>Push the spark images to our private docker registry</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">docker</span><span class="o">-</span><span class="n">push</span>
+</pre></div>
+</div>
+<p>HINT: if you see “Get https://192.168.99.100:30000/v2/: http: server gave HTTP response to HTTPS client”
+go back and check whether you have it listed in your insecure registries</p>
+<p>Once your images are pushed, let’s run a sample spark job (first on client mode):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$SPARK_HOME/bin/spark-submit \
+    --master k8s://https://$(minikube ip):8443 \
+    --deploy-mode client \
+    --conf spark.kubernetes.container.image=$(./get_image_name.sh spark) \
+    --class org.apache.spark.examples.SparkPi \
+    $SPARK_HOME/examples/jars/spark-examples_2.11-2.4.5.jar
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="limitations-todos">
+<h2>Limitations / TODOs<a class="headerlink" href="#limitations-todos" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Explore more on the Kubernetes driver options</p></li>
+<li><p>Explore how to run the example on AWS</p></li>
+</ul>
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p>https://tech.olx.com/running-spark-on-kubernetes-a-fully-functional-example-and-why-it-makes-sense-for-olx-d56b6a61fcbe</p></li>
+<li><p>https://github.com/olx-global/spark-on-k8s</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../ssp/ssp.html" class="btn btn-neutral float-right" title="ssp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="6_full_ml_model_cycle.html" class="btn btn-neutral float-left" title="Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

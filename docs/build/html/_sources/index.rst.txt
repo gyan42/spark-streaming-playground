@@ -33,10 +33,11 @@ to a filesystem, HDFS, databases, or any data source offering a Hadoop OutputFor
 
 Code base can be found @ `https://github.com/gyan42/spark-streaming-playground <https://github.com/gyan42/spark-streaming-playground/>`_.
 
+Some common useful `Cheat Sheets <https://github.com/gyan42/spark-streaming-playground/blob/master/docs/cheat_sheets/cheat_sheets.md>`_
+
 .. image:: drawio/big_data_zoo.png
     :align: center
     :alt: alternate text
-
 
 .. toctree::
    :maxdepth: 1

@@ -18,7 +18,10 @@ RUN wget https://archive.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoo
 RUN wget https://downloads.apache.org/kafka/2.4.0/kafka_2.11-2.4.0.tgz
 
 RUN apt-get install -y postgresql postgresql-contrib
-RUN apt-get install -y ssh supervisor openssh-server
+RUN apt-get update --fix-missing
+RUN apt-get install -y ssh
+RUN apt-get install -y supervisor
+RUN apt-get install -y openssh-server
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get install -y openjdk-8-jdk
@@ -123,7 +126,7 @@ EXPOSE 9092 2181 50070 8020 50075
 #-----------------------------------------------------------------------------------------------------------------------
 # Python specific setup
 
-COPY requirements.txt /opt/binaries/
+COPY requirements_docker.txt /opt/binaries/
 RUN pip3 install -r /opt/binaries/requirements.txt
 ENV PYSPARK_PYTHON /usr/bin/python3
 ENV PYSPARK_DRIVER_PYTHON /usr/bin/python3

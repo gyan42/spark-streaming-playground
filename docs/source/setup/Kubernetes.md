@@ -1,4 +1,19 @@
 # Kubernetes
+Kubernetes is an open-source container-orchestration system for automating deployment, scaling and management of 
+containerized applications.
+
+Minikube is a tool that makes it easy to run Kubernetes locally. Minikube runs a single-node Kubernetes cluster 
+inside a VM on your laptop for users looking to try out Kubernetes or develop with it day-to-day.
+
+- [Architecture]((https://www.edureka.co/blog/kubernetes-architecture/))
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux)
+- [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
+- [Hypervisor VirtualBox](https://www.virtualbox.org/wiki/Linux_Downloads)
+    ```shell script
+        sudo apt-get install libqt5opengl5
+        sudo dpkg -i virtualbox-6.1_6.1.6-137129~Ubuntu~bionic_amd64.deb
+    ```
+
 Some common commands that are handy while working with kubernetes.
 
 ```shell script
@@ -17,28 +32,11 @@ kubectl delete deployment.apps/spacy-flask-ner-python
 
  
 ```
-
-## Setting up with our docker image
-
-```
-sudo minikube start --vm-driver=none 
-
-# note only first time below commands will add the docker file and run its as as service,
-# there on, our service will be started by default when we start the Kubernetes!
-
-kubectl create -f kubernetes/spacy-flask-ner-python.deployment.yaml 
-kubectl create -f kubernetes/spacy-flask-ner-python.service.yaml
-# on a seprate terminal
-curl -i -H "Content-Type: application/json" -X POST -d '{"text":"Ram read a book on Friday 20/11/2019"}' http://127.0.0.1:30123/spacy/api/v0.1/ner
-
-# kubernetes restart
-kubectl delete service/spacy-flask-ner-python-service deployment.apps/spacy-flask-ner-python-deployment
-# and then create the services again
-```
  
-## SE
+
 ### References
 - https://medium.com/faun/how-to-restart-kubernetes-pod-7c702ca984c1
 - [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
 - [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 - [https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)
+- [https://intellipaat.com/blog/tutorial/devops-tutorial/kubernetes-cheat-sheet/](https://intellipaat.com/blog/tutorial/devops-tutorial/kubernetes-cheat-sheet/)

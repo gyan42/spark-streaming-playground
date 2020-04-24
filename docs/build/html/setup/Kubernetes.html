@@ -101,11 +101,7 @@
 <li class="toctree-l2"><a class="reference internal" href="ApacheSpark.html">Apache Spark</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Kubernetes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#setting-up-with-our-docker-image">Setting up with our docker image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#se">SE</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Twitter.html">Twitter</a></li>
@@ -188,6 +184,21 @@
             
   <div class="section" id="kubernetes">
 <h1>Kubernetes<a class="headerlink" href="#kubernetes" title="Permalink to this headline">¶</a></h1>
+<p>Kubernetes is an open-source container-orchestration system for automating deployment, scaling and management of
+containerized applications.</p>
+<p>Minikube is a tool that makes it easy to run Kubernetes locally. Minikube runs a single-node Kubernetes cluster
+inside a VM on your laptop for users looking to try out Kubernetes or develop with it day-to-day.</p>
+<ul>
+<li><p><a class="reference external" href="(https://www.edureka.co/blog/kubernetes-architecture/)">Architecture</a></p></li>
+<li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux">kubectl</a></p></li>
+<li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-minikube/">Minikube</a></p></li>
+<li><p><a class="reference external" href="https://www.virtualbox.org/wiki/Linux_Downloads">Hypervisor VirtualBox</a></p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>    sudo apt-get install libqt5opengl5
+    sudo dpkg -i virtualbox-6.1_6.1.6-137129~Ubuntu~bionic_amd64.deb
+</pre></div>
+</div>
+</li>
+</ul>
 <p>Some common commands that are handy while working with kubernetes.</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># starts the pods in yor machine
 sudo minikube start --vm-driver=none 
@@ -205,35 +216,15 @@ kubectl delete deployment.apps/spacy-flask-ner-python
  
 </pre></div>
 </div>
-<div class="section" id="setting-up-with-our-docker-image">
-<h2>Setting up with our docker image<a class="headerlink" href="#setting-up-with-our-docker-image" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">minikube</span> <span class="n">start</span> <span class="o">--</span><span class="n">vm</span><span class="o">-</span><span class="n">driver</span><span class="o">=</span><span class="n">none</span> 
-
-<span class="c1"># note only first time below commands will add the docker file and run its as as service,</span>
-<span class="c1"># there on, our service will be started by default when we start the Kubernetes!</span>
-
-<span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">deployment</span><span class="o">.</span><span class="n">yaml</span> 
-<span class="n">kubectl</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">yaml</span>
-<span class="c1"># on a seprate terminal</span>
-<span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30123</span><span class="o">/</span><span class="n">spacy</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">ner</span>
-
-<span class="c1"># kubernetes restart</span>
-<span class="n">kubectl</span> <span class="n">delete</span> <span class="n">service</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">service</span> <span class="n">deployment</span><span class="o">.</span><span class="n">apps</span><span class="o">/</span><span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">deployment</span>
-<span class="c1"># and then create the services again</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="se">
-<h2>SE<a class="headerlink" href="#se" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="references">
-<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>https://medium.com/faun/how-to-restart-kubernetes-pod-7c702ca984c1</p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/">https://kubernetes.io/docs/concepts/services-networking/service/</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">https://kubernetes.io/docs/concepts/workloads/controllers/deployment/</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/</a></p></li>
+<li><p><a class="reference external" href="https://intellipaat.com/blog/tutorial/devops-tutorial/kubernetes-cheat-sheet/">https://intellipaat.com/blog/tutorial/devops-tutorial/kubernetes-cheat-sheet/</a></p></li>
 </ul>
-</div>
 </div>
 </div>
 

@@ -4,17 +4,22 @@ It is highly recommended to setup Hadoop and Hive before Apache Spark.
 Download the latest build from http://spark.apache.org/downloads.html
 
 ## Local Setup
-Consider we have downloaded  `spark-2.4.3-bin-hadoop2.7.tgz`
-
 ```
-mkdir /opt/binaries/
-mv ~/Downloads/spark-2.4.3-bin-hadoop2.7.tgz /opt/binaries/
+MIRROR=archive.apache.org
+SPARK_VERSION=2.4.5
+SPARK_VERSION_SUFFIX=-bin-hadoop2.7
+
+mkdir -p /opt/binaries/
 cd /opt/binaries/
-tar -xzf spark-2.4.3-bin-hadoop2.7.tgz
+
+wget https://${MIRROR}/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}${SPARK_VERSION_SUFFIX}.tgz 
+# spark-2.4.5-bin-hadoop2.7
+tar xvzf spark-${SPARK_VERSION}${SPARK_VERSION_SUFFIX}.tgz
+
 
 # add following to ~/.bashrc
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
-export SPARK_HOME=/opt/binaries/spark-2.4.4-bin-hadoop2.7/
+export SPARK_HOME=/opt/binaries/spark-2.4.5-bin-hadoop2.7/
 
 # switch to the conda env you are in and run `which python` and use the path here
 export PYSPARK_PYTHON=/home/mageswarand/anaconda3/envs/vh/bin/python
@@ -29,17 +34,11 @@ Rerences: https://spark.apache.org/docs/latest/spark-standalone.html
 Following setup was on my machine Dell-G7 which has 32GB RAM and 12 cores :)
 
 ```
-cd /opt/binaries/spark-2.4.4-bin-hadoop2.7/conf
-vim spark-defaults.conf
-    spark.serializer                 org.apache.spark.serializer.KryoSerializer
-    spark.driver.memory              2g
-    spark.sql.catalogImplementation hive
-    spark.sql.hive.thriftServer.singleSession true
-    spark.sql.warehouse.dir /opt/spark-warehouse/
-    spark.jars.packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.4,org.apache.kafka:kafka-clients:2.4.0,io.delta:delta-core_2.11:0.4.0,postgresql:postgresql:9.1-901-1.jdbc4
+cd /path/to/spark-streaming-playground
+cp config/conf/spark/conf/hive-site.xml /opt/binaries/spark-2.4.5-bin-hadoop2.7/conf/hive-site.xml
+cp config/conf/spark/conf/spark-defaults.conf /opt/binaries/spark-2.4.5-bin-hadoop2.7/conf/spark-defaults.conf
 
-
-cd /opt/binaries/spark-2.4.4-bin-hadoop2.7/
+cd /opt/binaries/spark-2.4.5-bin-hadoop2.7/
 sbin/start-all.sh
 sbin/stop-all.sh
 ```
