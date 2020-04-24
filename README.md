@@ -29,7 +29,7 @@ to a filesystem, HDFS, databases, or any data source offering a Hadoop OutputFor
 - [Learning Materials](https://gyan42.github.io/spark-streaming-playground/build/html/tutorials.html)
 - [Localhost Port Number used](https://gyan42.github.io/spark-streaming-playground/build/html/host_urls_n_ports.html)
 - [How to Run?](https://gyan42.github.io/spark-streaming-playground/build/html/how_to_run.html)
-- [Usecases](https://gyan42.github.io/spark-streaming-playground/build/html/usecases/usecases.html)
+- [Usecases](https://gyan42.github.io/spark-streaming-playground/build/html/usecases/usecases.html)     
     ![](docs/source/drawio/usecase6.png)
 
 **Sanity test**
