@@ -176,31 +176,6 @@
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 
 <div class="viewcode-block" id="YagMail"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.yagmail.YagMail">[docs]</a><span class="k">class</span> <span class="nc">YagMail</span><span class="p">():</span>
-    
-<div class="viewcode-block" id="YagMail.email_notifier_ini"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.yagmail.YagMail.email_notifier_ini">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">email_notifier_ini</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">config_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attachments</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sends mail notification using the default ini file location `CONFIG_DIR_PATH+&quot;/yagmail.ini&quot;`</span>
-<span class="sd">        :param subject:</span>
-<span class="sd">        :param contents:</span>
-<span class="sd">        :param config_dir</span>
-<span class="sd">        :param attachments:</span>
-<span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">config_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span>
-
-        <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">(</span><span class="n">config_dir</span><span class="o">+</span><span class="s2">&quot;/yagmail.ini&quot;</span><span class="p">)</span>
-    
-        <span class="n">from_address</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;from_address&quot;</span><span class="p">)</span>
-        <span class="n">to_address</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;to_address&quot;</span><span class="p">)</span>
-        <span class="n">to_address</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_address</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-        <span class="n">from_email_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;from_email_password&quot;</span><span class="p">)</span>
-    
-        <span class="n">yag</span> <span class="o">=</span> <span class="n">yagmail</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="n">from_address</span><span class="p">,</span> <span class="n">from_email_password</span><span class="p">)</span>
-        <span class="n">yag</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">to_address</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span> <span class="n">contents</span><span class="o">=</span><span class="n">contents</span><span class="p">,</span> <span class="n">attachments</span><span class="o">=</span><span class="n">attachments</span><span class="p">)</span>
-    
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#wait for 3 seconds to make sure the SMPT server sends the mail</span></div>
 
 <div class="viewcode-block" id="YagMail.email_notifier_mannual"><a class="viewcode-back" href="../../../ssp/ssp.logger.html#ssp.logger.yagmail.YagMail.email_notifier_mannual">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">email_notifier_mannual</span><span class="p">(</span><span class="n">from_address</span><span class="p">,</span> <span class="n">to_address</span><span class="p">,</span> <span class="n">from_email_password</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">attachments</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

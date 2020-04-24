@@ -394,16 +394,39 @@ frequency of the AI/ML/Big Data tweets</p></li>
 </div>
 </li>
 <li><p>Start Tensorflow Serving</p>
+<ul>
+<li><p>Through installation</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[Tensorflow Serving]
     # give appropriate model path that needs to be served
     export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
     # test the model 
     saved_model_cli show --dir ${MODEL_DIR}/1/ --all
     # start the serving server
+
     tensorflow_model_server \
       --rest_api_port=8501 \
       --model_name=&quot;naive_text_clf&quot; \
       --model_base_path=&quot;${MODEL_DIR}&quot;
+</pre></div>
+</div>
+</li>
+<li><p>Through docker</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>  # Download the TensorFlow Serving Docker image and repo
+  docker pull tensorflow/serving
+  docker run -p 8501:8501 \
+  --mount type=bind,source=${MODEL_DIR},target=/models/naive_text_clf \
+  -e MODEL_NAME=naive_text_clf -t tensorflow/serving
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</li>
+<li><p>Test the serving REST end point</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+python src/ssp/spark/udf/tensorflow_serving_api_udf.py
 </pre></div>
 </div>
 </li>

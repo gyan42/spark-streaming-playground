@@ -177,17 +177,33 @@ This example needs multiple terminals:
         bin/models/build_naive_dl_text_classifier.sh 
     ```
 - Start Tensorflow Serving
+    - Through installation
+        ```shell script
+        #[Tensorflow Serving]
+            # give appropriate model path that needs to be served
+            export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
+            # test the model 
+            saved_model_cli show --dir ${MODEL_DIR}/1/ --all
+            # start the serving server
+      
+            tensorflow_model_server \
+              --rest_api_port=8501 \
+              --model_name="naive_text_clf" \
+              --model_base_path="${MODEL_DIR}"
+        ```
+    - Through docker
+        ```shell script
+          # Download the TensorFlow Serving Docker image and repo
+          docker pull tensorflow/serving
+          docker run -p 8501:8501 \
+          --mount type=bind,source=${MODEL_DIR},target=/models/naive_text_clf \
+          -e MODEL_NAME=naive_text_clf -t tensorflow/serving
+  
+    ```
+- Test the serving REST end point
     ```shell script
-    #[Tensorflow Serving]
-        # give appropriate model path that needs to be served
-        export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
-        # test the model 
-        saved_model_cli show --dir ${MODEL_DIR}/1/ --all
-        # start the serving server
-        tensorflow_model_server \
-          --rest_api_port=8501 \
-          --model_name="naive_text_clf" \
-          --model_base_path="${MODEL_DIR}"
+    export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+    python src/ssp/spark/udf/tensorflow_serving_api_udf.py
     ```
 
 - Start live Spark streaming for AI/Data Science tweet classification
