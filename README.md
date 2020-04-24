@@ -30,12 +30,6 @@ to a filesystem, HDFS, databases, or any data source offering a Hadoop OutputFor
 - [Localhost Port Number used](https://gyan42.github.io/spark-streaming-playground/build/html/host_urls_n_ports.html)
 - [How to Run?](https://gyan42.github.io/spark-streaming-playground/build/html/how_to_run.html)
 - [Usecases](https://gyan42.github.io/spark-streaming-playground/build/html/usecases/usecases.html)
-    - Dump Tweet data into Data Lake
-    - Trending Twitter Hash Tags
-    - Scalable REST end point a naive approach
-    - Spark ML Model
-    - Stackoverflow Dataset Exploration
-    - Streaming ML Classification with Online Learning Model
     ![](docs/source/drawio/usecase6.png)
 
 **Sanity test**
