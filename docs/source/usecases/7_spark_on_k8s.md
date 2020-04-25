@@ -14,8 +14,8 @@ Setup local Kubernetes cluster to run Spark examples
 
 Read the Spark [Kubernetes docs](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
 
-- [Spark Setup](../setup/ApacheSpark.md)
-- [Kubernetes](../setup/Kubernetes.md)
+- [Spark Setup](https://gyan42.github.io/spark-streaming-playground/build/html/setup/ApacheSpark.html)
+- [Kubernetes](https://gyan42.github.io/spark-streaming-playground/build/html/setup/Kubernetes.html)
 
 Make sure the Spark version > 2.4.5 for this to work seamlessly.
 
@@ -61,6 +61,7 @@ Push the spark images to our private docker registry
 ```
 make docker-push
 ```
+
 HINT: if you see "Get https://192.168.99.100:30000/v2/: http: server gave HTTP response to HTTPS client" 
 go back and check whether you have it listed in your insecure registries
 

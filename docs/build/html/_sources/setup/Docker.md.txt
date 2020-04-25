@@ -35,6 +35,7 @@ sudo ls /opt/binaries/docker
 
 ```
 
+It is very common to face network issues with docker, better equip with the basics @ [https://pythonspeed.com/articles/docker-connection-refused/](https://pythonspeed.com/articles/docker-connection-refused/)
 
 ## Build our images
 
@@ -146,6 +147,7 @@ sudo mount -t vboxsf /opt/vlab/spark-streaming-playground/ /mnt/dockerfolder
 
 **References**
 
+- [https://www.bogotobogo.com/DevOps/DevOps-Kubernetes-1-Running-Kubernetes-Locally-via-Minikube.php](https://www.bogotobogo.com/DevOps/DevOps-Kubernetes-1-Running-Kubernetes-Locally-via-Minikube.php)
 - https://blog.adriel.co.nz/2018/01/25/change-docker-data-directory-in-debian-jessie/
 - https://rominirani.com/docker-tutorial-series-part-7-data-volumes-93073a1b5b72
 - https://medium.com/rahasak/kafka-and-zookeeper-with-docker-65cff2c2c34f

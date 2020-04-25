@@ -192,6 +192,9 @@ inside a VM on your laptop for users looking to try out Kubernetes or develop wi
 <li><p><a class="reference external" href="(https://www.edureka.co/blog/kubernetes-architecture/)">Architecture</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux">kubectl</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-minikube/">Minikube</a></p></li>
+<li><p><a class="reference external" href="https://minikube.sigs.k8s.io/docs/drivers/">Minikube Drivers</a></p>
+<ul>
+<li><p><a class="reference external" href="https://minikube.sigs.k8s.io/docs/drivers/docker/">Docker</a></p></li>
 <li><p><a class="reference external" href="https://www.virtualbox.org/wiki/Linux_Downloads">Hypervisor VirtualBox</a></p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>    sudo apt-get install libqt5opengl5
     sudo dpkg -i virtualbox-6.1_6.1.6-137129~Ubuntu~bionic_amd64.deb
@@ -199,10 +202,20 @@ inside a VM on your laptop for users looking to try out Kubernetes or develop wi
 </div>
 </li>
 </ul>
+</li>
+</ul>
+<p><strong>Change owner and group</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo chown -R $USER $HOME/.minikube
+sudo chgrp -R $USER $HOME/.minikube
+</pre></div>
+</div>
+<p><a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">Cheat Sheet</a></p>
 <p>Some common commands that are handy while working with kubernetes.</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># starts the pods in yor machine
-sudo minikube start --vm-driver=none 
-sudo minikube stop
+# docker, virtualbox,
+DRIVER = docker
+minikube start --vm-driver=$(DRIVER) 
+minikube stop
 
 # list down all the pods 
 kubectl get pods
@@ -220,6 +233,7 @@ kubectl delete deployment.apps/spacy-flask-ner-python
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>https://medium.com/faun/how-to-restart-kubernetes-pod-7c702ca984c1</p></li>
+<li><p><a class="reference external" href="https://medium.com/&#64;yzhong.cs/getting-started-with-kubernetes-and-docker-with-minikube-b413d4deeb92">https://medium.com/&#64;yzhong.cs/getting-started-with-kubernetes-and-docker-with-minikube-b413d4deeb92</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/">https://kubernetes.io/docs/concepts/services-networking/service/</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">https://kubernetes.io/docs/concepts/workloads/controllers/deployment/</a></p></li>
 <li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/</a></p></li>

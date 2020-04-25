@@ -177,7 +177,7 @@ This example needs multiple terminals:
         bin/models/build_naive_dl_text_classifier.sh 
     ```
 - Start Tensorflow Serving
-    - Through installation
+    - Through **installation**
         ```shell script
         #[Tensorflow Serving]
             # give appropriate model path that needs to be served
@@ -191,15 +191,78 @@ This example needs multiple terminals:
               --model_name="naive_text_clf" \
               --model_base_path="${MODEL_DIR}"
         ```
-    - Through docker
+    - Through **docker**
         ```shell script
           # Download the TensorFlow Serving Docker image and repo
           docker pull tensorflow/serving
+          export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
           docker run -p 8501:8501 \
           --mount type=bind,source=${MODEL_DIR},target=/models/naive_text_clf \
           -e MODEL_NAME=naive_text_clf -t tensorflow/serving
   
-    ```
+        ```
+    - Through **Kubernetes**, using local machine as driver (TODO: try creating a private cluster with docker as driver)
+        - you may have delete previous minikube driver
+            ```shell script
+              minikube stop
+              minikube delete 
+            ```
+         - Start minikube
+             ```shell script
+               sudo minikube start --vm-driver=none #--cpus=6 --memory=16000mb # this will take few mins
+               #eval $(minikube docker-env)
+               #export DOCKER_CERT_PATH=${HOME}/.minikube/certs #bug fix
+             ```
+          
+         - Get the default tensorflow serving docker image
+            ```shell script
+             docker pull tensorflow/serving
+             # Make sure the port 8501 is free and not used by any application
+             sudo netstat -tulpen | grep 8501 #you should see blank output
+            ```
+      
+         - Prepare a new serving image with the model
+            ```shell script
+             #Start the default tensorflow serving docker image with a name "serving_base"
+             docker run -d --name serving_base tensorflow/serving
+             export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
+          
+             # copy the model artifacts
+             docker cp ${MODEL_DIR} serving_base:/models/naive_text_clf
+             # save the image with the model
+             docker commit --change "ENV MODEL_NAME naive_text_clf" serving_base naive-text-clf-serving
+             # kill and remove the default image
+             docker kill serving_base
+             docker rm serving_base
+           ```
+        
+        - Test the image
+            ```shell script
+                # Run the image and test APIs are working fine
+                # run below test script: tensorflow_serving_api_udf.py
+                # after testing kill the docker image, jus make sure there are no multiple docker images running 
+                docker inspect $(docker ps | grep naive-text-clf-serving | cut -d' ' -f1)
+                docker kill $(docker ps | grep naive-text-clf-serving | cut -d' ' -f1)
+            ```
+        - Create kubernetes deployment and service pods
+        
+            ```shell script
+              kubectl create -f  kubernetes/tensorflow_naive_classifier.yaml
+              sudo netstat -tulpen | grep 30125
+              
+              kubectl get pods        
+              kubectl get deployments
+              kubectl get services
+              kubectl describe service naive-text-clf-service
+            ```
+      
+      ![](../images/tf_kubernetes_text_classifier.png)
+        - Delete the kubernetes service cluster
+        ```shell script
+          # if you wanted to clear out all the kubernetes stuff
+          kubectl delete -f  kubernetes/tensorflow_naive_classifier.yaml
+        ```
+      
 - Test the serving REST end point
     ```shell script
     export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
@@ -238,8 +301,9 @@ Medium post on the use case @ [https://medium.com/@mageswaran1989/big-data-play-
 ------------------------------------------------------------------------------------------------------------------------
 
 **References**
-- https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65
-- https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f
-- https://github.com/ucg8j/awesome-dash
-- https://github.com/tensorflow/serving
-- https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/serving_kubernetes.md TODO
+- [https://towardsdatascience.com/deploy-your-machine-learning-models-with-tensorflow-serving-and-kubernetes-9d9e78e569db](https://towardsdatascience.com/deploy-your-machine-learning-models-with-tensorflow-serving-and-kubernetes-9d9e78e569db)
+- [https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65](https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65)
+- [https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f](https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f)
+- [https://github.com/ucg8j/awesome-dash](https://github.com/ucg8j/awesome-dash)
+- [https://github.com/tensorflow/serving](https://github.com/tensorflow/serving)
+- [https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/serving_kubernetes.md](https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/serving_kubernetes.md) 

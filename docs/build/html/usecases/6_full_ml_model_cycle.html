@@ -103,7 +103,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a><ul>
+<li class="toctree-l4"><a class="reference external" href="https://towardsdatascience.com/deploy-your-machine-learning-models-with-tensorflow-serving-and-kubernetes-9d9e78e569db">https://towardsdatascience.com/deploy-your-machine-learning-models-with-tensorflow-serving-and-kubernetes-9d9e78e569db</a></li>
+<li class="toctree-l4"><a class="reference external" href="https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65">https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65</a></li>
+<li class="toctree-l4"><a class="reference external" href="https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f">https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f</a></li>
+<li class="toctree-l4"><a class="reference external" href="https://github.com/ucg8j/awesome-dash">https://github.com/ucg8j/awesome-dash</a></li>
+<li class="toctree-l4"><a class="reference external" href="https://github.com/tensorflow/serving">https://github.com/tensorflow/serving</a></li>
+<li class="toctree-l4"><a class="reference external" href="https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/serving_kubernetes">https://github.com/tensorflow/serving/blob/master/tensorflow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="7_spark_on_k8s.html">Spark on K8s</a></li>
@@ -395,7 +403,7 @@ frequency of the AI/ML/Big Data tweets</p></li>
 </li>
 <li><p>Start Tensorflow Serving</p>
 <ul>
-<li><p>Through installation</p>
+<li><p>Through <strong>installation</strong></p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[Tensorflow Serving]
     # give appropriate model path that needs to be served
     export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
@@ -410,19 +418,84 @@ frequency of the AI/ML/Big Data tweets</p></li>
 </pre></div>
 </div>
 </li>
-<li><p>Through docker</p>
+<li><p>Through <strong>docker</strong></p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>  # Download the TensorFlow Serving Docker image and repo
   docker pull tensorflow/serving
+  export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
   docker run -p 8501:8501 \
   --mount type=bind,source=${MODEL_DIR},target=/models/naive_text_clf \
   -e MODEL_NAME=naive_text_clf -t tensorflow/serving
 </pre></div>
 </div>
 </li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<li><p>Through <strong>Kubernetes</strong>, using local machine as driver (TODO: try creating a private cluster with docker as driver)</p>
+<ul>
+<li><p>you may have delete previous minikube driver</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>  minikube stop
+  minikube delete 
 </pre></div>
 </div>
+</li>
+<li><p>Start minikube</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>  sudo minikube start --vm-driver=none #--cpus=6 --memory=16000mb # this will take few mins
+  #eval $(minikube docker-env)
+  #export DOCKER_CERT_PATH=${HOME}/.minikube/certs #bug fix
+</pre></div>
+</div>
+</li>
+<li><p>Get the default tensorflow serving docker image</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span> docker pull tensorflow/serving
+ # Make sure the port 8501 is free and not used by any application
+ sudo netstat -tulpen | grep 8501 #you should see blank output
+</pre></div>
+</div>
+</li>
+<li><p>Prepare a new serving image with the model</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span> #Start the default tensorflow serving docker image with a name &quot;serving_base&quot;
+ docker run -d --name serving_base tensorflow/serving
+ export MODEL_DIR=/home/mageswarand/ssp/model/raw_tweet_dataset_0/naive_text_classifier/exported/
+
+ # copy the model artifacts
+ docker cp ${MODEL_DIR} serving_base:/models/naive_text_clf
+ # save the image with the model
+ docker commit --change &quot;ENV MODEL_NAME naive_text_clf&quot; serving_base naive-text-clf-serving
+ # kill and remove the default image
+ docker kill serving_base
+ docker rm serving_base
+</pre></div>
+</div>
+</li>
+<li><p>Test the image</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>    # Run the image and test APIs are working fine
+    # run below test script: tensorflow_serving_api_udf.py
+    # after testing kill the docker image, jus make sure there are no multiple docker images running 
+    docker inspect $(docker ps | grep naive-text-clf-serving | cut -d&#39; &#39; -f1)
+    docker kill $(docker ps | grep naive-text-clf-serving | cut -d&#39; &#39; -f1)
+</pre></div>
+</div>
+</li>
+<li><p>Create kubernetes deployment and service pods</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>  kubectl create -f  kubernetes/tensorflow_naive_classifier.yaml
+  sudo netstat -tulpen | grep 30125
+
+  kubectl get pods        
+  kubectl get deployments
+  kubectl get services
+  kubectl describe service naive-text-clf-service
+</pre></div>
+</div>
+</li>
+</ul>
+<p><img alt="../_images/tf_kubernetes_text_classifier.png" src="../_images/tf_kubernetes_text_classifier.png" /></p>
+<ul class="simple">
+<li><p>Delete the kubernetes service cluster</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>  # if you wanted to clear out all the kubernetes stuff
+  kubectl delete -f  kubernetes/tensorflow_naive_classifier.yaml
+</pre></div>
+</div>
+</li>
+</ul>
 </li>
 <li><p>Test the serving REST end point</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
@@ -462,13 +535,16 @@ A Flask Web UI with the text and its prediction probability!</p>
 <p>Medium post on the use case &#64; <a class="reference external" href="https://medium.com/&#64;mageswaran1989/big-data-play-ground-for-engineers-architecting-a-realtime-streaming-deep-learning-pipeline-with-c0305407f21d">https://medium.com/&#64;mageswaran1989/big-data-play-ground-for-engineers-architecting-a-realtime-streaming-deep-learning-pipeline-with-c0305407f21d</a></p>
 <hr class="docutils" />
 <p><strong>References</strong></p>
-<ul class="simple">
-<li><p>https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65</p></li>
-<li><p>https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f</p></li>
-<li><p>https://github.com/ucg8j/awesome-dash</p></li>
-<li><p>https://github.com/tensorflow/serving</p></li>
-<li><p>https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/serving_kubernetes.md TODO</p></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://towardsdatascience.com/deploy-your-machine-learning-models-with-tensorflow-serving-and-kubernetes-9d9e78e569db">https://towardsdatascience.com/deploy-your-machine-learning-models-with-tensorflow-serving-and-kubernetes-9d9e78e569db</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65">https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f">https://towardsdatascience.com/how-to-build-a-complex-reporting-dashboard-using-dash-and-plotl-4f4257c18a7f</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ucg8j/awesome-dash">https://github.com/ucg8j/awesome-dash</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tensorflow/serving">https://github.com/tensorflow/serving</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/serving_kubernetes">https://github.com/tensorflow/serving/blob/master/tensorflow</a></li>
 </ul>
+</div>
 </div>
 </div>
 

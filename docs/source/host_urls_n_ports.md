@@ -13,10 +13,12 @@ Here is the list of services and their port numbers...
 |Yarn UI            |8088        |[http://localhost:8088](http://localhost:8088)|
 |PostgreSQL         |5432        |[postgresql://localhost:5432](postgresql://localhost:5432)|
 |Flask-NER          |5000        |[http://localhost:5000](http://localhost:5000)|
-|Flask-Dashboard    |5001        |[http://localhost:5001](http://localhost:5001)|
-|Flask-Tagger       |5000        |[http://localhost:5002](http://localhost:5002)|
+|Flask-Trending Hashtags    |5001        |[http://localhost:5001](http://localhost:5001)|
+|Flask-Tagger       |8766        |[http://localhost:8766](http://localhost:8766)|
+|Flask-AITweets DashBoard       |8766        |[http://localhost:8766](http://localhost:8766)|
 |Jupyter Lab        |8888        |[http://localhost:8888/lab](http://localhost:8888/lab)|
-|NER REST with Load Balancer |30123       |[http://127.0.0.1:30123](http://127.0.0.1:30123)|
+|Kubernetes: NER |30123       |[http://127.0.0.1:30123](http://127.0.0.1:30123)|
+|Kubernetes: TF Text Classifier |30125       |[http://127.0.0.1:30125](http://127.0.0.1:30125)|
 
 All the services when running could load your machine to the fullest.
 
