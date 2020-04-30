@@ -33,8 +33,11 @@ more followers to their handle.
 3. Data Preparation / Data Labelling and Segregation 
    ```shell script
    Posgresql ---> Raw Dataset Table ---> Split ---> Train/Test/Dev/Snorkel dataset tables --
-                     -> SSPLabeler(Snorkel Labeler) ---> Labelled Train/Test/Dev dataset stored in Postgresql & Disk
-   Labelled Train/Test/Dev dataset on Posgresql---> Mannual UI Tagger --->  Train/Test/Dev dataset with golden label column on Posgresql
+                     -> SSPLabeler(Snorkel Labeler) --
+                         -> Labelled Train/Test/Dev dataset stored in Postgresql & Disk
+   
+   Labelled Train/Test/Dev dataset on Posgresql---> Mannual UI Tagger --
+                 ->  Train/Test/Dev dataset with golden label column on Posgresql
    ```
 
 4. Model Training and Evaluation

@@ -224,8 +224,11 @@ more followers to their handle.</p>
 </li>
 <li><p>Data Preparation / Data Labelling and Segregation</p>
 <div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>Posgresql ---&gt; Raw Dataset Table ---&gt; Split ---&gt; Train/Test/Dev/Snorkel dataset tables --
-                  -&gt; SSPLabeler(Snorkel Labeler) ---&gt; Labelled Train/Test/Dev dataset stored in Postgresql &amp; Disk
-Labelled Train/Test/Dev dataset on Posgresql---&gt; Mannual UI Tagger ---&gt;  Train/Test/Dev dataset with golden label column on Posgresql
+                  -&gt; SSPLabeler(Snorkel Labeler) --
+                      -&gt; Labelled Train/Test/Dev dataset stored in Postgresql &amp; Disk
+
+Labelled Train/Test/Dev dataset on Posgresql---&gt; Mannual UI Tagger --
+              -&gt;  Train/Test/Dev dataset with golden label column on Posgresql
 </pre></div>
 </div>
 </li>
