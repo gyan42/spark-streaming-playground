@@ -101,7 +101,10 @@
 <li class="toctree-l2"><a class="reference internal" href="ApacheSpark.html">Apache Spark</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Kubernetes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-quick-reference">API Quick Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Twitter.html">Twitter</a></li>
@@ -203,10 +206,17 @@ inside a VM on your laptop for users looking to try out Kubernetes or develop wi
 </li>
 </ul>
 </li>
+<li><p><a class="reference external" href="https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/">Kubernetes YAML</a></p></li>
 </ul>
 <p><strong>Change owner and group</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo chown -R $USER $HOME/.minikube
 sudo chgrp -R $USER $HOME/.minikube
+</pre></div>
+</div>
+<p><strong>Enable kubectl bash_completion</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">completion</span> <span class="n">bash</span> <span class="o">&gt;&gt;</span>  <span class="o">~/.</span><span class="n">bash_completion</span>
+<span class="o">.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">bash_completion</span><span class="o">.</span><span class="n">sh</span>
+<span class="o">.</span> <span class="o">~/.</span><span class="n">bash_completion</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">Cheat Sheet</a></p>
@@ -229,8 +239,21 @@ kubectl delete deployment.apps/spacy-flask-ner-python
  
 </pre></div>
 </div>
+<div class="section" id="api-quick-reference">
+<h2>API Quick Reference<a class="headerlink" href="#api-quick-reference" title="Permalink to this headline">¶</a></h2>
+<p>Here’s a brief explanation of the various fields:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>replicas – Tells Kubernetes how many pods to create during a deployment. Modifying this field is an easy way to scale a containerized application.
+spec.strategy.type – Suppose there is another version of the application that needs to be deployed, and during the deployment phase, you need to update without facilitating an outage. The Rolling Update strategy allows Kubernetes to update a service without facilitating an outage by proceeding to update pods one at a time.
+spec.strategy.rollingUpdate.maxUnavailable – The maximum number of pods that can be unavailable during the Rolling update.
+spec.strategy.rollingUpdate.maxSurge – The maximum number of pods that can be scheduled above the desired number of pods.
+spec.minReadySeconds – An optional Integer that describes the minimum number of seconds, for which a new pod should be ready without any of its containers crashing for it to be considered available.
+spec.revisionHistoryLimit – An optional integer attribute that you can use to tell Kuberneres explicitly how many old ReplicaSets to retain at any given time.
+spec.template.metadata.labels – Adds labels to a deployment specification.
+spec.selector – An optional object that tells the Kubernetes deployment controller to only target pods that match the specified labels. Thus, to only target pods with the labels “app” and “deployer” you can make the following modification to our deployment yaml.
+</pre></div>
+</div>
 <div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>https://medium.com/faun/how-to-restart-kubernetes-pod-7c702ca984c1</p></li>
 <li><p><a class="reference external" href="https://medium.com/&#64;yzhong.cs/getting-started-with-kubernetes-and-docker-with-minikube-b413d4deeb92">https://medium.com/&#64;yzhong.cs/getting-started-with-kubernetes-and-docker-with-minikube-b413d4deeb92</a></p></li>
@@ -239,6 +262,7 @@ kubectl delete deployment.apps/spacy-flask-ner-python
 <li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/</a></p></li>
 <li><p><a class="reference external" href="https://intellipaat.com/blog/tutorial/devops-tutorial/kubernetes-cheat-sheet/">https://intellipaat.com/blog/tutorial/devops-tutorial/kubernetes-cheat-sheet/</a></p></li>
 </ul>
+</div>
 </div>
 </div>
 

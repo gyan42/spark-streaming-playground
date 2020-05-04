@@ -22,6 +22,9 @@ Make sure the Spark version > 2.4.5 for this to work seamlessly.
 Handy Links
 - [https://docs.docker.com/registry/insecure/](https://docs.docker.com/registry/insecure/)
 
+A [MakeFile](https://github.com/gyan42/spark-streaming-playground/tree/master/kubernetes/spark) was put in place to download all needed binaries, prepare the docker image with respect to Spark and use
+the Spark image to run the example locally
+
 ```shell script
 cd /path/to/spark-streaming-playground/kubernetes/spark/
 ```
