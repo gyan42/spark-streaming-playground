@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Apache Hadoop &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Apache Hive" href="ApacheHive.html" />
+    <link rel="prev" title="PostgreSQL" href="Postgres.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="setup.html">Spark Streaming Playground Environment Setup</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux Machine Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">SSH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Anaconda.html">Python - Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Postgres.html">PostgreSQL</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Apache Hadoop</a><ul>
+<li class="toctree-l3"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/hadoop-env.sh</a></li>
+<li class="toctree-l3"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/core-site.xml</a></li>
+<li class="toctree-l3"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/hdfs-site.xml</a></li>
+<li class="toctree-l3"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/mapred-site.xml</a></li>
+<li class="toctree-l3"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/yarn-site.xml</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHive.html">Apache Hive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#test-with-our-code">Test with our code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheSpark.html">Apache Spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Kubernetes.html">Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Twitter.html">Twitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">MISC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="setup.html">Spark Streaming Playground Environment Setup</a> &raquo;</li>
+        
+      <li>Apache Hadoop</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/setup/ApacheHadoop.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="apache-hadoop">
+<h1>Apache Hadoop<a class="headerlink" href="#apache-hadoop" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>First would be setting up the <code class="docutils literal notranslate"><span class="pre">ssh</span></code>, which you can refer <a class="reference internal" href="ssh.html"><span class="doc">here</span></a></p></li>
+<li><p>Having the right version of Java</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">openjdk</span><span class="o">-</span><span class="mi">8</span><span class="o">-</span><span class="n">jdk</span>
+<span class="n">java</span> <span class="o">-</span><span class="n">version</span> <span class="c1"># 1.8.x.yyy</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Download the hadoop <a class="reference external" href="https://archive.apache.org/dist/hadoop/common/hadoop-3.1.2/hadoop-3.1.2.tar.gz">3.1.2 version</a></p></li>
+<li><p>Extract to say `/opt/binaries/hadoop/</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">tar</span> <span class="n">xzf</span> <span class="n">hadoop</span><span class="o">-</span><span class="mf">3.1</span><span class="o">.</span><span class="mf">2.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+    <span class="n">mv</span> <span class="n">hadoop</span><span class="o">-</span><span class="mf">3.1</span><span class="o">.</span><span class="mf">2.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="n">hadoop</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Following files are needed before you can start the service:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/hadoop-env.sh</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/core-site.xml</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/hdfs-site.xml</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/mapred-site.xml</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf/hadoop/etc/hadoop">hadoop/etc/hadoop/yarn-site.xml</a></li>
+</ul>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vim</span> <span class="pre">~/.bashrc</span></code></p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export HADOOP_HOME=&quot;/opt/binaries/hadoop&quot;
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin 
+export HADOOP_MAPRED_HOME=${HADOOP_HOME}
+export HADOOP_COMMON_HOME=${HADOOP_HOME}
+export HADOOP_HDFS_HOME=${HADOOP_HOME}
+export YARN_HOME=${HADOOP_HOME}
+</pre></div>
+</div>
+</li>
+<li><p>Prepare our HDFS <code class="docutils literal notranslate"><span class="pre">bin/hdfs</span> <span class="pre">namenode</span> <span class="pre">-format</span></code></p></li>
+<li><p>Start HDFS <code class="docutils literal notranslate"><span class="pre">/opt/binaries/hadoop/sbin/start-dfs.sh</span></code>. Check the url &#64;  <a class="reference external" href="http://localhost:9870">http://localhost:9870</a></p></li>
+<li><p>Start Yarn <code class="docutils literal notranslate"><span class="pre">/opt/binaries/hadoop/sbin/start-yarn.sh</span></code>. Check the url &#64; <a class="reference external" href="localhost:8088">localhost:8088</a></p></li>
+<li><p>Use the command <code class="docutils literal notranslate"><span class="pre">jps</span></code> to see the following list of Java containers running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NameNode</span>
+<span class="n">DataNode</span>
+<span class="n">ResourceManager</span>
+<span class="n">NodeManager</span>
+<span class="n">SecondaryNameNode</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p>https://data-flair.training/blogs/installation-of-hadoop-3-on-ubuntu/</p></li>
+<li><p>https://towardsdatascience.com/a-gentle-introduction-to-apache-arrow-with-apache-spark-and-pandas-bb19ffe0ddae</p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ApacheHive.html" class="btn btn-neutral float-right" title="Apache Hive" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Postgres.html" class="btn btn-neutral float-left" title="PostgreSQL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

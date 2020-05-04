@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+
+<head>
+    <style type="text/css">
+        .header{
+            text-align: center;
+            background-color: rgb(136, 185, 229);
+            height: 70px;
+            line-height: 70px;
+        }
+        .chart{
+            margin-top: 30px;
+            text-align: center;
+        }
+        .pagination-page-info {
+            padding: .6em;
+            padding-left: 0;
+            width: 40em;
+            margin: .5em;
+            margin-left: 0;
+            font-size: 12px;
+        }
+        .pagination-page-info b {
+            color: black;
+            background: #6aa6ed;
+            padding-left: 2px;
+            padding: .1em .25em;
+            font-size: 150%;
+        }
+        .boxed {
+          border: 5px solid lightskyblue ;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+{#    <script>#}
+{#        window.onload = function(){#}
+{#            if({{ scroll_id}}){#}
+{#                window.location.hash="#tag_text" + {{ scroll_id }};#}
+{#            }#}
+{#        }#}
+{#        </script>#}
+</head>
+
+<body>
+    <div class="header">
+        <h3>Text Binary Classification Tagger</h3>
+    </div>
+        <br>
+       Uploaded file : {{ file }}
+        <br>
+        {{ pagination.info }}
+        <br>
+        {{ pagination.links }}
+        <br>
+
+       <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+
+{#        <form method="post" action="{{ url_for('tag_text', id='tag_text_form' + i|string) }}">#}
+        <form method="post" action="{{ url_for('tag_table', table_name=file)}}">
+{#Jinja tempalte#}
+        <div style="text-align:center">
+            <input name="sumbit"  style="font-size:30px;" align="middle" type="submit" style='width:auto' />
+        </div>
+        <br><br><br>
+
+        {%for i in range(0, len)%}
+
+                {% if label[i]  == 0 %}
+                    <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word;
+                background-color:lightpink;",  class="boxed">
+                {% else %}
+                     <div id = i style="font-size:30px; word-break: break-all; word-wrap: break-word;
+                background-color:lightgreen;",  class="boxed">
+                 {% endif %}
+                    <a name="tag_table{{ id[i]|string }}">"{{ text[i] }}"</a>
+                    <br>
+                    <select style="font-size:22px;" name="option{{ id[i]|string }}">
+                        <option value="{{ label_string[i] }}" selected>{{ label_string[i] }}</option>
+                        {% for option in options %}
+                            {% if option != label_string[i] %}
+                                <option value="{{option}}">{{option}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <input name="id{{ id[i]|string }}" value={{ id[i] }}  size="5"  />
+                <input name="label{{ id[i]|string }}" value={{ label[i] }} type="hidden" size="5"  />
+                <input name="page" value={{ page }} type="hidden" size="5"  />
+                <input name="per_page" value={{ per_page }} type="hidden" size="5"  />
+                <input name="offset" value={{ offset }} type="hidden" size="5"  />
+
+
+            <br><br><br>
+        {%endfor%}
+
+        <div style="text-align:center">
+            <input name="sumbit"  style="font-size:30px;" align="middle" type="submit" style='width:auto' />
+        </div>
+        </form>
+
+    <br>
+    {{ pagination.links }}
+    <br>
+
+   <p><a style="font-size:16px;" href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+{{ df }}
+</body>
+</html>

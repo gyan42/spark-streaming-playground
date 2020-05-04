@@ -1,0 +1,39 @@
+apiVersion: apps/v1 #Defines the API Version
+kind: Deployment
+metadata:
+  name: naive-text-clf-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: naive-text-clf-server #Label name which would be searched
+  template:
+    metadata:
+      labels:
+        app: naive-text-clf-server
+    spec:
+      containers:
+      - name: naive-text-clf-container
+        image: naive-text-clf-serving:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8501
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: naive-text-clf-service
+  name: naive-text-clf-service
+spec:
+  ports:
+  - protocol: "TCP"
+    # Port accessible inside cluster
+    port: 8081
+    # Port to forward to inside the pod
+    targetPort: 8501
+    # Port accessible outside cluster
+    nodePort: 30125
+  selector:
+    app: naive-text-clf-server
+  type: LoadBalancer

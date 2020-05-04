@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+
+<head>
+    <style type="text/css">
+        .header{
+            text-align: center;
+            background-color: rgb(136, 185, 229);
+            height: 70px;
+            line-height: 70px;
+        }
+        .chart{
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% for id in ids %}
+        <div class="header">
+            <h3>{{id}}</h3>
+        </div>
+        <div id="{{id}}"></div>
+    {% endfor %}
+
+   <p><a href="{{ url_for('index') }}"><<< Back to Home</a></p>
+
+</body>
+
+
+<footer>
+    <!-- D3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script type="text/javascript">
+
+        var graphs = {{graphJSON | safe}};
+        var ids = {{ids | safe}};
+
+        for(var i in graphs) {
+            Plotly.plot(ids[i], // the ID of the div, created above
+                        graphs[i].data,
+                        graphs[i].layout || {});
+        }
+
+    </script>
+</footer>
+
+</html>

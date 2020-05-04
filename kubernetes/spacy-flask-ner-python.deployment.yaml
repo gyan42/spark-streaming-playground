@@ -1,0 +1,20 @@
+apiVersion: apps/v1 #Defines the API Version
+kind: Deployment #Kinds parameter defines which kind of file is it, over here it is Deployment
+metadata:
+  name: spacy-flask-ner-python-deployment #Stores the name of the deployment
+spec: # Under Specifications, you mention all the specifications for the deployment
+  replicas: 2 # Number of replicas would be 3
+  selector:
+    matchLabels:
+      app: spacy-flask-ner-python #Label name which would be searched
+  template:
+    metadata:
+      labels:
+        app: spacy-flask-ner-python #Template name
+    spec:
+      containers:
+      - name: spacy-flask-ner-python #Name of the containers
+        image: spacy-flask-ner-python:latest #The image which has to be downloaded
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000 #The application would be exposed on port

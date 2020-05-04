@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.utils &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp.viz" href="ssp.viz.html" />
+    <link rel="prev" title="ssp.spark.udf" href="ssp.spark.udf.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="ssp.html">ssp</a> &raquo;</li>
+        
+      <li>ssp.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ssp/ssp.utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ssp.utils">
+<span id="ssp-utils"></span><h1>ssp.utils<a class="headerlink" href="#module-ssp.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="ssp.utils.get_false_positive_keywords">
+<code class="sig-prename descclassname">ssp.utils.</code><code class="sig-name descname">get_false_positive_keywords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils.html#get_false_positive_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.get_false_positive_keywords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.utils.get_positive_keywords">
+<code class="sig-prename descclassname">ssp.utils.</code><code class="sig-name descname">get_positive_keywords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils.html#get_positive_keywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.get_positive_keywords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<hr class="docutils" />
+<span class="target" id="module-ssp.utils.ai_key_words"></span><dl class="py class">
+<dt id="ssp.utils.ai_key_words.AIKeyWords">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.utils.ai_key_words.</code><code class="sig-name descname">AIKeyWords</code><a class="reference internal" href="../_modules/ssp/utils/ai_key_words.html#AIKeyWords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.AI">
+<code class="sig-name descname">AI</code><em class="property"> = '#AI|Artificial Intelligence|robotics'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.AI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.ALL">
+<code class="sig-name descname">ALL</code><em class="property"> = '#AI|Artificial Intelligence|robotics|machinelearningengineer|Machine Learning|scikit|#ML|mathematics|DeepLearning|Deep Learning|#DL|Tensorflow|Pytorch|Neural Network|NeuralNetwork|computervision|computer vision|machine vision|machinevision|convolutional network|convnet|image processing|NLP|naturallanguageprocessing|natural language processing|text processing|text analytics|nltk|spacy|iot|datasets|dataengineer|analytics|bigdata|big data|data science|data analytics|data insights|data mining|distributed computing|parallel processing|apache spark|hadoop|apache hive|airflow|mlflow|apache kafka|hdfs|apache|kafka|dataanalysis|AugmentedIntelligence|datascience|machinelearning|rnd|businessintelligence|DigitalTransformation|datamanagement|ArtificialIntelligence|gpu|nvidia|maths|mathematics|intelligence|conspiracy|astrology|vedic|tamil|text|computer|ebook|pdf|learning|big|insights|processing|network|machine|artifical|data|science|parallel|computing|deep|vision|natural|language|data|nature|climate|space|earth|animals|plants|astrology|horoscope|occult|hidden science|conspiracy|hinduism|hindu|vedic'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.ALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.CV">
+<code class="sig-name descname">CV</code><em class="property"> = 'computervision|computer vision|machine vision|machinevision|convolutional network|convnet|image processing'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.CV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.DATA">
+<code class="sig-name descname">DATA</code><em class="property"> = 'iot|datasets|dataengineer|analytics|bigdata|big data|data science|data analytics|data insights|data mining|distributed computing|parallel processing|apache spark|hadoop|apache hive|airflow|mlflow|apache kafka|hdfs|apache|kafka'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.DATA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.DL">
+<code class="sig-name descname">DL</code><em class="property"> = 'DeepLearning|Deep Learning|#DL|Tensorflow|Pytorch|Neural Network|NeuralNetwork'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.DL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.FALSE_POSITIVE">
+<code class="sig-name descname">FALSE_POSITIVE</code><em class="property"> = 'gpu|nvidia|maths|mathematics|intelligence|conspiracy|astrology|vedic|tamil|text|computer|ebook|pdf|learning|big|insights|processing|network|machine|artifical|data|science|parallel|computing|deep|vision|natural|language|data'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.FALSE_POSITIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.ML">
+<code class="sig-name descname">ML</code><em class="property"> = 'machinelearningengineer|Machine Learning|scikit|#ML|mathematics'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.ML" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.NLP">
+<code class="sig-name descname">NLP</code><em class="property"> = 'NLP|naturallanguageprocessing|natural language processing|text processing|text analytics|nltk|spacy'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.NLP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.POSITIVE">
+<code class="sig-name descname">POSITIVE</code><em class="property"> = '#AI|Artificial Intelligence|robotics|machinelearningengineer|Machine Learning|scikit|#ML|mathematics|DeepLearning|Deep Learning|#DL|Tensorflow|Pytorch|Neural Network|NeuralNetwork|computervision|computer vision|machine vision|machinevision|convolutional network|convnet|image processing|NLP|naturallanguageprocessing|natural language processing|text processing|text analytics|nltk|spacy|iot|datasets|dataengineer|analytics|bigdata|big data|data science|data analytics|data insights|data mining|distributed computing|parallel processing|apache spark|hadoop|apache hive|airflow|mlflow|apache kafka|hdfs|apache|kafka|dataanalysis|AugmentedIntelligence|datascience|machinelearning|rnd|businessintelligence|DigitalTransformation|datamanagement|ArtificialIntelligence'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.POSITIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.RANDOM_TOPICS">
+<code class="sig-name descname">RANDOM_TOPICS</code><em class="property"> = 'nature|climate|space|earth|animals|plants|astrology|horoscope|occult|hidden science|conspiracy|hinduism|hindu|vedic'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.RANDOM_TOPICS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ssp.utils.ai_key_words.AIKeyWords.TWEET_HASH_TAGS">
+<code class="sig-name descname">TWEET_HASH_TAGS</code><em class="property"> = 'dataanalysis|AugmentedIntelligence|datascience|machinelearning|rnd|businessintelligence|DigitalTransformation|datamanagement|ArtificialIntelligence'</em><a class="headerlink" href="#ssp.utils.ai_key_words.AIKeyWords.TWEET_HASH_TAGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ssp.utils.config_manager"></span><dl class="py class">
+<dt id="ssp.utils.config_manager.ConfigManager">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.utils.config_manager.</code><code class="sig-name descname">ConfigManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_value_pair_dict</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">string</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Config manager to read ini file</p>
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.add_section">
+<code class="sig-name descname">add_section</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.add_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.add_section" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.get_item">
+<code class="sig-name descname">get_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em>, <em class="sig-param"><span class="n">option</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.get_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.get_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.get_item_as_boolean">
+<code class="sig-name descname">get_item_as_boolean</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em>, <em class="sig-param"><span class="n">option</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.get_item_as_boolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.get_item_as_boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value as bool
+:param section:
+:param option:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.get_item_as_float">
+<code class="sig-name descname">get_item_as_float</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em>, <em class="sig-param"><span class="n">option</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.get_item_as_float"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.get_item_as_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value as float
+:param section:
+:param option:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.get_item_as_int">
+<code class="sig-name descname">get_item_as_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em>, <em class="sig-param"><span class="n">option</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.get_item_as_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.get_item_as_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value as int
+:param section:
+:param option:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.get_sections">
+<code class="sig-name descname">get_sections</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.get_sections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.get_sections" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em>, <em class="sig-param"><span class="n">raw</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">vars</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.save_config">
+<code class="sig-name descname">save_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.save_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.save_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.utils.config_manager.ConfigManager.set_item">
+<code class="sig-name descname">set_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section</span></em>, <em class="sig-param"><span class="n">option</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/config_manager.html#ConfigManager.set_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.config_manager.ConfigManager.set_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ssp.utils.configuration"></span><dl class="py class">
+<dt id="ssp.utils.configuration.StreamingConfigs">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.utils.configuration.</code><code class="sig-name descname">StreamingConfigs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em>, <em class="sig-param"><span class="n">twitter_ini_file</span><span class="o">=</span><span class="default_value">'twitter.ini'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/configuration.html#StreamingConfigs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.configuration.StreamingConfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Reads the config.ini using configparser</p>
+</dd></dl>
+
+<span class="target" id="module-ssp.utils.eda"></span><dl class="py function">
+<dt id="ssp.utils.eda.get_stop_words">
+<code class="sig-prename descclassname">ssp.utils.eda.</code><code class="sig-name descname">get_stop_words</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/eda.html#get_stop_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.eda.get_stop_words" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.utils.eda.get_value_count">
+<code class="sig-prename descclassname">ssp.utils.eda.</code><code class="sig-name descname">get_value_count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">label_col</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/eda.html#get_value_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.eda.get_value_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-ssp.utils.environment_setup"></span><span class="target" id="module-ssp.utils.misc"></span><dl class="py function">
+<dt id="ssp.utils.misc.check_n_mk_dirs">
+<code class="sig-prename descclassname">ssp.utils.misc.</code><code class="sig-name descname">check_n_mk_dirs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">is_remove</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/misc.html#check_n_mk_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.misc.check_n_mk_dirs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-ssp.utils.multicore_df_apply"></span><dl class="py function">
+<dt id="ssp.utils.multicore_df_apply.df_multi_core">
+<code class="sig-prename descclassname">ssp.utils.multicore_df_apply.</code><code class="sig-name descname">df_multi_core</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">df_f_name</span></em>, <em class="sig-param"><span class="n">subset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">njobs</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/multicore_df_apply.html#df_multi_core"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.multicore_df_apply.df_multi_core" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-ssp.utils.postgresql"></span><dl class="py function">
+<dt id="ssp.utils.postgresql.close_connection">
+<code class="sig-prename descclassname">ssp.utils.postgresql.</code><code class="sig-name descname">close_connection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">database_connection</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/postgresql.html#close_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.postgresql.close_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.utils.postgresql.create_pandas_table">
+<code class="sig-prename descclassname">ssp.utils.postgresql.</code><code class="sig-name descname">create_pandas_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sql_query</span></em>, <em class="sig-param"><span class="n">database_connection</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/postgresql.html#create_pandas_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.postgresql.create_pandas_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="ssp.utils.postgresql.postgressql_connection">
+<code class="sig-prename descclassname">ssp.utils.postgresql.</code><code class="sig-name descname">postgressql_connection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host</span></em>, <em class="sig-param"><span class="n">port</span></em>, <em class="sig-param"><span class="n">database</span></em>, <em class="sig-param"><span class="n">user</span></em>, <em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/utils/postgresql.html#postgressql_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.postgresql.postgressql_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-ssp.utils.singleton_metaclass"></span><dl class="py class">
+<dt id="ssp.utils.singleton_metaclass.Singleton">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.utils.singleton_metaclass.</code><code class="sig-name descname">Singleton</code><a class="reference internal" href="../_modules/ssp/utils/singleton_metaclass.html#Singleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.utils.singleton_metaclass.Singleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="simple">
+<dt>References:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python">https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/100003/what-are-metaclasses-in-python">https://stackoverflow.com/questions/100003/what-are-metaclasses-in-python</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/43619748/destroying-a-singleton-object-in-python">https://stackoverflow.com/questions/43619748/destroying-a-singleton-object-in-python</a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-ssp.utils.sparksession"></span></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ssp.viz.html" class="btn btn-neutral float-right" title="ssp.viz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ssp.spark.udf.html" class="btn btn-neutral float-left" title="ssp.spark.udf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

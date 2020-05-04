@@ -1,0 +1,1 @@
+from ssp.kafka.producer.twitter_producer import TwitterProducer

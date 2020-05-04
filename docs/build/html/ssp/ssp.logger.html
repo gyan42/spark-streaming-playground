@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.logger &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp.ml" href="ssp.ml.html" />
+    <link rel="prev" title="ssp.kafka.producer" href="ssp.kafka.producer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ssp.logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="ssp.html">ssp</a> &raquo;</li>
+        
+      <li>ssp.logger</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ssp/ssp.logger.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ssp.logger">
+<span id="ssp-logger"></span><h1>ssp.logger<a class="headerlink" href="#module-ssp.logger" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<span class="target" id="module-ssp.logger.pretty_print"></span><dl class="py function">
+<dt id="ssp.logger.pretty_print.print_debug">
+<code class="sig-prename descclassname">ssp.logger.pretty_print.</code><code class="sig-name descname">print_debug</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/pretty_print.html#print_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.pretty_print.print_debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the string in blue color
+:param args: user string information
+:return: stdout</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.logger.pretty_print.print_error">
+<code class="sig-prename descclassname">ssp.logger.pretty_print.</code><code class="sig-name descname">print_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/pretty_print.html#print_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.pretty_print.print_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the string in red color
+:param args: user string information
+:return: stdout</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.logger.pretty_print.print_info">
+<code class="sig-prename descclassname">ssp.logger.pretty_print.</code><code class="sig-name descname">print_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/pretty_print.html#print_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.pretty_print.print_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the string in green color
+:param args: user string information
+:return: stdout</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.logger.pretty_print.print_warn">
+<code class="sig-prename descclassname">ssp.logger.pretty_print.</code><code class="sig-name descname">print_warn</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/pretty_print.html#print_warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.pretty_print.print_warn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the string in yellow color
+:param args: user string information
+:return: stdout</p>
+</dd></dl>
+
+<span class="target" id="module-ssp.logger.python_logger"></span><dl class="py class">
+<dt id="ssp.logger.python_logger.PythonLogger">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.logger.python_logger.</code><code class="sig-name descname">PythonLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_level</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#PythonLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.PythonLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="ssp.logger.python_logger.PythonLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#PythonLogger.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.PythonLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.python_logger.PythonLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#PythonLogger.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.PythonLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.python_logger.PythonLogger.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#PythonLogger.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.PythonLogger.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.python_logger.PythonLogger.warn">
+<code class="sig-name descname">warn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#PythonLogger.warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.PythonLogger.warn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.logger.python_logger.str_to_level">
+<code class="sig-prename descclassname">ssp.logger.python_logger.</code><code class="sig-name descname">str_to_level</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_level</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/python_logger.html#str_to_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.python_logger.str_to_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-ssp.logger.spark_logger"></span><dl class="py class">
+<dt id="ssp.logger.spark_logger.SparkLogger">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.logger.spark_logger.</code><code class="sig-name descname">SparkLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">sparksession</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.spark_logger.SparkLogger.warn">
+<code class="sig-name descname">warn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/spark_logger.html#SparkLogger.warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.spark_logger.SparkLogger.warn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ssp.logger.ssp_logger"></span><dl class="py class">
+<dt id="ssp.logger.ssp_logger.SSPLogger">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.logger.ssp_logger.</code><code class="sig-name descname">SSPLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">parsed_args</span></em>, <em class="sig-param"><span class="n">pipeline_name</span><span class="o">=</span><span class="default_value">'Default'</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">'info'</span></em>, <em class="sig-param"><span class="n">sparksession</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that wraps all logging functionality.
+It supports following:
+- Spark logging, if sparksession is provided or it ognores it
+- Python way of logging into a file “log.txt”
+- Sends the email based on the user flag</p>
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.add_script_details">
+<em class="property">static </em><code class="sig-name descname">add_script_details</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.add_script_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.add_script_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.debug">
+<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.email">
+<code class="sig-name descname">email</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subject</span></em>, <em class="sig-param"><span class="n">contents</span></em>, <em class="sig-param"><span class="n">config_dir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.lineno">
+<code class="sig-name descname">lineno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.lineno"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.lineno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current line number in your code</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.logger.ssp_logger.SSPLogger.warning">
+<code class="sig-name descname">warning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">subject</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">send_mail</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/ssp_logger.html#SSPLogger.warning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.ssp_logger.SSPLogger.warning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ssp.logger.yagmail"></span><dl class="py class">
+<dt id="ssp.logger.yagmail.YagMail">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.logger.yagmail.</code><code class="sig-name descname">YagMail</code><a class="reference internal" href="../_modules/ssp/logger/yagmail.html#YagMail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.yagmail.YagMail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="ssp.logger.yagmail.YagMail.email_notifier_mannual">
+<em class="property">static </em><code class="sig-name descname">email_notifier_mannual</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">from_address</span></em>, <em class="sig-param"><span class="n">to_address</span></em>, <em class="sig-param"><span class="n">from_email_password</span></em>, <em class="sig-param"><span class="n">subject</span></em>, <em class="sig-param"><span class="n">contents</span></em>, <em class="sig-param"><span class="n">attachments</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/logger/yagmail.html#YagMail.email_notifier_mannual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.logger.yagmail.YagMail.email_notifier_mannual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends mail notification  based on given email details along with password
+:param from_address:
+:param to_address:
+:param from_email_password:
+:param subject:
+:param contents:
+:param attachments:
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ssp.ml.html" class="btn btn-neutral float-right" title="ssp.ml" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ssp.kafka.producer.html" class="btn btn-neutral float-left" title="ssp.kafka.producer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

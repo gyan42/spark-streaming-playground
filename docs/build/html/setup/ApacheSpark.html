@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Apache Spark &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Docker" href="Docker.html" />
+    <link rel="prev" title="Setup" href="ApacheKafka.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="setup.html">Spark Streaming Playground Environment Setup</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux Machine Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">SSH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Anaconda.html">Python - Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Postgres.html">PostgreSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHadoop.html">Apache Hadoop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHive.html">Apache Hive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#test-with-our-code">Test with our code</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Apache Spark</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#local-setup">Local Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#standalone-mode">Standalone mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thrift-server">Thrift Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyspark-integration">PySpark Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Kubernetes.html">Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Twitter.html">Twitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">MISC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="setup.html">Spark Streaming Playground Environment Setup</a> &raquo;</li>
+        
+      <li>Apache Spark</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/setup/ApacheSpark.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="apache-spark">
+<h1>Apache Spark<a class="headerlink" href="#apache-spark" title="Permalink to this headline">¶</a></h1>
+<p>It is highly recommended to setup Hadoop and Hive before Apache Spark.</p>
+<p>Download the latest build from http://spark.apache.org/downloads.html</p>
+<div class="section" id="local-setup">
+<h2>Local Setup<a class="headerlink" href="#local-setup" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>MIRROR=archive.apache.org
+SPARK_VERSION=2.4.5
+SPARK_VERSION_SUFFIX=-bin-hadoop2.7
+
+mkdir -p /opt/binaries/
+cd /opt/binaries/
+
+wget https://${MIRROR}/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}${SPARK_VERSION_SUFFIX}.tgz 
+# spark-2.4.5-bin-hadoop2.7
+tar xvzf spark-${SPARK_VERSION}${SPARK_VERSION_SUFFIX}.tgz
+
+# add following to ~/.bashrc
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
+export SPARK_HOME=/opt/binaries/spark-2.4.5-bin-hadoop2.7/
+
+# switch to the conda env you are in and run `which python` and use the path here
+export PYSPARK_PYTHON=/home/mageswarand/anaconda3/envs/vh/bin/python
+export PYSPARK_DRIVER_PYTHON=/home/mageswarand/anaconda3/envs/vh/bin/python
+export PYTHONDONTWRITEBYTECODE=True
+</pre></div>
+</div>
+</div>
+<div class="section" id="standalone-mode">
+<h2>Standalone mode<a class="headerlink" href="#standalone-mode" title="Permalink to this headline">¶</a></h2>
+<p>Rerences: https://spark.apache.org/docs/latest/spark-standalone.html</p>
+<p>Following setup was on my machine Dell-G7 which has 32GB RAM and 12 cores :)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span>
+<span class="n">cp</span> <span class="n">config</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">spark</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">hive</span><span class="o">-</span><span class="n">site</span><span class="o">.</span><span class="n">xml</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="nb">bin</span><span class="o">-</span><span class="n">hadoop2</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">hive</span><span class="o">-</span><span class="n">site</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">cp</span> <span class="n">config</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">spark</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">defaults</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="nb">bin</span><span class="o">-</span><span class="n">hadoop2</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">defaults</span><span class="o">.</span><span class="n">conf</span>
+
+<span class="n">cd</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">binaries</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="nb">bin</span><span class="o">-</span><span class="n">hadoop2</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span>
+<span class="n">sbin</span><span class="o">/</span><span class="n">start</span><span class="o">-</span><span class="nb">all</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">sbin</span><span class="o">/</span><span class="n">stop</span><span class="o">-</span><span class="nb">all</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>A <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/config/conf">config</a> folder is maintained for quick reference, please head there to find related config xml files and move it to your
+Spark <code class="docutils literal notranslate"><span class="pre">conf</span></code> folder.</p>
+<p>UI      : http://localhost:8080
+MASTER  : spark://IMCHLT276:7077</p>
+</div>
+<div class="section" id="thrift-server">
+<h2>Thrift Server<a class="headerlink" href="#thrift-server" title="Permalink to this headline">¶</a></h2>
+<p>Thrift server enable REST endpoint to Spark, hosting itself as a running application in the
+Spark cluster. It can be thought as a distributed SQL engine with an REST end point.</p>
+<p>Spark doc <a class="reference external" href="https://spark.apache.org/docs/latest/sql-distributed-sql-engine.html">here</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbin</span><span class="o">/</span><span class="n">start</span><span class="o">-</span><span class="n">thriftserver</span><span class="o">.</span><span class="n">sh</span> \
+<span class="o">--</span><span class="n">master</span> <span class="n">spark</span><span class="p">:</span><span class="o">//</span><span class="n">IMCHLT276</span><span class="p">:</span><span class="mi">7077</span> \
+<span class="o">--</span><span class="n">hiveconf</span> <span class="n">hive</span><span class="o">.</span><span class="n">server2</span><span class="o">.</span><span class="n">thrift</span><span class="o">.</span><span class="n">bind</span><span class="o">.</span><span class="n">host</span><span class="o">=</span><span class="n">localhost</span> \
+<span class="o">--</span><span class="n">hiveconf</span> <span class="n">hive</span><span class="o">.</span><span class="n">server2</span><span class="o">.</span><span class="n">thrift</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">10000</span> \
+<span class="o">--</span><span class="n">executor</span><span class="o">-</span><span class="n">memory</span> <span class="mi">2</span><span class="n">g</span> \
+<span class="o">--</span><span class="n">conf</span> <span class="n">spark</span><span class="o">.</span><span class="n">jars</span><span class="o">=</span><span class="n">libs</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="mf">42.2</span><span class="o">.</span><span class="mf">10.</span><span class="n">jar</span> \
+<span class="o">--</span><span class="n">conf</span> <span class="n">spark</span><span class="o">.</span><span class="n">cores</span><span class="o">.</span><span class="n">max</span><span class="o">=</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Test it with <code class="docutils literal notranslate"><span class="pre">beeline</span></code> client, user will be your machine login user and empty password.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>bin/beeline
+ !connect jdbc:hive2://localhost:10000
+</pre></div>
+</div>
+</div>
+<div class="section" id="pyspark-integration">
+<h2>PySpark Integration<a class="headerlink" href="#pyspark-integration" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pyspark</span> <span class="pre">--master</span> <span class="pre">spark://IMCHLT276:7077</span> <span class="pre">--conf</span> <span class="pre">&quot;spark.sql.streaming.checkpointLocation=/opt/spark-warehouse/&quot;</span></code></p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#pyspark shell
+# https://spark.apache.org/docs/latest/sql-data-sources-hive-tables.html
+from pyspark.sql.types import *
+
+cSchema = StructType([StructField(&quot;Words&quot;, StringType())\
+                      ,StructField(&quot;total&quot;, IntegerType())])
+
+test_list = [[&#39;Hello&#39;, 1], [&#39;I am fine&#39;, 3]]
+
+df = spark.createDataFrame(test_list,schema=cSchema) 
+
+df.createGlobalTempView(&quot;test_df&quot;)
+
+from pyhive import hive
+connection = hive.connection(host=&quot;localhost&quot;)
+df = pd.reqd_sql(&quot;show tables&quot;, con=connection)
+</pre></div>
+</div>
+<p><strong>JDBC</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>beeline&gt; !connect jdbc:hive2://&lt;host&gt;:&lt;port&gt;/&lt;database&gt;?hive.server2.transport.mode=http;hive.server2.thrift.http.path=&lt;http_endpoint&gt;
+</pre></div>
+</div>
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p>https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-hive-metastore.html</p></li>
+<li><p>https://stackoverflow.com/questions/32730731/error-creating-transactional-connection-factory-during-running-spark-on-hive-pro</p></li>
+<li><p>https://aws.amazon.com/premiumsupport/knowledge-center/postgresql-hive-metastore-emr/</p></li>
+<li><p>http://www.russellspitzer.com/2017/05/19/Spark-Sql-Thriftserver/</p></li>
+<li><p>https://acadgild.com/blog/how-to-access-hive-tables-to-spark-sql</p></li>
+<li><p>https://medium.com/&#64;marcovillarreal_40011/creating-a-spark-standalone-cluster-with-docker-and-docker-compose-ba9d743a157f</p></li>
+<li><p>https://medium.com/&#64;saipeddy/setting-up-a-thrift-server-4eb0c55c11f0</p></li>
+<li><p>https://www.adaltas.com/en/2019/03/25/spark-sql-dataframe-thrift-server/</p></li>
+<li><p>https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-thrift-server.html</p></li>
+<li><p>https://www.adaltas.com/en/2019/03/25/spark-sql-dataframe-thrift-server/</p></li>
+</ul>
+<p><strong>Learning Materials</strong></p>
+<ul class="simple">
+<li><p>https://databricks.com/session/monitoring-structured-streaming-applications-using-web-ui</p></li>
+<li><p>https://databricks.com/session/a-deep-dive-into-structured-streaming</p></li>
+<li><p>https://databricks.com/session/deep-dive-into-monitoring-spark-applications-using-web-ui-and-sparklisteners</p></li>
+<li><p>https://databricks.com/blog/2016/07/28/structured-streaming-in-apache-spark.html</p></li>
+<li><p>https://blog.clairvoyantsoft.com/productionalizing-spark-streaming-applications-4d1c8711c7b0</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Docker.html" class="btn btn-neutral float-right" title="Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ApacheKafka.html" class="btn btn-neutral float-left" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

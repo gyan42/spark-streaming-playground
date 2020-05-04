@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scalable REST end point a naive approach &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spark ML Model" href="4_spark_ml.html" />
+    <link rel="prev" title="Trending Twitter Hash Tags" href="2_trending_tweets.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_dump_tweets.html">Dump Tweet data into Data Lake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scalable REST end point a naive approach</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4_spark_ml.html">Spark ML Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_static_table_stackoverflow.html">Stackoverflow Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_full_ml_model_cycle.html">Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_spark_on_k8s.html">Spark on K8s</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="usecases.html">Usecases</a> &raquo;</li>
+        
+      <li>Scalable REST end point a naive approach</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/3_scalable_rest_api.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scalable-rest-end-point-a-naive-approach">
+<h1>Scalable REST end point a naive approach<a class="headerlink" href="#scalable-rest-end-point-a-naive-approach" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Build a naive approach for a scalable back end loading the spaCy model (12MB) and serve them over a REST end point with Kubernetes</p></li>
+<li><p>Perform NLP task called NER with spaCy</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Design Flask application with a end point to do spaCy NER</p></li>
+<li><p>Define Docker with flask application</p></li>
+<li><p>Define Kubernetes service and deployment file</p></li>
+<li><p>Run as Kubernetes application</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">Bronze</span> <span class="pre">Lake/Live</span> <span class="pre">Stream</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Parquet</span> <span class="pre">Source</span> <span class="pre">-&gt;</span> <span class="pre">Extract</span> <span class="pre">NER</span> <span class="pre">Tags</span> <span class="pre">from</span> <span class="pre">text</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">-&gt;</span> <span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">Console</span> <span class="pre">Sink</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Extract</span> <span class="pre">NER</span> <span class="pre">Tags</span> <span class="pre">from</span> <span class="pre">text</span> <span class="pre">with</span> <span class="pre">UDF</span> <span class="pre">:</span> <span class="pre">Raw</span> <span class="pre">Text</span> <span class="pre">-&gt;</span> <span class="pre">REST</span> <span class="pre">API</span> <span class="pre">end</span> <span class="pre">point</span> <span class="pre">-&gt;</span> <span class="pre">Kubernetes</span> <span class="pre">-&gt;</span> <span class="pre">Docker</span> <span class="pre">-&gt;</span> <span class="pre">Flask</span> <span class="pre">-&gt;</span> <span class="pre">spaCy</span> <span class="pre">-&gt;</span> <span class="pre">NER</span></code></p>
+<p><img alt="../_images/3_scalable_rest_api.png" src="../_images/3_scalable_rest_api.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords">Tweets Keywords Used</a></p></li>
+<li><p>Config file used : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin">default_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html">TwitterProducer</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlConnection">PostgresqlConnection</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.spark.streaming.nlp.html?highlight=nerextraction#ssp.spark.streaming.nlp.ner_extraction.NerExtraction">NerExtraction</a></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/app.gin">api.gin</a></p></li>
+<li><p>Kubernets port number is configured <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/kubernetes/spacy-flask-ner-python.service.yaml">here</a></p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="how-to-run">
+<h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
+is the difference, once the terminal is launched, the steps are common.</p>
+<p>Start the docker container, if needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+</pre></div>
+</div>
+<p>To get a new terminal for our docker instance run : <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
+Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
+<p>This example needs testing of the API flask server on multiple levels, before using them in Spark Streaming.
+Hence the first half contains the steps to test at 3 different levels and in the second part to start the
+Spark Streaming application</p>
+<p>On each terminal move to source folder</p>
+<ul class="simple">
+<li><p>If it is on on local machine</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># 
+cd /path/to/spark-streaming-playground/ 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you wanted to run on Docker, then ‘spark-streaming-playground’ is mounted as a volume at <code class="docutils literal notranslate"><span class="pre">/host/</span></code></p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d&#39; &#39; -f1) bash
+cd /host  
+</pre></div>
+</div>
+<ul>
+<li><p><strong>API server</strong>
+There are three stages of testing the API REST end points, beofre useing them in Spark Streaming…</p>
+<ol>
+<li><p>As a standalone Flask server</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># [api]
+    bin/flask/api_endpoint.sh
+    # test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; http://127.0.0.1:5000/text/ner/spacy
+    # output
+        HTTP/1.0 201 CREATED
+        Content-Type: application/json
+        Content-Length: 34
+        Server: Werkzeug/1.0.0 Python/3.6.9
+        Date: Thu, 02 Apr 2020 18:08:28 GMT
+
+        {
+          &quot;res&quot;: &quot;{&#39;DATE&#39;: &#39;Friday&#39;}&quot;
+        }
+</pre></div>
+</div>
+</li>
+<li><p>As part of docker</p></li>
+</ol>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[docker]
+
+    docker build --network host -f docker/api/Dockerfile -t spacy-flask-ner-python:latest .
+    docker run -d -p 5000:5000 spacy-flask-ner-python
+    # test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; http://127.0.0.1:5000/text/ner/spacy
+    # stop 
+    docker stop $(docker ps | grep spacy-flask-ner-python | cut -d&#39; &#39; -f1)
+    # use below command to stop all containers
+    # docker rm $(docker ps -a -q)
+</pre></div>
+</div>
+<ol>
+<li><p>As part of Kubernetes</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>#[kubernetes]
+
+    sudo minikube start --vm-driver=none 
+
+    # note only first time below commands will add the docker file and run its as as service,
+    # there on, our service will be started by default when we start the Kubernetes!
+    kubectl create -f kubernetes/spacy-flask-ner-python.deployment.yaml 
+    kubectl create -f kubernetes/spacy-flask-ner-python.service.yaml
+
+    # on local machine, test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; http://127.0.0.1:30123/text/ner/spacy
+
+    # on docker, test it to see everything working
+    curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39; -sS host.docker.internal:30123/text/ner/spacy
+
+    # kubernetes restart
+    kubectl delete service/spacy-flask-ner-python-service deployment.apps/spacy-flask-ner-python-deployment
+    # and then create the services again
+</pre></div>
+</div>
+</li>
+<li><p>Python App test</p>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+python3 src/ssp/spark/udf/spacy_ner_udf.py # test it to see everything working
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>[producer] &lt;- Guake terminal name!</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/start_kafka_producer.sh
+bin/data/start_kafka_producer.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[ner]</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+sudo netstat -tulpen | grep 30123 # make sure the port is listed
+vim bin/nlp/ner_extraction_using_spacy.sh
+bin/nlp/ner_extraction_using_spacy.sh
+</pre></div>
+</div>
+<p><img alt="../_images/ner_out.png" src="../_images/ner_out.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="take-aways-learning-s">
+<h2>Take Aways / Learning’s<a class="headerlink" href="#take-aways-learning-s" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>TODOs</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="4_spark_ml.html" class="btn btn-neutral float-right" title="Spark ML Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="2_trending_tweets.html" class="btn btn-neutral float-left" title="Trending Twitter Hash Tags" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

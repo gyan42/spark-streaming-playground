@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Docker &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes" href="Kubernetes.html" />
+    <link rel="prev" title="Apache Spark" href="ApacheSpark.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="setup.html">Spark Streaming Playground Environment Setup</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux Machine Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">SSH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Anaconda.html">Python - Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Postgres.html">PostgreSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHadoop.html">Apache Hadoop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheHive.html">Apache Hive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheKafka.html#test-with-our-code">Test with our code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ApacheSpark.html">Apache Spark</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a><ul>
+<li class="toctree-l4"><a class="reference external" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#build-our-images">Build our images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#misc">Misc</a><ul>
+<li class="toctree-l4"><a class="reference external" href="https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container">https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Kubernetes.html">Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Twitter.html">Twitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Misc.html">MISC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="setup.html">Spark Streaming Playground Environment Setup</a> &raquo;</li>
+        
+      <li>Docker</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/setup/Docker.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04">- https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04</a></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></li>
+</ul>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span>  <span class="n">install</span> <span class="n">docker</span><span class="o">.</span><span class="n">io</span>
+</pre></div>
+</div>
+<p>Since docker gonna eat up lot of disk space, it is idel to use HDD instead of SSD in case if you happened to ahve one!
+Below are the steps to update the <code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">folder</span></code> of Docker download path to store the files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo systemctl stop docker
+
+sudo mv /var/lib/docker/ /opt/binaries/
+sudo rm -rf /var/lib/docker
+sudo ln -s /opt/binaries/docker/ /var/lib/docker
+
+sudo vim /etc/docker/daemon.json\:
+
+    {
+        “data-path”: “/opt/binaries/docker”,
+        “graph”: “/opt/binaries/docker”
+    } 
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+sudo ls /opt/binaries/docker
+    mageswarand@IMCHLT276:/opt/binaries/docker$ ls
+    builder  buildkit  containers  image  network  overlay2  plugins  runtimes  swarm  tmp  trust  volumes
+</pre></div>
+</div>
+<p>It is very common to face network issues with docker, better equip with the basics &#64; <a class="reference external" href="https://pythonspeed.com/articles/docker-connection-refused/">https://pythonspeed.com/articles/docker-connection-refused/</a></p>
+</div>
+<div class="section" id="build-our-images">
+<h2>Build our images<a class="headerlink" href="#build-our-images" title="Permalink to this headline">¶</a></h2>
+<p><strong>NER Image</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">network</span> <span class="n">host</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">Dockerfile</span> <span class="o">-</span><span class="n">t</span> <span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+<span class="c1"># start the app</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="p">:</span><span class="n">latest</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5000</span><span class="p">:</span><span class="mi">5000</span> <span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span>
+<span class="c1"># on a seprate terminal</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;text&quot;:&quot;Ram read a book on Friday 20/11/2019&quot;}&#39;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5000</span><span class="o">/</span><span class="n">spacy</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">ner</span>
+</pre></div>
+</div>
+<p><strong>Structured Streaming Image</strong></p>
+<ul class="simple">
+<li><p>Build</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">network</span> <span class="n">host</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">/</span><span class="n">ssp</span><span class="o">/</span><span class="n">Dockerfile</span> <span class="o">-</span><span class="n">t</span> <span class="n">sparkstructuredstreaming</span><span class="o">-</span><span class="n">pg</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Run</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Login into bash shell:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># first time
+docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest /bin/bash
+
+# to get bash shell from running instance
+docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d&#39; &#39; -f1) bash
+</pre></div>
+</div>
+<p>We are mounting current directory as a volume inside the container, so make sure you trigger from repo base directory,
+so that following steps works.</p>
+</div>
+<div class="section" id="misc">
+<h2>Misc<a class="headerlink" href="#misc" title="Permalink to this headline">¶</a></h2>
+<p><strong>Common commands</strong></p>
+<ul class="simple">
+<li><p>https://www.edureka.co/blog/docker-commands/</p></li>
+<li><p>start the services</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">docker</span> <span class="n">start</span>
+<span class="ow">or</span> 
+<span class="n">systemctl</span> <span class="n">start</span> <span class="n">docker</span>
+<span class="n">systemctl</span> <span class="n">enable</span> <span class="n">docker</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>build the image</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">network</span> <span class="n">host</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">Dockerfile</span> <span class="o">-</span><span class="n">t</span> <span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>run docker in interactive mode</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">ti</span> <span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>start the app</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5000</span><span class="p">:</span><span class="mi">5000</span> <span class="n">spacy</span><span class="o">-</span><span class="n">flask</span><span class="o">-</span><span class="n">ner</span><span class="o">-</span><span class="n">python</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>list containers</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">container</span> <span class="n">ls</span> <span class="o">-</span><span class="n">a</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>remove/delete Docker images</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">rmi</span> <span class="nb">id</span><span class="c1">#</span>
+<span class="n">docker</span> <span class="n">images</span> <span class="o">-</span><span class="n">f</span> <span class="n">dangling</span><span class="o">=</span><span class="n">true</span>
+<span class="n">docker</span> <span class="n">system</span> <span class="n">prune</span>
+<span class="n">docker</span> <span class="n">images</span> <span class="n">purge</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>stop all the services/containers</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>When there is a change in the python code base, we obviously have to
+rebuild the docker image, isn’t? Use following steps to do so:</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>docker container ls
+docker stop {id}
+docker rm {id}
+docker build ...
+# for multiple shells for same container
+docker exec -it &lt;container&gt; bash
+</pre></div>
+</div>
+<p><strong>Mount Host Folder</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container">https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container</a></li>
+</ul>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">virtualbox</span><span class="o">-</span><span class="n">guest</span><span class="o">-</span><span class="n">x11</span>
+<span class="n">sudo</span> <span class="n">mount</span> <span class="o">-</span><span class="n">t</span> <span class="n">vboxsf</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">vlab</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">streaming</span><span class="o">-</span><span class="n">playground</span><span class="o">/</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">dockerfolder</span>
+</pre></div>
+</div>
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.bogotobogo.com/DevOps/DevOps-Kubernetes-1-Running-Kubernetes-Locally-via-Minikube.php">https://www.bogotobogo.com/DevOps/DevOps-Kubernetes-1-Running-Kubernetes-Locally-via-Minikube.php</a></p></li>
+<li><p>https://blog.adriel.co.nz/2018/01/25/change-docker-data-directory-in-debian-jessie/</p></li>
+<li><p>https://rominirani.com/docker-tutorial-series-part-7-data-volumes-93073a1b5b72</p></li>
+<li><p>https://medium.com/rahasak/kafka-and-zookeeper-with-docker-65cff2c2c34f</p></li>
+<li><p>https://github.com/sameersbn/docker-postgresql</p></li>
+<li><p>https://github.com/kibatic/docker-single-node-hadoop/</p></li>
+<li><p>https://github.com/bbonnin/docker-hadoop-3/blob/master/Dockerfile</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Kubernetes.html" class="btn btn-neutral float-right" title="Kubernetes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ApacheSpark.html" class="btn btn-neutral float-left" title="Apache Spark" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

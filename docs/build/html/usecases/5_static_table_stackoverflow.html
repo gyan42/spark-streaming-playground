@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Stackoverflow Exploration &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python" href="6_full_ml_model_cycle.html" />
+    <link rel="prev" title="Spark ML Model" href="4_spark_ml.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_dump_tweets.html">Dump Tweet data into Data Lake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_scalable_rest_api.html">Scalable REST end point a naive approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_spark_ml.html">Spark ML Model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Stackoverflow Exploration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6_full_ml_model_cycle.html">Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_spark_on_k8s.html">Spark on K8s</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="usecases.html">Usecases</a> &raquo;</li>
+        
+      <li>Stackoverflow Exploration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/5_static_table_stackoverflow.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stackoverflow-exploration">
+<h1>Stackoverflow Exploration<a class="headerlink" href="#stackoverflow-exploration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Use stack overflow dataset from <a class="reference external" href="https://snap.stanford.edu/data/sx-stackoverflow.html">https://snap.stanford.edu/data/sx-stackoverflow.html</a></p></li>
+<li><p>Create a external table with Hive meta store</p></li>
+<li><p>Demonstrate sample queries in SparkSQL, ThriftServer and Hive</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>A <strong><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/notebooks/stackoverflow/DataAnalysis.ipynb">Jupyter Notebook</a></strong> for the task</p></li>
+<li><p>Explore teh data &#64; <a class="reference external" href="https://archive.org/details/stackexchange">https://archive.org/details/stackexchange</a></p></li>
+<li><p>Download the data from <a class="reference external" href="https://archive.org/download/stackexchange">https://archive.org/download/stackexchange</a></p></li>
+<li><p>Setup data load for XML format</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="6_full_ml_model_cycle.html" class="btn btn-neutral float-right" title="Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="4_spark_ml.html" class="btn btn-neutral float-left" title="Spark ML Model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Dump Tweet data into Data Lake &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Trending Twitter Hash Tags" href="2_trending_tweets.html" />
+    <link rel="prev" title="Usecases" href="usecases.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usecases.html">Usecases</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Dump Tweet data into Data Lake</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation-steps">Implementation Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-run">How to run?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#take-aways-learning-s">Take Aways / Learning’s</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations-todos">Limitations / TODOs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2_trending_tweets.html">Trending Twitter Hash Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_scalable_rest_api.html">Scalable REST end point a naive approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_spark_ml.html">Spark ML Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_static_table_stackoverflow.html">Stackoverflow Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_full_ml_model_cycle.html">Architecting a Real time Streaming Deep Learning Text Classification Pipeline With Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_spark_on_k8s.html">Spark on K8s</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ssp/ssp.html">ssp</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="usecases.html">Usecases</a> &raquo;</li>
+        
+      <li>Dump Tweet data into Data Lake</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/1_dump_tweets.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dump-tweet-data-into-data-lake">
+<h1>Dump Tweet data into Data Lake<a class="headerlink" href="#dump-tweet-data-into-data-lake" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Come up with a <a class="reference external" href="https://aws.amazon.com/big-data/datalakes-and-analytics/what-is-a-data-lake/">Data Lake</a> storage system.<br />Data lake setup should be as follows on our HDFS, basically boils down to HDFS paths:</p>
+<ul>
+<li><p>Bronze Lake : Raw data i.e tweets</p></li>
+<li><p>Silver Lake : Preprocessed data like running some kind of NLP stuff like Nammed Entity Recoginition (NER), cleansing etc.,</p></li>
+<li><p>Gold Lake   : Data Ready for web application / dash board to consume</p></li>
+</ul>
+</li>
+<li><p>Have provision to collect tweets:</p>
+<ul>
+<li><p>Related to <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Science/AI/Machine</span> <span class="pre">Learning/Big</span> <span class="pre">Data</span></code> and dump into bronze lake</p></li>
+<li><p>More generic along side of above tweets</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="implementation-steps">
+<h2>Implementation Steps<a class="headerlink" href="#implementation-steps" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Get API Credentials from Twitter Developement Site</p></li>
+<li><p>Setup <a class="reference external" href="https://www.tweepy.org/">Tweepy</a> to read Twitter stream filtering tweets
+that talks about <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Science/AI/Machine</span> <span class="pre">Learning/Big</span> <span class="pre">Data</span></code></p></li>
+<li><p>Create Kafka topics for twitter stream</p></li>
+<li><p>Dump the tweets from Tweepy into Kafka topics</p></li>
+<li><p>Use Spark Structured Streaming to read the Kafka topic(s) and store as parquet in HDFS</p></li>
+<li><p>Use HDFS command line ot verify the data dump</p></li>
+</ul>
+<p>Data flow path:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Twitter</span> <span class="n">API</span> <span class="o">-&gt;</span> <span class="n">Kafka</span> <span class="n">Producer</span> <span class="p">(</span><span class="n">two</span> <span class="n">topics</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Kafka</span> <span class="n">Server</span>  
+
+<span class="n">Spark</span> <span class="n">Structured</span> <span class="n">Streaming</span> <span class="k">with</span> <span class="n">Kafka</span> <span class="n">Consumer</span> <span class="o">-&gt;</span> <span class="n">Parquet</span> <span class="n">Sink</span> <span class="o">-&gt;</span> <span class="n">Bronze</span> <span class="n">Lake</span> <span class="p">(</span><span class="n">HDFS</span> <span class="n">location</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="../_images/1_dump_raw_tweets.png" src="../_images/1_dump_raw_tweets.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.utils.html#ssp.utils.ai_key_words.AIKeyWords">Tweets Keywords Used</a></p></li>
+<li><p>Config file used : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/config/default_ssp_config.gin">default_ssp_config.gin</a></p></li>
+<li><p><a class="reference external" href="https://gyan42.github.io/spark-streaming-playground/build/html/ssp/ssp.kafka.producer.html">TwitterProducer</a></p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="how-to-run">
+<h2>How to run?<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways of running, that is on docker or on your local machine. In either case, opening the terminal
+is the difference, once the terminal is launched, the steps are common.</p>
+<p>Start the docker container, if needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run -v $(pwd):/host/ --hostname=$(hostname) -p 50075:50075 -p 50070:50070 -p 8020:8020 -p 2181:2181 -p 9870:9870 -p 9000:9000 -p 8088:8088 -p 10000:10000 -p 7077:7077 -p 10001:10001 -p 8080:8080 -p 9092:9092 -it sparkstructuredstreaming-pg:latest
+</pre></div>
+</div>
+<p>To get a new terminal for our docker instance run :<br /><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span> <span class="pre">bash</span></code>
+Note: We pull our container run id with <code class="docutils literal notranslate"><span class="pre">$(docker</span> <span class="pre">ps</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">sparkstructuredstreaming-pg</span> <span class="pre">|</span> <span class="pre">cut</span> <span class="pre">-d'</span> <span class="pre">'</span> <span class="pre">-f1)</span></code></p>
+<p>This example needs three terminals:</p>
+<ul class="simple">
+<li><p>Producer <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/bin/data/start_kafka_producer.sh">bin/data/start_kafka_producer.sh</a></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Twitter</span> <span class="pre">API</span> <span class="pre">-&gt;</span> <span class="pre">Kafka</span> <span class="pre">Producer</span> <span class="pre">-&gt;</span> <span class="pre">Kafka</span> <span class="pre">Server</span></code></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py">src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py</a></p></li>
+</ul>
+</li>
+<li><p>Consumer <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/bin/data/dump_raw_data_into_bronze_lake.sh">bin/data/dump_raw_data_into_bronze_lake.sh</a></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Spark</span> <span class="pre">Structured</span> <span class="pre">Streaming</span> <span class="pre">with</span> <span class="pre">Kafka</span> <span class="pre">Consumer</span> <span class="pre">-&gt;</span> <span class="pre">Parquet</span> <span class="pre">Sink</span> <span class="pre">-&gt;</span> <span class="pre">Bronze</span> <span class="pre">Lake</span></code></p></li>
+<li><p><a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py">src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spark-submit</span></code> is used to run the application.</p></li>
+<li><p>Which submits the application to Spark master, if the application has SparkSession in it, then it will
+be considered as Spark Application and the cluster is used to run the application</p></li>
+<li><p>Since cluster is involved in our example, we need to specify the number of cores, memory needed and maximum cores for our application,
+which is exported just before the spark-submit command in the shell script file.</p></li>
+<li><p>Also the extra packages need for the application is given as part of the submit config</p></li>
+</ul>
+</li>
+<li><p>HDFS</p>
+<ul>
+<li><p>Command line tool to test the parquet file storage</p></li>
+</ul>
+</li>
+</ul>
+<p>On each terminal move to source folder</p>
+<ul class="simple">
+<li><p>If it is on on local machine</p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span># 
+cd /path/to/spark-streaming-playground/ 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you wanted to run on Docker, then ‘spark-streaming-playground’ is mounted as a volume at <code class="docutils literal notranslate"><span class="pre">/host/</span></code></p></li>
+</ul>
+<div class="highlight-shell script notranslate"><div class="highlight"><pre><span></span>docker exec -it $(docker ps | grep sparkstructuredstreaming-pg | cut -d&#39; &#39; -f1) bash
+cd /host  
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[producer] &lt;- custom (guake) terminal name!</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/start_kafka_producer.sh
+bin/data/start_kafka_producer.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[visualize]</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/visulaize_raw_text.sh
+bin/data/visulaize_raw_text.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[consumer]</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+vim bin/data/dump_raw_data_into_bronze_lake.sh
+bin/data/dump_raw_data_into_bronze_lake.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>[hdfs]</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+export PYTHONPATH=$(pwd)/src/:$PYTHONPATH
+hdfs dfs -ls /tmp/ssp/data/lake/bronze/delta/
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="take-aways-learning-s">
+<h2>Take Aways / Learning’s<a class="headerlink" href="#take-aways-learning-s" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Understand how to get an Twitter API</p></li>
+<li><p>Learn to use Python library <a class="reference external" href="http://docs.tweepy.org/en/latest/streaming_how_to.html">Tweepy to listen to Twitter stream</a></p></li>
+<li><p>Understand creation of Kafka topic</p>
+<ul>
+<li><div class="highlight-sudo /opt/binaries/kafka/bin/kafka-topics.sh \ notranslate"><div class="highlight"><pre><span></span>   --create 
+   --zookeeper localhost:2181 \
+   --replication-factor 1 
+   --partitions 20 
+   --topic {topic}``` 
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Dumping the data to Kafka topic : <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/tree/master/src/ssp/spark/streaming/consumer/twiteer_stream_consumer_main.py">TweetsListener</a></p>
+<ul class="simple">
+<li><p>Define <code class="docutils literal notranslate"><span class="pre">KafkaProducer</span></code> with Kafka master url</p></li>
+<li><p>Send the data to specific topic</p></li>
+</ul>
+</li>
+<li><p>Using Spark Structured Streaming to read Kafka topic</p>
+<ul class="simple">
+<li><p>Configuring the read stream</p></li>
+<li><p>Defining the Schema as per <a class="reference external" href="https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object">Twitter Json schema</a>
+in our <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/master/src/ssp/spark/streaming/common/twitter_streamer_base.py#L56">code</a></p></li>
+</ul>
+</li>
+<li><p>Using Spark Structured Streaming to store streaming data as <a class="reference external" href="https://github.com/gyan42/spark-streaming-playground/blob/756ee7c204039c8a3bc890a95e1da78ac2d6a9ee/src/ssp/spark/streaming/common/streamer_base.py#L57">parquet</a> in HDFS/local path</p></li>
+<li><p>View the stored data with HDFS commands</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="limitations-todos">
+<h2>Limitations / TODOs<a class="headerlink" href="#limitations-todos" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The free Twitter streaming API is sampling <a class="reference external" href="https://brightplanet.com/2013/06/25/twitter-firehose-vs-twitter-api-whats-the-difference-and-why-should-you-care/">1% to 40% of tweets for given filter words</a>.
+So how to handle to full scale real time tweets with services like <a class="reference external" href="https://support.gnip.com/apis/firehose/overview.html">Gnip Firehose</a>?</p></li>
+<li><p>Have common APIs for all File systems : Local Disk, HDFS, AWS S3. GFS</p></li>
+<li><p>Understand more on Kafka topic creation and its distribution configuration paramaters like partitions, replicas etc.,</p></li>
+<li><p>Come up with Apache Spark Streaming Listeners, to monitor the streaming data</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="2_trending_tweets.html" class="btn btn-neutral float-right" title="Trending Twitter Hash Tags" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usecases.html" class="btn btn-neutral float-left" title="Usecases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

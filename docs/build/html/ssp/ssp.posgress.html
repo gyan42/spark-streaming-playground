@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.posgress &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp.snorkel" href="ssp.snorkel.html" />
+    <link rel="prev" title="ssp.ml.transformer" href="ssp.ml.transformer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.ml.html">ssp.ml</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="ssp.html">ssp</a> &raquo;</li>
+        
+      <li>ssp.posgress</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ssp/ssp.posgress.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ssp.posgress">
+<span id="ssp-posgress"></span><h1>ssp.posgress<a class="headerlink" href="#module-ssp.posgress" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<span class="target" id="module-ssp.posgress.dataset_base"></span><dl class="py class">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.posgress.dataset_base.</code><code class="sig-name descname">PostgresqlConnection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Postgresql utility class to read,write tables and execute query</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>postgresql_host</strong> – Postgresql Host address</p></li>
+<li><p><strong>postgresql_port</strong> – Postgresql port number</p></li>
+<li><p><strong>postgresql_database</strong> – Postgresql database name</p></li>
+<li><p><strong>postgresql_user</strong> – Postgresql user name</p></li>
+<li><p><strong>postgresql_password</strong> – Postgresql password</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_connection">
+<code class="sig-name descname">get_sqlalchemy_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.get_sqlalchemy_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_connection" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns postgresql sqlalchemy connection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_session">
+<code class="sig-name descname">get_sqlalchemy_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.get_sqlalchemy_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.get_sqlalchemy_session" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.get_table">
+<code class="sig-name descname">get_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.get_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use to get the Postgresql table as Pandas dataframe
+:param table_name:
+:return: Pandas DataFrame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.get_tables_list">
+<code class="sig-name descname">get_tables_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table_schema</span><span class="o">=</span><span class="default_value">'public'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.get_tables_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.get_tables_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_schema</strong> – Postgresql schema. Default is <cite>public</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of tables on given table schema</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.query_to_df">
+<code class="sig-name descname">query_to_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.query_to_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.query_to_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.run_query">
+<code class="sig-name descname">run_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.run_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.run_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.store_df_as_parquet">
+<code class="sig-name descname">store_df_as_parquet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.store_df_as_parquet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.store_df_as_parquet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the DataFrame as parquet
+:param df: Pandas DataFrame
+:param path: Local machine path
+:return: None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlConnection.to_posgresql_table">
+<code class="sig-name descname">to_posgresql_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">table_name</span></em>, <em class="sig-param"><span class="n">schema</span><span class="o">=</span><span class="default_value">'public'</span></em>, <em class="sig-param"><span class="n">if_exists</span><span class="o">=</span><span class="default_value">'fail'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlConnection.to_posgresql_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlConnection.to_posgresql_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the DataFrame as Postgresql table
+:param df: Pandas Dataframe
+:param table_name: Name of the table
+:param if_exists: {‘fail’, ‘replace’, ‘append’}, default ‘fail’</p>
+<blockquote>
+<div><p>How to behave if the table already exists.</p>
+<ul class="simple">
+<li><p>fail: Raise a ValueError.</p></li>
+<li><p>replace: Drop the table before inserting new values.</p></li>
+<li><p>append: Insert new values to the existing table.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="ssp.posgress.dataset_base.PostgresqlDatasetBase">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.posgress.dataset_base.</code><code class="sig-name descname">PostgresqlDatasetBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_column</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">label_output_column</span><span class="o">=</span><span class="default_value">'slabel'</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="default_value">'raw_tweet_dataset'</span></em>, <em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlDatasetBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlDatasetBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ssp.posgress.dataset_base.PostgresqlConnection" title="ssp.posgress.dataset_base.PostgresqlConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.posgress.dataset_base.PostgresqlConnection</span></code></a></p>
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlDatasetBase.get_latest_raw_dataset_name">
+<code class="sig-name descname">get_latest_raw_dataset_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlDatasetBase.get_latest_raw_dataset_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_latest_raw_dataset_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the specific version of raw tweet table
+:param version: (int) Run id/version used while dumping the data using ~ssp.spark.consumer.TwitterDataset
+:return: (str) name of the table with version</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlDatasetBase.get_processed_datasets">
+<code class="sig-name descname">get_processed_datasets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlDatasetBase.get_processed_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_processed_datasets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlDatasetBase.get_raw_dump_tables_list">
+<code class="sig-name descname">get_raw_dump_tables_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlDatasetBase.get_raw_dump_tables_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlDatasetBase.get_raw_dump_tables_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of raw data tables dataset dumped by ~ssp.spark.consumer.TwitterDataset
+:return: List of string Eg: [raw_tweet_dataset_0,raw_tweet_dataset_1]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ssp.posgress.dataset_base.PostgresqlDatasetBase.split_dataset_table">
+<code class="sig-name descname">split_dataset_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#PostgresqlDatasetBase.split_dataset_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.PostgresqlDatasetBase.split_dataset_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.posgress.dataset_base.main">
+<code class="sig-prename descclassname">ssp.posgress.dataset_base.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">argv</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/posgress/dataset_base.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.posgress.dataset_base.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ssp.snorkel.html" class="btn btn-neutral float-right" title="ssp.snorkel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ssp.ml.transformer.html" class="btn btn-neutral float-left" title="ssp.ml.transformer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

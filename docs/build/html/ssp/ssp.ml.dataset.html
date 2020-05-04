@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ssp.ml.dataset &mdash; spark-streaming-playground 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ssp.ml.estimator" href="ssp.ml.estimator.html" />
+    <link rel="prev" title="ssp.ml" href="ssp.ml.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> spark-streaming-playground
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">Spark Streaming Playground Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_urls_n_ports.html">Localhost Port Number used</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/usecases.html">Usecases</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="ssp.html">ssp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ssp.dl.html">ssp.dl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.flask.html">ssp.flask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.kafka.html">ssp.kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.logger.html">ssp.logger</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ssp.ml.html">ssp.ml</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ssp.ml.dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.ml.estimator.html">ssp.ml.estimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssp.ml.transformer.html">ssp.ml.transformer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.posgress.html">ssp.posgress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.snorkel.html">ssp.snorkel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.spark.html">ssp.spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.utils.html">ssp.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssp.viz.html">ssp.viz</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">spark-streaming-playground</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="ssp.html">ssp</a> &raquo;</li>
+        
+          <li><a href="ssp.ml.html">ssp.ml</a> &raquo;</li>
+        
+      <li>ssp.ml.dataset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ssp/ssp.ml.dataset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ssp.ml.dataset">
+<span id="ssp-ml-dataset"></span><h1>ssp.ml.dataset<a class="headerlink" href="#module-ssp.ml.dataset" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<span class="target" id="module-ssp.ml.dataset.prepare_dataset"></span><dl class="py class">
+<dt id="ssp.ml.dataset.prepare_dataset.SSPMLDataset">
+<em class="property">class </em><code class="sig-prename descclassname">ssp.ml.dataset.prepare_dataset.</code><code class="sig-name descname">SSPMLDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_column</span><span class="o">=</span><span class="default_value">'text'</span></em>, <em class="sig-param"><span class="n">label_output_column</span><span class="o">=</span><span class="default_value">'slabel'</span></em>, <em class="sig-param"><span class="n">raw_tweet_table_name_prefix</span><span class="o">=</span><span class="default_value">'raw_tweet_dataset'</span></em>, <em class="sig-param"><span class="n">postgresql_host</span><span class="o">=</span><span class="default_value">'localhost'</span></em>, <em class="sig-param"><span class="n">postgresql_port</span><span class="o">=</span><span class="default_value">'5432'</span></em>, <em class="sig-param"><span class="n">postgresql_database</span><span class="o">=</span><span class="default_value">'sparkstreamingdb'</span></em>, <em class="sig-param"><span class="n">postgresql_user</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">postgresql_password</span><span class="o">=</span><span class="default_value">'sparkstreaming'</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/ml/dataset/prepare_dataset.html#SSPMLDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.ml.dataset.prepare_dataset.SSPMLDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ssp.posgress.html#ssp.posgress.dataset_base.PostgresqlDatasetBase" title="ssp.posgress.dataset_base.PostgresqlDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ssp.posgress.dataset_base.PostgresqlDatasetBase</span></code></a></p>
+<p>Reads the raw tweet data dump from Postgresql, splits the data and annotates the text with Snorkel.</p>
+<p>Dumps the data into postgresql for annotation and conitnuous improvement purpose</p>
+<p>Dumps the data into given path as train/dev/test/snorkell train data for model building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text_column</strong> – Name of the text column</p></li>
+<li><p><strong>label_output_column</strong> – Name of the label column to be created using the snorkel labeler</p></li>
+<li><p><strong>raw_tweet_table_name_prefix</strong> – Raw tweet table dump name prefix</p></li>
+<li><p><strong>postgresql_host</strong> – Postgresql host</p></li>
+<li><p><strong>postgresql_port</strong> – Postgresql port</p></li>
+<li><p><strong>postgresql_database</strong> – Postgresql Database</p></li>
+<li><p><strong>postgresql_user</strong> – Postgresql user name</p></li>
+<li><p><strong>postgresql_password</strong> – Postgresql user password</p></li>
+<li><p><strong>overwrite</strong> – Overwrite the table and disk data</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">|</span><span class="n">Table</span> <span class="n">Name</span>                        <span class="o">|</span><span class="n">Records</span><span class="o">|</span><span class="n">Info</span>                       <span class="o">|</span>
+<span class="o">|----------------------------------|-------|---------------------------|</span>
+<span class="o">|</span><span class="n">raw_tweet_dataset_0</span>               <span class="o">|</span> <span class="mi">50</span><span class="n">K</span><span class="o">+</span>  <span class="o">|</span><span class="n">Full</span> <span class="n">Raw</span> <span class="n">Dataset</span>           <span class="o">|</span>
+<span class="o">|</span><span class="n">deduplicated_raw_tweet_dataset_0</span>  <span class="o">|</span> <span class="o">~</span>     <span class="o">|</span><span class="n">Depulicated</span> <span class="n">on</span> <span class="n">text</span> <span class="n">column</span> <span class="o">|</span>
+<span class="o">|</span><span class="n">test_dataset_0</span>                    <span class="o">|</span><span class="mi">1000</span>   <span class="o">|</span><span class="n">Test</span> <span class="n">dataset</span>               <span class="o">|</span>
+<span class="o">|</span><span class="n">dev_dataset_0</span>                     <span class="o">|</span><span class="mi">500</span>    <span class="o">|</span><span class="n">Dev</span> <span class="n">dataset</span>                <span class="o">|</span>
+<span class="o">|</span><span class="n">snorkel_train_dataset_0</span>           <span class="o">|</span><span class="mi">10</span><span class="n">K</span>    <span class="o">|</span><span class="n">Snorkel</span> <span class="n">train</span> <span class="n">dataset</span>      <span class="o">|</span>
+<span class="o">|</span><span class="n">train_dataset_0</span>                   <span class="o">|~</span>      <span class="o">|</span><span class="n">Model</span> <span class="n">train</span> <span class="n">dataset</span>        <span class="o">|</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="ssp.ml.dataset.prepare_dataset.SSPMLDataset.download_n_store">
+<code class="sig-name descname">download_n_store</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/ml/dataset/prepare_dataset.html#SSPMLDataset.download_n_store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.ml.dataset.prepare_dataset.SSPMLDataset.download_n_store" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ssp.ml.dataset.prepare_dataset.SSPMLDataset.split_n_store">
+<code class="sig-name descname">split_n_store</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/ml/dataset/prepare_dataset.html#SSPMLDataset.split_n_store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.ml.dataset.prepare_dataset.SSPMLDataset.split_n_store" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="ssp.ml.dataset.prepare_dataset.insert_id_col">
+<code class="sig-prename descclassname">ssp.ml.dataset.prepare_dataset.</code><code class="sig-name descname">insert_id_col</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ssp/ml/dataset/prepare_dataset.html#insert_id_col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ssp.ml.dataset.prepare_dataset.insert_id_col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts <cite>text_id</cite> column considering the number of rows and a label column.
+<cite>label</cite> column copies the values of <cite>slabel</cite> column, if exists or inserts <cite>-1</cite> as value
+:param df: Pandas DataFrame
+:return: Pandas DataFrame</p>
+</dd></dl>
+
+<span class="target" id="module-ssp.ml.dataset.prepare_dataset_main"></span></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ssp.ml.estimator.html" class="btn btn-neutral float-right" title="ssp.ml.estimator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ssp.ml.html" class="btn btn-neutral float-left" title="ssp.ml" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Mageswaran Dhandapani
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

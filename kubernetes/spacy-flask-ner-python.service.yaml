@@ -1,0 +1,17 @@
+apiVersion: v1 #Defines the API Version
+kind: Service #Kinds parameter defines which kind of file is it, over here it is Service
+metadata:
+  labels:
+  name: spacy-flask-ner-python-service #Stores the name of the service
+spec:
+  selector:
+    app: spacy-flask-ner-python
+  ports:
+  - protocol: "TCP"
+    # Port accessible inside cluster
+    port: 8081
+    # Port to forward to inside the pod
+    targetPort: 5000
+    # Port accessible outside cluster
+    nodePort: 30123
+  type: LoadBalancer
