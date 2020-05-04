@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 from ssp.utils.config_manager import ConfigManager
 
 class StreamingConfigs(object):
@@ -25,7 +36,6 @@ class StreamingConfigs(object):
             self._twitter_consumer_secret = self._twitter_config.get_item("twitter", "consumer_secret")
             self._twitter_access_token = self._twitter_config.get_item("twitter", "access_token")
             self._twitter_access_secret = self._twitter_config.get_item("twitter", "access_secret")
-        self._key_words = self._config.get_item("twitter", "key_words").split(",")
 
         # [dataset]
         self._checkpoint_dir = self._config.get_item("dataset", "checkpoint_dir")
@@ -36,7 +46,8 @@ class StreamingConfigs(object):
         self._bronze_hive_manifest_location = self._config.get_item("dataset", "bronze_hive_manifest_location")
         self._silver_hive_manifest_location = self._config.get_item("dataset", "silver_hive_manifest_location")
         self._gold_hive_manifest_location = self._config.get_item("dataset", "gold_hive_manifest_location")
-
+        self._raw_tweet_table_name = self._config.get_item("dataset", "raw_tweet_table_name")
+        self._ai_tweet_table_name = self._config.get_item("dataset", "ai_tweet_table_name")
 
         # [kafka]
         self._kafka_addr = self._config.get_item("kafka", "kafka_addr")

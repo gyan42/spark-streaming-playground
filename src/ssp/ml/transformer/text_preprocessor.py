@@ -1,8 +1,22 @@
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
 import re
+import pandas as pd
 import swifter
+from pyspark.sql.types import StringType
 from sklearn.base import BaseEstimator, TransformerMixin
 import spacy
-
+from tqdm import tqdm
+from pyspark.sql.functions import udf
 from ssp.utils.eda import get_stop_words
 STOPWORDS = get_stop_words()
 
@@ -33,9 +47,11 @@ def preprocess(text):
     return text.strip()
 
 
+preprocess_udf = udf(preprocess, StringType())
+
 
 class TextPreProcessor(BaseEstimator, TransformerMixin):
-    def __init__(self, input_col, output_col):
+    def __init__(self, input_col=None, output_col=None):
         self._input_col = input_col
         self._output_col = output_col
 
@@ -44,7 +60,16 @@ class TextPreProcessor(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-        X[self._output_col] = X[self._input_col].swifter.apply(preprocess)
+        if isinstance(X, pd.DataFrame):
+            if self._output_col:
+                X[self._output_col] = X[self._input_col].swifter.apply(preprocess)
+            return X
+        elif isinstance(X, list):
+            X = [preprocess(x) for x in tqdm(X)]
+            return X
+        elif isinstance(X, str):
+            return preprocess(X)
+
         # Lematization ? for ML models
         # Tweets with more than 5 mentions/hashtag then consider it to be spam/useless, check with length
         return X

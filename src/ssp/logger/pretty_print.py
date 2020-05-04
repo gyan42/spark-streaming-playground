@@ -1,4 +1,15 @@
-CEND      = '\33[0m'
+#!/usr/bin/env python
+
+__author__ = "Mageswaran Dhandapani"
+__copyright__ = "Copyright 2020, The Spark Structured Playground Project"
+__credits__ = []
+__license__ = "Apache License"
+__version__ = "2.0"
+__maintainer__ = "Mageswaran Dhandapani"
+__email__ = "mageswaran1989@gmail.com"
+__status__ = "Education Purpose"
+
+
 CBOLD     = '\33[1m'
 CITALIC   = '\33[3m'
 CURL      = '\33[4m'
@@ -7,10 +18,10 @@ CBLINK2   = '\33[6m'
 CSELECTED = '\33[7m'
 
 CBLACK  = '\33[30m'
-CRED    = '\33[31m'
+
 CGREEN  = '\33[32m'
 CYELLOW = '\33[33m'
-CBLUE   = '\33[34m'
+
 CVIOLET = '\33[35m'
 CBEIGE  = '\33[36m'
 CWHITE  = '\33[37m'
@@ -26,8 +37,8 @@ CWHITEBG  = '\33[47m'
 
 CGREY    = '\33[90m'
 CRED2    = '\33[91m'
-CGREEN2  = '\33[92m'
-CYELLOW2 = '\33[93m'
+
+
 CBLUE2   = '\33[94m'
 CVIOLET2 = '\33[95m'
 CBEIGE2  = '\33[96m'
@@ -42,6 +53,11 @@ CVIOLETBG2 = '\33[105m'
 CBEIGEBG2  = '\33[106m'
 CWHITEBG2  = '\33[107m'
 
+CEND      = '\33[0m'
+CBLUE   = '\33[34m'
+CYELLOW2 = '\33[93m'
+CRED    = '\33[31m'
+CGREEN2  = '\33[92m'
 
 def print_info(*args):
     """
