@@ -9,10 +9,8 @@ __maintainer__ = "Mageswaran Dhandapani"
 __email__ = "mageswaran1989@gmail.com"
 __status__ = "Education Purpose"
 
-import pytest
-
-from ssp.logger.pretty_print import print_error
 from ssp.spark.streaming.analytics import SentimentAnalysis
+
 
 def test_sentiment_analysis_members():
     for item in ['_get_schema', '_get_source_stream', '_get_spark', '_hdfs_process',

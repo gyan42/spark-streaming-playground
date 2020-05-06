@@ -11,7 +11,6 @@ __status__ = "Education Purpose"
 
 import os
 
-import argparse
 import pyarrow as pa
 import gin
 from pyspark.sql import SparkSession
@@ -39,6 +38,7 @@ class SentimentSparkModel(object):
     :param hdfs_host: HDFS host url
     :param hdfs_port: HDFS port
     """
+
     def __init__(self,
                  spark=None,
                  spark_master="spark://IMCHLT276:7077",
@@ -106,7 +106,7 @@ class SentimentSparkModel(object):
         # Tokenize the text
         tokenizer = Tokenizer(inputCol=input_col, outputCol="words")
         # Count each word and use the count as its weight
-        cv = CountVectorizer(vocabSize=2**16, inputCol="words", outputCol='tf')
+        cv = CountVectorizer(vocabSize=2 ** 16, inputCol="words", outputCol='tf')
         # IDF
         idf = IDF(inputCol='tf', outputCol="features", minDocFreq=5)  # minDocFreq: remove sparse terms
         label_string_idx = StringIndexer(inputCol="target", outputCol="label")
@@ -153,5 +153,4 @@ class SentimentSparkModel(object):
     def predict(self, df):
         predicted_df = self._model.transform(df)
         return predicted_df
-
 

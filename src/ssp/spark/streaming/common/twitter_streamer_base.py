@@ -9,16 +9,15 @@ __maintainer__ = "Mageswaran Dhandapani"
 __email__ = "mageswaran1989@gmail.com"
 __status__ = "Education Purpose"
 
-from pyspark.sql import SparkSession
-
 import re
 
-from ssp.logger.pretty_print import print_error, print_info
+from ssp.logger.pretty_print import  print_info
 from ssp.spark.streaming.common.streamer_base import StreamerBase
 from pyspark.sql.types import StructType, StringType, IntegerType, ArrayType
 from pyspark.sql.functions import col, isnull
 from pyspark.sql.functions import sha2, udf
 from pyspark.sql.functions import from_json, regexp_replace
+
 
 def pick_text(text, rtext, etext):
     ret = ""
@@ -37,7 +36,6 @@ def pick_text(text, rtext, etext):
 pick_text_udf = udf(pick_text, StringType())
 
 
-
 class TwitterStreamerBase(StreamerBase):
     """
 
@@ -48,6 +46,7 @@ class TwitterStreamerBase(StreamerBase):
     :param kafka_topic:
     :param processing_time:
     """
+
     def __init__(self,
                  spark_master,
                  checkpoint_dir,
@@ -62,7 +61,6 @@ class TwitterStreamerBase(StreamerBase):
                               kafka_bootstrap_servers=kafka_bootstrap_servers,
                               kafka_topic=kafka_topic,
                               processing_time=processing_time)
-
 
     @staticmethod
     def _get_schema():

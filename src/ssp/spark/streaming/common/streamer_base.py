@@ -25,6 +25,7 @@ class StreamerBase(object):
     The first one is the cheapest—highest performance, least implementation overhead—because it can be done in a fire-and-forget fashion without keeping state at the sending end or in the transport mechanism. The second one requires retries to counter transport losses, which means keeping state at the sending end and having an acknowledgement mechanism at the receiving end. The third is most expensive—and has consequently worst performance—because in addition to the second it requires state to be kept at the receiving end in order to filter out duplicate deliveries.
 
     """
+
     def __init__(self,
                  spark_master,
                  checkpoint_dir,
@@ -38,23 +39,27 @@ class StreamerBase(object):
         self._kafka_bootstrap_servers = kafka_bootstrap_servers
         self._kafka_topic = kafka_topic
         self._processing_time = processing_time
+        self._spark = None
+    
+    @property
+    def sparkSession(self):
+        return self._get_spark()
 
     def _get_spark(self):
         """
         :return:Spark Session
         """
-
-        spark = SparkSession.builder. \
-            appName("TwitterRawDataIngestion"). \
-            master(self._spark_master). \
-            config("spark.sql.streaming.checkpointLocation", self._checkpoint_dir). \
-            config("spark.sql.warehouse.dir", self._warehouse_location). \
-            enableHiveSupport(). \
-            getOrCreate()
-        spark.sparkContext.setLogLevel("ERROR")
-        spark.conf.set("spark.sql.streaming.metricsEnabled", "true")
-
-        return spark
+        if not self._spark:
+            self._spark = SparkSession.builder. \
+                appName("TwitterRawDataIngestion"). \
+                master(self._spark_master). \
+                config("spark.sql.streaming.checkpointLocation", self._checkpoint_dir). \
+                config("spark.sql.warehouse.dir", self._warehouse_location). \
+                enableHiveSupport(). \
+                getOrCreate()
+            self._spark.sparkContext.setLogLevel("ERROR")
+            self._spark.conf.set("spark.sql.streaming.metricsEnabled", "true")
+        return self._spark
 
     def _get_source_stream(self, kafka_topic):
         raise NotImplementedError
@@ -81,7 +86,7 @@ class StreamerBase(object):
         # dump the data into bronze lake path
         sdf = self._get_source_stream(self._kafka_topic)
 
-        storeDF = sdf.writeStream. \
+        sdf.writeStream. \
             format("parquet"). \
             outputMode("append"). \
             option("path", path). \

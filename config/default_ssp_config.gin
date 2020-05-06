@@ -15,6 +15,7 @@ import ssp.spark.streaming.nlp
 kafka_address = 'localhost:9092'
 kafka_topic_1 = 'ai_tweets_topic'
 kafka_topic_2 = 'mix_tweets_topic'
+kafka_topic_3 = 'news_data'
 spark_master = @consumer/get_local_spark_master()
 
 #######################################################################################################################
@@ -34,6 +35,18 @@ TwitterDataset.postgresql_password = "sparkstreaming"
 TwitterDataset.kafka_topic = %kafka_topic_2
 TwitterDataset.raw_tweet_table_name_prefix = "raw_tweet_dataset"
 TwitterDataset.processing_time = '5 seconds'
+
+
+#######################################################################################################################
+#                                               NEWS_DATA                                                             #
+#######################################################################################################################
+Scrapy_Data_Stream_Consumer.spark_master = %spark_master
+Scrapy_Data_Stream_Consumer.checkpoint_dir = "/tmp/ssp/data/lake/checkpoint/"
+Scrapy_Data_Stream_Consumer.warehouse_location = "/opt/spark-warehouse/"
+Scrapy_Data_Stream_Consumer.kafka_bootstrap_servers="localhost:9092"
+Scrapy_Data_Stream_Consumer.kafka_topic =%kafka_topic_3
+Scrapy_Data_Stream_Consumer.bronze_parquet_dir = "/tmp/ssp/data/lake/scrapy_bronze/"
+
 
 
 #######################################################################################################################

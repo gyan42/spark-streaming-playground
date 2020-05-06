@@ -9,13 +9,12 @@ __maintainer__ = "Mageswaran Dhandapani"
 __email__ = "mageswaran1989@gmail.com"
 __status__ = "Education Purpose"
 
-import argparse
 import gin
-from pyspark.sql import SparkSession
 
 from ssp.spark.streaming.common.twitter_streamer_base import TwitterStreamerBase
 from ssp.spark.streaming.ml import SentimentSparkModel
 # from ssp.customudf.textblob_sentiment import textblob_sentiment_analysis_udf
+
 
 @gin.configurable
 class SentimentAnalysis(TwitterStreamerBase):
@@ -59,7 +58,6 @@ class SentimentAnalysis(TwitterStreamerBase):
 
         self._is_live_stream = is_live_stream
 
-
     def online_process(self):
         tweet_stream = self._get_source_stream()
         return tweet_stream
@@ -80,7 +78,6 @@ class SentimentAnalysis(TwitterStreamerBase):
             tweet_stream = self.online_process()
         else:
             tweet_stream = self.hdfs_process()
-
 
         def foreach_batch_function(df, epoch_id):
             # Transform and write batchDF
