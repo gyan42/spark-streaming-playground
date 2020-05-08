@@ -91,7 +91,7 @@ class SSPTweetLabeller(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None):
         if isinstance(X, pd.DataFrame):
             if self._input_col:
-               res  = self.predict(X[self._input_col])[:, 1]
+               res = self.predict(X[self._input_col])[:, 1]
                X[self._output_col] = self.normalize_prob(res)
                return X
         elif isinstance(X, list):
@@ -209,6 +209,7 @@ class SSPTweetLabeller(BaseEstimator, TransformerMixin):
 
 @gin.configurable
 class SSPLabelEvaluator(PostgresqlDatasetBase):
+
     def __init__(self,
                  text_column="text",
                  label_column="label",
@@ -237,7 +238,6 @@ class SSPLabelEvaluator(PostgresqlDatasetBase):
         self._snorkel_labeler.fit(snorkel_train_df)
         self._snorkel_labeler.evaluate(test_df, test_df[self._label_output_column])
 
-
         # snorkel_train_df["label"] = snorkel_train_df["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
         # print_info(snorkel_train_df["label"].value_counts())
         # print_error(snorkel_train_df[snorkel_train_df["label"]==0]["text"].tolist()[:10])
@@ -258,5 +258,4 @@ class SSPLabelEvaluator(PostgresqlDatasetBase):
         #         # print_info("\n".join(group["text"].tolist()[:10]))
         #         group["label"] = group["text"].apply(lambda x: SSPTweetLabeller.is_ai_tweet(x))
         #         print_info("\n".join(group[group["label"]==1]["text"].tolist()[:100]))
-
 

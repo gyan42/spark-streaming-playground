@@ -8,8 +8,8 @@ kafka_address = 'localhost:9092'
 kafka_topic = 'news_data'
 #spark_master = @consumer/get_local_spark_master()
 spark_master = 'local[4]'
-bronze_parquet_dir="hdfs://localhost:9000/tmp/ssp/topic_model/lake"
-checkpoint_dir="hdfs://localhost:9000/tmp/ssp/topic_model//checkpoint/"
+bronze_parquet_dir="/home/srinivasan/Desktop/topic_model/lake"
+checkpoint_dir="/home/srinivasan/Desktop/topic_model/checkpoint/"
 warehouse_location="hdfs://localhost:9000/tmp/ssp/topic_model/spark-warehouse/"
 
 #######################################################################################################################
@@ -26,7 +26,7 @@ Scrapy_Data_Stream_Consumer.bronze_parquet_dir =%bronze_parquet_dir
 #######################################################################################################################
 #                                               MODEL_PREPARATION                                                     #
 #######################################################################################################################
-LdaModelOperation.model_path = "hdfs://localhost:9000/tmp/ssp/topic_model/model_path/"
+LdaModelOperation.model_path = "/home/srinivasan/Desktop/topic_model/model_path/"
 LdaModelOperation.data_path = %bronze_parquet_dir
 LdaModelOperation.spark_master = %spark_master
 LdaModelOperation.checkpoint_dir = %checkpoint_dir
