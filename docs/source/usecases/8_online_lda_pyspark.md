@@ -1,4 +1,6 @@
 # Online LDA-Topic Modeling Algorithm in Pyspark
+   Topic Modelling is a natural language processing task of identifying the probable topic that is being represented by the text in the document.To capture these kind of information into a mathematical model, Apache Spark MLlib provides Topic modelling using Latent Dirichlet Condition.
+   
 
 ## Implementation
 
