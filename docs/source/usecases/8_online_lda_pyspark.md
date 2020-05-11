@@ -34,9 +34,15 @@
                  
               
    ```
+## Flow Diagram:
+
+![](../images/topic_modeling.jpg)
+
+## Data Pre Processing Steps:
+![](../images/preprocessing.png)
 
 
-Dataset tables:
+### Dataset tables:
 
 |Table Name   |Info                               | 
 |-------------|-----------------------------------|
