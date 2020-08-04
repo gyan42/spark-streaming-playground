@@ -19,6 +19,7 @@ if you are an intermediate or experienced developer you can ignore it.
     - [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html)  
     - [1 day Edureka Full Course](https://www.youtube.com/watch?v=F8pyaR4uQ2g)
     - [Saark Internals](https://github.com/JerryLead/SparkInternals)  
+    - [Spark SQL Joins](https://towardsdatascience.com/six-spark-exercises-to-rule-them-all-242445b24565)
 - [Apache Kafka](https://kafka.apache.org/)  
     - [what you need to know?](https://intellipaat.com/blog/what-is-apache-kafka/)  
     - [Kafka + Apache Spark](https://www.youtube.com/watch?v=65lHphtrfo0)  
