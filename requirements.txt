@@ -15,7 +15,7 @@ pyarrow==0.16.0
 #EDA
 python-snappy==0.5.4
 wordcloud==1.4.1
-pillow==7.0.0
+pillow==9.0.1
 imageio==2.6.1
 textacy==0.10.0
 tqdm
