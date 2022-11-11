@@ -10,7 +10,7 @@ numpy
 Flask-Menu==0.7.1
 flask-paginate==0.5.5
 tweepy==3.8.0
-pyspark==2.4.4
+pyspark==3.2.2
 pyarrow==0.16.0
 #EDA
 python-snappy==0.5.4
