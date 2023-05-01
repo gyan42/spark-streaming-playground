@@ -1,5 +1,5 @@
 delta==0.4.2
-flask==1.1.1
+flask==2.3.2
 spacy==2.2.3
 kafka-python==2.0.1
 textblob==0.15.3
